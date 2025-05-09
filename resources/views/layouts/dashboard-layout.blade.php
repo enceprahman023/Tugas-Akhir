@@ -11,7 +11,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   {{-- Custom CSS --}}
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  {{--  <link rel="stylesheet" href="{{ asset('css/style.css') }}">  --}}
+    @if (Request::is('guru*'))
+    <link rel="stylesheet" href="{{ asset('css/guru.css') }}">
+    @elseif (Request::is('admin*'))
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    @elseif (Request::is('pelapor*'))
+    <link rel="stylesheet" href="{{ asset('css/pelapor.css') }}">
+    @endif
 </head>
 <body>
 
@@ -55,22 +62,33 @@
     </aside>
 
     {{-- Main Content --}}
-    <main class="flex-grow-1 p-5" style="background-color: #f4f4f4;">
+    <main class="flex-grow-1" style="background-color: #f4f4f4; padding-top: 100px; padding-left: 40px; padding-right: 40px; padding-bottom: 40px;">
       @yield('content')
     </main>
   </div>
 
   {{-- Bootstrap Bundle JS --}}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const logoutButton = document.getElementById('logout-button');
-      const logoutForm = document.getElementById('logout-form');
+  document.addEventListener('DOMContentLoaded', function () {
+    const logoutButton = document.getElementById('logout-button');
+    const logoutForm = document.getElementById('logout-form');
 
-      if (logoutButton && logoutForm) {
-        logoutButton.addEventListener('click', function (e) {
-          e.preventDefault(); // Hindari default POST yang bisa bermasalah karena <form> di <ul>
-          if (confirm('Apakah kamu yakin ingin logout?')) {
+    if (logoutButton && logoutForm) {
+      logoutButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        Swal.fire({
+          title: 'Yakin ingin logout?',
+          text: "Kamu akan keluar dari aplikasi.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Ya, logout',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = logoutForm.action;
@@ -88,9 +106,10 @@
             form.submit();
           }
         });
-      }
-    });
-  </script>
+      });
+    }
+  });
+</script>
 
 </body>
 </html>

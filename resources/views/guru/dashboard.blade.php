@@ -12,7 +12,7 @@
         </div>
         <nav class="nav flex-column">
             <a href="#" class="nav-link text-white">🏠 Dashboard</a>
-            <a href="#" class="nav-link text-white">📋 Kelola Laporan</a>
+            <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
             <a href="#" class="nav-link text-white">🖨️ Cetak Laporan</a>
             <a href="#" class="nav-link text-white">📖 Panduan</a>
             <a href="#" class="nav-link text-white">🚪 Logout</a>

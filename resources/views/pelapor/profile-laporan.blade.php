@@ -30,12 +30,12 @@
             </li>
             <li class="nav-item">
                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                  @csrf
-                  <button type="button" id="logout-button" class="nav-link text-danger bg-transparent border-0 d-flex align-items-center p-0" style="width: 100%; text-align: left;">
+                @csrf
+                <button type="button" id="logout-button" class="nav-link text-danger bg-transparent border-0 d-flex align-items-center p-0" style="width: 100%; text-align: left;">
                     <i class="bi bi-box-arrow-right me-2"></i>Logout
-                  </button>
+                </button>
                 </form>
-              </li>
+            </li>
         </ul>
     </aside>
 
@@ -44,12 +44,13 @@
         <div class="container bg-white p-5 rounded-4 shadow-sm">
             <h1 class="fw-bold mb-4 text-center" style="color: #1e2a38;">Profil Saya</h1>
 
-            <div class="card mx-auto" style="max-width: 500px;">
+            <!-- Card Profil Saya -->
+            <div class="profile-card;">
                 <div class="card-body text-center">
                     <img src="{{ asset('images/team 1.jpg') }}" alt="Foto Profil" class="rounded-circle mb-3" width="120" height="120">
                     <h4 class="card-title mb-2">John Doe</h4>
                     <p class="text-muted mb-1">NIS: 12345678</p>
-                    <p class="text-muted mb-1">Nama:jhon ilahi</p>
+                    <p class="text-muted mb-1">Nama: jhon ilahi</p>
                     <p class="text-muted mb-3">Email: johndoe@example.com</p>
 
                     <a href="#" class="btn btn-primary">Edit Profil</a>

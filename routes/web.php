@@ -39,7 +39,6 @@ Route::post('/login-guru', [LoginGuruController::class, 'login'])->name('guru.lo
 Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard');
 
 
-
 // Proses login (langsung redirect ke dashboard tanpa cek database)
 Route::post('/login', function () {
     return redirect()->route('dashboard');
@@ -128,4 +127,11 @@ Route::post('/guru/register', function (Request $request) {
     return redirect()->route('guru.login')->with('success', 'Registrasi berhasil!');
 })->name('guru.register.store');
 
-// Halaman dasboard
+Route::get('/guru/dashboard', function () {
+    return view('guru.dashboard'); // ganti dengan nama file blade dashboard kamu
+})->name('guru.dashboard');
+
+// Route untuk halaman Kelola Laporan
+Route::get('/guru/kelola-laporan', function () {
+    return view('guru.kelola_laporan'); // Sesuaikan dengan lokasi dan nama file blade-nya
+})->name('guru.kelola');

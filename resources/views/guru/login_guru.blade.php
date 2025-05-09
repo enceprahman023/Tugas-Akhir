@@ -3,13 +3,13 @@
 @section('title', 'Login Guru BK')
 
 @section('content')
-<div class="login-bg d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="card shadow-lg border-0 p-4" style="width: 100%; max-width: 420px; border-radius: 16px;">
+<div class="login-bg d-flex justify-content-center align-items-center">
+    <div class="login-card">
         <div class="text-center mb-4">
             <img src="{{ asset('images/logodu.png') }}" alt="Logo" class="animated-logo mb-2" style="width: 80px;">
             <h4 class="fw-bold">Login Guru BK</h4>
         </div>
-        <form action="{{ route('guru.login.store') }}" method="POST">
+        <form action="{{ route('guru.dashboard') }}" method="GET">
             @csrf
             <div class="mb-3">
                 <label for="nip" class="form-label">NIP</label>
@@ -19,7 +19,7 @@
                 <label for="password" class="form-label">Kata Sandi</label>
                 <input type="password" class="form-control" id="password" name="password" required>
                 <span onclick="togglePassword('password')" 
-                      style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer;">
+                      style="position: absolute; top: 70%; right: 12px; transform: translateY(-50%); cursor: pointer;">
                     👁️
                 </span>
             </div>

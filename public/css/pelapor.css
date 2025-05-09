@@ -927,6 +927,9 @@ footer {
 /* akhir dashboard pelapoe */
 
 /* Awal Halaman Buat Laporan */
+.card-body{
+  padding: 1.5rem; /* Memberi padding ekstra */
+}
 .card-header {
   font-size: 1.2rem;
   text-align: center;
@@ -968,6 +971,7 @@ input:focus {
 .btn-toggle-saksi:hover {
   background-color: #e2e6ea;
 }
+
 /* Akhir Halaman Buat Laporan */
 
 /* Awal halaman Status laporan */
@@ -990,7 +994,7 @@ dropdown-toggle::after {
 
 /* Styling untuk halaman Laporan */
 .card {
-  border-radius: 10px;
+  border-radius: 100px;
 }
 
 .card-header {
@@ -1218,13 +1222,6 @@ h6 {
 
 /* Awal halaman profile */
 /* Profil Page Styles */
-.profile-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
 
 .profile-card img {
   width: 120px;
@@ -1235,7 +1232,7 @@ h6 {
 }
 
 .profile-card h4 {
-  color: #1e2a38;
+  color: #212224;
   font-weight: bold;
 }
 
@@ -1266,161 +1263,3 @@ h6 {
   transform: scale(0.97); /* efek klik */
 }
 /* Akhir Css Pelapor */
-
-/* Awal Css Guru_BK */
-/* Awal Halaman Register */
-/* Form wrapper agar tidak terlalu luas */
-.form-wrapper {
-  max-width: 420px;
-  width: 100%;
-}
-
-/* Jarak antar field lebih padat */
-.form-wrapper .form-control {
-  padding: 10px 14px;
-  font-size: 15px;
-  border-radius: 10px;
-}
-
-/* Label lebih kecil dan rapi */
-.form-wrapper .form-label {
-  margin-bottom: 6px;
-  font-weight: 500;
-  font-size: 14px;
-  color: #333;
-}
-
-/* Jarak antar group form dikecilkan */
-.form-wrapper .mb-3,
-.form-wrapper .mb-4 {
-  margin-bottom: 14px !important;
-}
-
-/* Button */
-.form-wrapper button {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 12px;
-}
-.form-wrapper {
-  width: 100%;
-  max-width: 450px;
-}
-
-/* Animasi hover pada logo */
-.logo {
-  transition: transform 0.4s ease, filter 0.4s ease;
-}
-
-.logo:hover {
-  transform: scale(1.1) rotate(-3deg);
-  filter: brightness(1.1);
-}
-
-
-/* AAkhir halaman register */
-
-/* Awal Halaman Login */
-.login-bg {
-  background: linear-gradient(to right, #2b5876, #4e4376);
-}
-
-/* Animasi logo saat hover */
-.animated-logo {
-  transition: transform 0.3s ease;
-}
-.animated-logo:hover {
-  transform: scale(1.1) rotate(5deg);
-}
-
-/* Style tombol login */
-.card button {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 12px;
-}
-
-/* BG halaman login */
-.login-bg {
-  background: linear-gradient(to bottom right, #3fb714, #fef314); /* Contoh gradasi biru ungu */
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
-}
-/* Akhir halaman login */
-
-/* Awal halaman dashboard */
-.sidebar {
-  width: 240px;
-  min-height: 100vh;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-}
-
-.sidebar .nav-link {
-  margin: 8px 0;
-  font-size: 16px;
-  transition: background 0.2s;
-  border-radius: 8px;
-}
-
-.sidebar .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.card {
-  border: none;
-  border-radius: 15px;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.wrapper-dashboard {
-  display: flex;
-  height: 100vh;
-}
-
-.sidebar {
-  width: 250px;
-  background-color: #0d6efd;
-  color: white;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.sidebar .nav-link {
-  color: white;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-
-.main-content {
-  flex-grow: 1;
-  background-color: #f8f9fa;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.card {
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.activity-list {
-  max-height: 150px;
-  overflow-y: auto;
-}
-/* akhir css dashboard pelapor */
-
-/* awal css kelola laporan */
-
-

@@ -14,7 +14,16 @@
 
 
     {{-- Custom CSS --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {{--  <link rel="stylesheet" href="{{ asset('css/style.css') }}">  --}}
+    @if (Request::is('guru*'))
+    <link rel="stylesheet" href="{{ asset('css/guru.css') }}">
+    @elseif (Request::is('admin*'))
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    @elseif (Request::is('pelapor*'))
+    <link rel="stylesheet" href="{{ asset('css/pelapor.css') }}">
+    @else
+    <link rel="stylesheet" href="{{ asset('css/pelapor.css') }}">
+    @endif
 </head>
 <body>
     @if (in_array(Route::currentRouteName(), ['home', 'about.bullying']))
