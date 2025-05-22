@@ -13,9 +13,16 @@
         <nav class="nav flex-column">
             <a href="#" class="nav-link text-white">🏠 Dashboard</a>
             <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
-            <a href="#" class="nav-link text-white">🖨️ Cetak Laporan</a>
-            <a href="#" class="nav-link text-white">📖 Panduan</a>
-            <a href="#" class="nav-link text-white">🚪 Logout</a>
+            <a href="{{ route ('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
+            <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
+            <a href="{{ route ('guru.profile') }}" class="nav-link text-white">👤 Profile</a>
+            <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
+    @csrf
+    <a href="#" class="nav-link text-white"
+       onclick="event.preventDefault(); if(confirm('Apakah kamu yakin ingin logout?')) document.getElementById('logout-form').submit();">
+        🚪 Keluar
+    </a>
+</form>
         </nav>
     </aside>
 

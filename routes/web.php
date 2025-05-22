@@ -15,6 +15,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
 
+// route halaman logout pelapor
+Route::get('/login-guru', [LoginGuruController::class, 'showLoginForm'])->name('guru.login');
+Route::post('/login-guru', [LoginGuruController::class, 'login'])->name('guru.login.submit');
+Route::post('/logout-guru', [LoginGuruController::class, 'logout'])->name('guru.logout');
+
 
 // Halaman register
 Route::get('/register', function () {
@@ -135,3 +140,80 @@ Route::get('/guru/dashboard', function () {
 Route::get('/guru/kelola-laporan', function () {
     return view('guru.kelola_laporan'); // Sesuaikan dengan lokasi dan nama file blade-nya
 })->name('guru.kelola');
+
+// Route untuk halaman Cetak Laporan
+Route::get('/guru/cetak-laporan', function () {
+    return view('guru.cetak_laporan'); // Sesuaikan dengan lokasi dan nama file blade-nya
+})->name('guru.cetak');
+
+// Halaman detail cetak detail laporan
+Route::get('/guru/detail-laporan', function () {
+    return view('guru.detail_laporan'); // menampilkan detail 1 laporan
+})->name('guru.cetak.detail');
+
+// halaman panduan guru
+Route::get('/guru/panduan', function () {
+    return view('guru.panduan-guru'); 
+})->name('guru.panduan');
+
+// halaman profile guruBK
+Route::get('/guru/profile', function () {
+    return view('guru.profile_guru');
+})->name('guru.profile');
+
+//  Akhir Untuk halaman guruBK
+
+// Awal Untuk halaman admin
+// Menampilkan halaman login admin
+// Tampilkan form login admin
+Route::GET('/admin/login', function () {
+    return view('admin.login_admin');
+})->name('admin.login');
+
+Route::post('/admin/login', function (Request $request) {
+    $username = $request->input('username');
+    $password = $request->input('password');
+
+    // Hardcode admin
+    if ($username === 'admin' && $password === 'admin123') {
+        session(['admin_logged_in' => true]);
+        return redirect('/admin/dashboard');
+    }
+    return redirect()->back()->with('error', 'Username atau password salah!');
+})->name('admin.login.store');
+
+// Halaman Dashboard admin
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard_admin');
+})->name('admin.dashboard');
+
+// halaman kelola laporan
+Route::get('/admin/kelola_laporan', function () {
+    return view('admin.kelola_laporan');
+})->name('admin.kelola.laporan');
+
+// halaman cetak laporan admin
+Route::get('/admin/cetak_laporan', function () {
+    return view('admin.cetak_laporan');
+})->name('admin.cetak');
+
+// halaman detail laporan admin
+Route::get('/admin/detail_laporan', function () {
+    return view('admin.detail_laporan');
+})->name('admin.detail');
+
+// halaman kelola akun admin
+Route::get('/admin/kelola_akun', function () {
+    return view('admin.kelola_akun');
+})->name('admin.kelola.akun');
+
+// halaman panduan admin
+Route::get('/admin/panduan_admin', function () {
+    return view('admin.panduan_admin');
+})->name('admin.panduan.admin');
+
+// halaman logout admin
+Route::post('/admin/logout', function () {
+    Auth::logout();
+    return redirect('/login'); // atau ke halaman login admin kamu
+})->name('admin.logout');

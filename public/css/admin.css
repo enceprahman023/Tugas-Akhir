@@ -1,0 +1,272 @@
+body.login-page {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(#6bcf5e, #2a9d8f)
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background-color: rgb(255, 255, 255);
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo-section {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo-section img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.logo-section h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #003366;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    background-color: #002244;
+}
+
+.error-message {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.logo-section img.animate-bounce {
+    animation: bounce 0.5s ease;
+}
+
+/* Animasi JS pada logo login */
+@keyframes rotateLogo {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(10deg) scale(1.1); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+.animate-logo {
+    animation: rotateLogo 1s ease;
+}
+
+/* halaman dashboard */
+/* Reset dan font */
+* {
+  box-sizing: border-box;
+}
+body.dashboard-admin {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #00b3ff5f;
+}
+
+/* Header utama */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #1b5e20, #fbc02d); /* hijau gelap ke kuning */
+  padding: 0 20px;
+  height: 70px;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* Kiri: logo + judul */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-left img {
+  height: 50px;
+  width: 50px;
+  object-fit: contain;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.header-left img:hover {
+  transform: rotate(15deg);
+}
+.header-left h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+ 
+}
+
+/* Tengah: menu horizontal */
+nav.menu {
+  display: flex;
+  gap: 25px;
+  font-weight: 600;
+}
+nav.menu a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+nav.menu a:hover, nav.menu a.active {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Kanan: foto profil + nama admin */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: default;
+}
+.header-right img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+}
+.header-right span {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Konten utama di bawah header */
+main {
+  margin-top: 70px; /* sesuai tinggi header */
+  padding: 20px;
+  min-height: calc(100vh - 70px);
+  overflow-y: auto;
+}
+
+.statistik h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #333;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  min-height: 150px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.stat-card .icon {
+  font-size: 36px;
+  margin-right: 12px;
+}
+
+.stat-value {
+  margin: 0;
+  font-size: 25px;
+  font-weight: bold;
+  color: #1b5e20;
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+
+/* Awal halaman kelola laporan admin */
+/* custom.css */
+table img {
+  border: 2px solid #ddd;
+  padding: 2px;
+}
+
+.header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 1rem;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+}

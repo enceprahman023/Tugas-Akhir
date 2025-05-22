@@ -55,7 +55,7 @@
     @endif
 
     {{-- Dynamic Content Section --}}
-    <main>
+    <main class:"container-fluid p-0 m-0">
         @yield('content')
     </main>
 
@@ -64,7 +64,7 @@
         @yield('footer')
     @endif
 
-    <!-- Script Logout Umum -->
+     <!-- Script Logout Umum pelapor -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const logoutButton = document.getElementById('logout-button');
@@ -79,5 +79,25 @@
     }
   });
 </script>
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+  @csrf
+</form>
+<!-- Script Logout guruBK -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const logoutButton = document.getElementById('logout-button');
+    const logoutForm = document.getElementById('logout-form');
+
+    if (logoutButton && logoutForm) {
+      logoutButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (confirm('Apakah kamu yakin ingin logout?')) {
+          logoutForm.submit();
+        }
+      });
+    }
+  });
+</script>
+
 </body>
 </html>

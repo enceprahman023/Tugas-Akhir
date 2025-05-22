@@ -54,33 +54,148 @@
                             <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-002">Lihat Detail</button>
                         </td>
                     </tr>
-                    <!-- Tambahkan baris lainnya sesuai laporan yang masuk -->
                 </tbody>
             </table>
         </div>
 
-        <!-- Modal Detail Laporan -->
-        <div class="modal fade" id="detailModal-001" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabel">Detail Laporan LAP-001</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h6>Judul Laporan: Laporan Bullying di Kelas 10</h6>
-                        <p><strong>Status:</strong> Dalam Proses</p>
-                        <p><strong>Tanggal Laporan:</strong> 2025-05-03</p>
-                        <p><strong>Deskripsi:</strong> Laporan mengenai bullying yang terjadi di kelas 10. Siswa yang terlibat sudah teridentifikasi.</p>
-                        <!-- Tambahkan detail lainnya yang relevan -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                    </div>
-                </div>
+      <!-- Modal Detail Laporan LAP-001 (Non-Anonim) -->
+<div class="modal fade" id="detailModal-001" tabindex="-1" aria-labelledby="detailModalLabel001" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel001">Detail Laporan LAP-001</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Judul Laporan</th>
+                            <td>Laporan Bullying di Kelas 10</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><span class="badge bg-warning">Dalam Proses</span></td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Laporan</th>
+                            <td>2025-05-03</td>
+                        </tr>
+                        <tr>
+                            <th>Pelaku</th>
+                            <td>Siswa A</td>
+                        </tr>
+                        <tr>
+                            <th>Pelapor</th>
+                            <td>Rina Putri</td>
+                        </tr>
+                        <tr>
+                            <th>Saksi</th>
+                            <td>Siswa B, Siswa C</td>
+                        </tr>
+                        <tr>
+                            <th>Deskripsi</th>
+                            <td>Laporan mengenai bullying yang terjadi di kelas 10. Siswa yang terlibat sudah teridentifikasi dan tindakan telah diambil oleh pihak sekolah.</td>
+                        </tr>
+                        <tr>
+                            <th>Bukti Foto</th>
+                            <td><img src="{{ asset('images/bukti_dummy.jpg') }}" alt="Bukti Foto" class="img-fluid" style="max-height: 250px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Catatan Penanganan -->
+<div class="mt-4">
+    <h6>Catatan Penanganan</h6>
+    <form>
+        <div class="mb-3">
+            <textarea class="form-control" rows="3" placeholder="Tulis catatan penanganan..."></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tanggal Penanganan</label>
+            <input type="date" class="form-control">
+        </div>
+        <button type="button" class="btn btn-primary">Simpan Catatan</button>
+    </form>
+</div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger">Hapus</button>
+                <button class="btn btn-success">Selesaikan</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
+    </div>
+</div>
 
-    </main>
+<!-- Modal Detail Laporan LAP-002 (Anonim) -->
+<div class="modal fade" id="detailModal-002" tabindex="-1" aria-labelledby="detailModalLabel002" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel002">Detail Laporan LAP-002</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Judul Laporan</th>
+                            <td>Laporan Penganiayaan oleh Senior</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td><span class="badge bg-success">Selesai</span></td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Laporan</th>
+                            <td>2025-05-02</td>
+                        </tr>
+                        <tr>
+                            <th>Pelaku</th>
+                            <td>Siswa X</td>
+                        </tr>
+                        <tr>
+                            <th>Pelapor</th>
+                            <td><em>Laporan ini dikirim secara anonim</em></td>
+                        </tr>
+                        <tr>
+                            <th>Saksi</th>
+                            <td>Tidak disebutkan</td>
+                        </tr>
+                        <tr>
+                            <th>Deskripsi</th>
+                            <td>Laporan anonim mengenai tindakan penganiayaan oleh siswa senior kepada junior saat kegiatan ekstrakurikuler.</td>
+                        </tr>
+                        <tr>
+                            <th>Bukti Foto</th>
+                            <td><img src="{{ asset('images/bukti_dummy2.jpg') }}" alt="Bukti Foto" class="img-fluid" style="max-height: 250px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Catatan Penanganan -->
+<div class="mt-4">
+    <h6>Catatan Penanganan</h6>
+    <form>
+        <div class="mb-3">
+            <textarea class="form-control" rows="3" placeholder="Tulis catatan penanganan..."></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Tanggal Penanganan</label>
+            <input type="date" class="form-control">
+        </div>
+        <button type="button" class="btn btn-primary">Simpan Catatan</button>
+    </form>
+</div>
+            </div>
+           <div class="modal-footer">
+            <button class="btn btn-danger">Hapus</button>
+         <button class="btn btn-success">Selesaikan</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+</div>
+        </div>
+    </div>
+</div>
+</main>
 </div>
 @endsection

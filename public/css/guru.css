@@ -142,9 +142,9 @@ html, body {
 }
 
 .card {
-  height: 120px;
+  height: 0 px;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
 }
 
@@ -200,4 +200,13 @@ main {
 
 /* ===============================
 x
-/* awal css kelola laporan GuruBK*/
+/* awal css cetak laporan GuruBK*/
+ /* Tambahan styling khusus cetak laporan */
+.ttd {
+    margin-top: 50px;
+    text-align: right;
+}
+
+.ttd img {
+    margin-bottom: 10px;
+}
