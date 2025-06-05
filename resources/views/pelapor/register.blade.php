@@ -16,7 +16,7 @@
     </div>
     <div class="register-right">
         <h2>Daftar Akun</h2>
-        <form action="{{ route('register.store') }}" method="POST">
+        <form method="POST" action="{{ route('register.store') }}">
             @csrf
             <input type="text" name="nis" placeholder="NIS" required>
             <input type="email" name="email" placeholder="Email" required>

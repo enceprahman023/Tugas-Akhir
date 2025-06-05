@@ -27,7 +27,7 @@
                 <h3 class="fw-bold mb-4">Profil Guru BK</h3>
                 <div class="row">
                     <div class="col-md-4 text-center">
-                        <img src="{{ asset('images/profile_guru.png') }}" alt="Foto Guru BK" class="img-thumbnail rounded-circle mb-3" style="max-width: 150px;">
+                        <img src="{{ asset('images/team 3.jpg') }}" alt="Foto Guru BK" class="img-thumbnail rounded-circle mb-3" style="max-width: 150px;">
                         <h5 class="fw-semibold">Bu Dewi Lestari</h5>
                         <p class="text-muted">guru.bk@ducare.sch.id</p>
                     </div>

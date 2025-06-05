@@ -19,13 +19,7 @@
     <a href="{{ route('admin.cetak') }}">Cetak Laporan</a>
     <a href="{{ route('admin.kelola.akun') }}">Kelola Akun</a>
     <a href="{{ route('admin.panduan.admin') }}">Panduan</a>
-    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-    @csrf
-</form>
-
-<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    Logout
-</a>
+    <a href="#" id="btn-logout-trigger">Logout</a>
 
   </nav>
 
@@ -70,6 +64,57 @@
   </div>
 </div>
 </main>
+<!-- Bagian logout di menu -->
+<form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+  @csrf
+</form>
+
+<a href="#" id="btn-logout-trigger">Logout</a>
+
+<!-- Popup Logout -->
+<div class="popup-overlay" id="popup-logout" role="dialog" aria-modal="true" aria-labelledby="logout-title">
+  <div class="popup-box">
+    <h2 id="logout-title">Konfirmasi Logout</h2>
+    <p>Apakah Anda yakin ingin logout dari akun ini?</p>
+    <div class="popup-buttons">
+      <button class="btn-cancel" id="btn-cancel">Batal</button>
+      <button class="btn-logout" id="btn-logout">Ya, Logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const btnTrigger = document.getElementById('btn-logout-trigger');
+  const popup = document.getElementById('popup-logout');
+  const btnCancel = document.getElementById('btn-cancel');
+  const btnLogout = document.getElementById('btn-logout');
+  const logoutForm = document.getElementById('logout-form');
+
+  btnTrigger.addEventListener('click', function(e) {
+    e.preventDefault();
+    popup.style.display = 'flex';
+  });
+
+  btnCancel.addEventListener('click', function() {
+    popup.style.display = 'none';
+  });
+
+  btnLogout.addEventListener('click', function() {
+    logoutForm.submit();
+  });
+
+  popup.addEventListener('click', function(e) {
+    if(e.target === popup) {
+      popup.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if(e.key === 'Escape' && popup.style.display === 'flex') {
+      popup.style.display = 'none';
+    }
+  });
+</script>
 
 </body>
 </html>

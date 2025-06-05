@@ -208,15 +208,7 @@
 
       <!-- Google Maps Embed -->
       <div class="map-wrapper mt-5">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.3740012835606!2d107.47859798885497!3d-7.0825678999999955!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68ed592d7b2075%3A0xb9c07590bbee0f35!2sMA%20Darul%20&#39;Ulum%20Boarding%20School%2C%2C!5e0!3m2!1sid!2sid!4v1745108228708!5m2!1sid!2sid"
-          width="100%"
-          height="400"
-          style="border:0; border-radius: 10px;"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31674.340284952763!2d107.4369843492558!3d-7.0920497585975575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68ed56408530c9%3A0x5e331a2a59a3b3db!2sPondok%20Pesantren%20Darul%20Ulum%20Cikabuyutan!5e0!3m2!1sid!2sid!4v1748661714025!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
   </div>
 </section>
