@@ -101,7 +101,7 @@ Route::post('/logout-guru', [LoginGuruController::class, 'logout'])->name('guru.
 
 
 // Rute Guru BK yang Memerlukan Autentikasi (menggunakan middleware 'auth:guru' - khusus guard 'guru')
-Route::middleware(['auth:guru'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     // Halaman Dashboard Guru BK
     Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard'); // Menggunakan Controller
     // Atau jika hanya menampilkan view langsung:

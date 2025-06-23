@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Guru; // Pastikan model Guru ada dan benar
+use App\Models\User; // Gunakan model User karena Guru BK disimpan di tabel users
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth; // Impor facade Auth
-use Illuminate\Support\Facades\Log;  // Untuk logging
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginGuruController extends Controller
 {
@@ -28,44 +28,44 @@ class LoginGuruController extends Controller
         // Log input dari user
         Log::info('Coba login dengan:', [
             'email' => $request->email,
-            'password' => $request->password,
+            // jangan log password asli di production
         ]);
 
-        // Cek apakah email ditemukan di database
-        $guru = Guru::where('email', $request->email)->first();
+        // Cari user dengan role gurubk
+        $user = User::where('email', $request->email)
+                    ->where('role', 'gurubk')
+                    ->first();
 
-        if (!$guru) {
-            Log::warning('Login gagal: email tidak ditemukan di tabel gurus.');
-        } else {
-            Log::info('Data Guru ditemukan:', [
-                'email' => $guru->email,
-                'password_hash' => $guru->password,
-            ]);
-
-            Log::info('Password cocok?', [
-                'result' => Hash::check($request->password, $guru->password)
-            ]);
+        if (!$user) {
+             dd('User tidak ditemukan');
+            Log::warning('Login gagal: email tidak ditemukan di tabel users untuk role gurubk.');
+            return back()->withErrors([
+                'email' => 'Akun Guru BK tidak ditemukan.',
+            ])->onlyInput('email');
         }
 
-        // Coba autentikasi menggunakan guard 'guru'
-        if (Auth::guard('guru')->attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
-            Log::info('Login BERHASIL untuk: ' . $request->email);
-            return redirect()->route('guru.dashboard');
+        // Cek apakah password cocok
+        if (!Hash::check($request->password, $user->password)) {
+             dd('User tidak ditemukan');
+            Log::warning('Login gagal: password salah untuk email ' . $request->email);
+            return back()->withErrors([
+                'password' => 'Password salah.',
+            ])->onlyInput('email');
         }
 
-        // Login gagal
-        Log::error('Login GAGAL untuk: ' . $request->email);
+        // Login berhasil
+        Auth::login($user);
+        $request->session()->regenerate();
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        Log::info('Login BERHASIL untuk Guru BK: ' . $request->email);
+
+        return redirect()->route('guru.dashboard');
     }
 
     // Logout Guru BK
     public function logout(Request $request)
     {
-        Auth::guard('guru')->logout();
+        Auth::logout(); // tidak perlu pakai guard karena kita pakai default login
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

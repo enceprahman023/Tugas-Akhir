@@ -12,6 +12,8 @@
 
     {{-- SweetAlert2 CSS - Ditempatkan di HEAD UTAMA --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     {{-- Custom CSS --}}
     @if (Request::is('guru*'))

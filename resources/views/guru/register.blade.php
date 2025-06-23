@@ -3,6 +3,7 @@
 @section('title', 'Register guru')
 
 @section('content')
+
 <div class="container-fluid vh-100 d-flex">
     <!-- KIRI: Branding -->
     <div class="col-md-6 d-none d-md-flex flex-column justify-content-center align-items-center text-white p-5" style="background: linear-gradient(to bottom right, #03d106cd, #a3bb09d5);">

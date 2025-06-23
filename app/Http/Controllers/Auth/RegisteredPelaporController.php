@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pelapor;
+use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,36 +16,27 @@ class RegisteredPelaporController extends Controller
 {
     public function create(): View
     {
-        // Pastikan view yang dipanggil sesuai dengan lokasi file register.blade.php Anda
-        // Jika file register.blade.php ada di resources/views/pelapor/, gunakan:
         return view('pelapor.register');
-        // Jika file register.blade.php ada di resources/views/auth/, gunakan:
-        // return view('auth.register');
     }
 
     public function store(Request $request): RedirectResponse
     {
-        //   dd($request->all());
-        // Hapus atau tetap comment ini agar proses registrasi berjalan.
-        // dd($request->all());
-
         $request->validate([
-            'nis' => ['required', 'string', 'max:255', 'unique:pelapor,nis'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:pelapor,email'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $pelapor = Pelapor::create([
-            'nis' => $request->nis,
+        $user = User::create([
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'pelapor',
         ]);
 
-        event(new Registered($pelapor));
+        event(new Registered($user));
+        Auth::login($user);
 
-        Auth::login($pelapor);
-
-       return redirect()->route('pelapor.register')->with('register_success', true);
-
+        return redirect()->route('pelapor.dashboard')->with('register_success', true);
     }
 }
