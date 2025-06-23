@@ -25,12 +25,12 @@ class RegisteredPelaporController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-          dd($request->all());
+        //   dd($request->all());
         // Hapus atau tetap comment ini agar proses registrasi berjalan.
         // dd($request->all());
 
         $request->validate([
-            'nis' => ['required', 'string', 'max:255'],
+            'nis' => ['required', 'string', 'max:255', 'unique:pelapor,nis'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:pelapor,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -45,6 +45,7 @@ class RegisteredPelaporController extends Controller
 
         Auth::login($pelapor);
 
-        return redirect()->route('dashboard');
+       return redirect()->route('pelapor.register')->with('register_success', true);
+
     }
 }

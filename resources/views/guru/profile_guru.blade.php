@@ -28,18 +28,26 @@
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <img src="{{ asset('images/team 3.jpg') }}" alt="Foto Guru BK" class="img-thumbnail rounded-circle mb-3" style="max-width: 150px;">
-                        <h5 class="fw-semibold">Bu Dewi Lestari</h5>
-                        <p class="text-muted">guru.bk@ducare.sch.id</p>
+                        <h5 class="fw-semibold">{{ $guru->name }}</h5>
+                        <p class="text-muted">{{ $guru->email }}</p>
                     </div>
                     <div class="col-md-8">
                         <table class="table table-borderless">
                             <tr>
                                 <th style="width: 180px;">Nama</th>
-                                <td>: Bu Dewi Lestari</td>
+                                <td>: {{ $guru->name }}</td>
                             </tr>
                             <tr>
                                 <th>Email</th>
-                                <td>: guru.bk@ducare.sch.id</td>
+                                <td>: {{ $guru->email }}</td>
+                            </tr>
+                            <tr>
+                                <th>NIP</th>
+                                <td>: {{ $guru->nip }}</td>
+                            </tr>
+                            <tr>
+                                <th>Kontak</th>
+                                <td>: {{ $guru->phone_number ?? '-' }}</td>
                             </tr>
                             <tr>
                                 <th>Role</th>

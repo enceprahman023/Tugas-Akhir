@@ -3,149 +3,143 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginGuruController;
+use App\Http\Controllers\LoginGuruController; // Controller untuk login GuruBK
 use App\Http\Controllers\DashboardGuruController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredPelaporController;
-use App\Http\Controllers\Auth\RegisteredController;
+use App\Http\Controllers\Auth\RegisteredGuruController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController; // Jika dipakai untuk autentikasi default
+use App\Http\Controllers\Auth\RegisteredController; // Jika dipakai untuk registrasi default
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\Auth\LoginPelaporController; // Controller untuk login Pelapor
+use App\Http\Controllers\GuruProfileController;
 use Illuminate\Http\Request;
 
-// Route untuk Halaman & Proses Registrasi Pelapor
-Route::get('/register', [RegisteredPelaporController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredPelaporController::class, 'store'])->name('register.store');
+// =====================================================================================================================
+// Rute untuk Pelapor
+// =====================================================================================================================
 
-// Halaman home
+// Rute Registrasi Pelapor
+Route::get('/register', [RegisteredPelaporController::class, 'create'])->name('register');
+Route::get('/pelapor/register', [RegisteredPelaporController::class, 'create'])->name('pelapor.register'); // Duplikat? Coba gunakan satu saja.
+Route::post('/pelapor/register', [RegisteredPelaporController::class, 'store'])->name('pelapor.register.store');
+
+// Rute Login Pelapor (Menggunakan LoginPelaporController)
+Route::get('/login', [LoginPelaporController::class, 'create'])->name('login');
+Route::post('/login', [LoginPelaporController::class, 'store'])->name('login.store');
+
+// Halaman Home (Tidak memerlukan autentikasi)
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// halaman profil
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
+// Halaman About (Tidak memerlukan autentikasi)
+Route::get('/about-bullying', function () {
+    return view('pelapor.about-bullying');
+})->name('about.bullying');
 
-// route halaman login/logout guru bk
+// Halaman Panduan (Tidak memerlukan autentikasi)
+Route::get('/panduan-laporan', function () {
+    return view('pelapor.panduan-laporan');
+})->name('panduan.laporan');
+
+
+// Rute Pelapor yang Memerlukan Autentikasi (menggunakan middleware 'auth' - default 'web' guard)
+Route::middleware(['auth'])->group(function () {
+    // Halaman Dashboard Pelapor
+    Route::get('/dashboard', function () {
+        return view('pelapor.dashboard'); // Pastikan ini mengarah ke view dashboard pelapor Anda
+    })->name('dashboard');
+
+    // Rute Profil Pelapor
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
+
+    // Rute Buat Laporan
+    Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
+    Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+
+    // Status Laporan Pelapor
+    Route::get('/status-laporan', function () {
+        return view('pelapor.status-laporan');
+    })->name('status.laporan');
+
+    // Detail Laporan Pelapor
+    Route::get('/detail-laporan', function () {
+        return view('pelapor.detail-laporan');
+    })->name('detail.laporan');
+
+    // Ubah Laporan Pelapor
+    Route::get('/ubah-laporan', function () {
+        return view('pelapor.ubah-laporan');
+    })->name('ubah.laporan');
+
+    // Halaman Profile Laporan Pelapor
+    Route::get('/profile-laporan', function () {
+        return view('pelapor.profile-laporan');
+    })->name('profile.laporan.view');
+
+    // Logout Pelapor
+    Route::post('/logout', function (Request $request) {
+        Auth::logout(); // Logout dari guard default (web)
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    })->name('logout');
+});
+
+// =====================================================================================================================
+// Rute untuk Guru BK
+// =====================================================================================================================
+
+// Rute Registrasi Guru BK
+Route::get('/guru/register', [RegisteredGuruController::class, 'create'])->name('guru.register');
+Route::post('/guru/register', [RegisteredGuruController::class, 'store'])->name('guru.register.store');
+
+// Rute Login/Logout Guru BK (Menggunakan LoginGuruController)
 Route::get('/login-guru', [LoginGuruController::class, 'showLoginForm'])->name('guru.login');
 Route::post('/login-guru', [LoginGuruController::class, 'login'])->name('guru.login.submit');
 Route::post('/logout-guru', [LoginGuruController::class, 'logout'])->name('guru.logout');
 
 
-// Halaman login
-Route::get('/login', function () {
-    return view('pelapor.login');
-})->name('login');
+// Rute Guru BK yang Memerlukan Autentikasi (menggunakan middleware 'auth:guru' - khusus guard 'guru')
+Route::middleware(['auth:guru'])->group(function () {
+    // Halaman Dashboard Guru BK
+    Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard'); // Menggunakan Controller
+    // Atau jika hanya menampilkan view langsung:
+    // Route::get('/guru/dashboard', function () {
+    //     return view('guru.dashboard');
+    // })->name('guru.dashboard');
 
-// Proses login
-Route::post('/login', function (Request $request) {
-    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        $request->session()->regenerate();
-        return redirect()->route('dashboard');
-    }
-    return back()->withErrors(['email' => 'Email atau password salah!']);
-})->name('login.store');
+    // Rute Kelola Laporan Guru
+    Route::get('/guru/kelola-laporan', [LaporanController::class, 'guruKelola'])->name('guru.kelola');
 
+    // Rute Cetak Laporan Guru
+    Route::get('/guru/cetak-laporan', function () {
+        return view('guru.cetak_laporan');
+    })->name('guru.cetak');
 
-// Halaman About
-Route::get('/about-bullying', function () {
-    return view('pelapor.about-bullying');
-})->name('about.bullying');
+    // Halaman Detail Cetak Laporan Guru
+    Route::get('/guru/detail-laporan', function () {
+        return view('guru.detail_laporan');
+    })->name('guru.cetak.detail');
 
-// Halaman Dashboard Pelapor
-Route::get('/dashboard', function () {
-    return view('pelapor.dashboard');
-})->name('dashboard')->middleware('auth');
+    // Halaman Panduan Guru
+    Route::get('/guru/panduan', function () {
+        return view('guru.panduan-guru');
+    })->name('guru.panduan');
 
-// buat laporan pelapor
-Route::get('/buat-laporan', function () {
-    return view('pelapor.buat-laporan');
-})->name('buat.laporan')->middleware('auth');
+    // Halaman Profile Guru BK
+    Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile'); // Menggunakan Controller
+    // Atau jika hanya menampilkan view langsung:
+    // Route::get('/guru/profile', function () {
+    //     return view('guru.profile_guru');
+    // })->name('guru.profile');
+});
 
-// status laporan pelapor
-Route::get('/status-laporan', function () {
-    return view('pelapor.status-laporan');
-})->name('status.laporan')->middleware('auth');
+// =====================================================================================================================
+// Rute untuk Admin
+// =====================================================================================================================
 
-// detail laporan pelapor
-Route::get('/detail-laporan', function () {
-    return view('pelapor.detail-laporan');
-})->name('detail.laporan')->middleware('auth');
-
-// ubah laporan pelapor
-Route::get('/ubah-laporan', function () {
-    return view('pelapor.ubah-laporan');
-})->name('ubah.laporan')->middleware('auth');
-
-// halaman panduan
-Route::get('/panduan-laporan', function () {
-    return view('pelapor.panduan-laporan');
-})->name('panduan.laporan');
-
-// halaman profile laporan pelapor
-Route::get('/profile-laporan', function () {
-    return view('pelapor.profile-laporan');
-})->name('profile.laporan.view');
-
-// halaman logout pelapor
-Route::post('/logout', function () {
-    Auth::logout();
-    session()->invalidate();
-    session()->regenerateToken();
-    return redirect('/');
-})->name('logout');
-
-// Akhir Route Pelapor
-
-
-// Awal Route Guru BK
-Route::get('/guru/register', function () {
-    return view('guru.register');
-})->name('guru.register');
-
-Route::post('/guru/register', function (Request $request) {
-    $validated = $request->validate([
-        'nama' => 'required|string|max:255',
-        'nip' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'kontak' => 'nullable|string|max:15',
-        'password' => 'required|min:6|confirmed',
-    ]);
-
-    // TODO: Tambahkan logika penyimpanan Guru ke database di sini
-    // Contoh: User::create([...]);
-
-    return redirect()->route('guru.login')->with('success', 'Registrasi berhasil!');
-})->name('guru.register.store');
-
-Route::get('/guru/dashboard', function () {
-    return view('guru.dashboard');
-})->name('guru.dashboard')->middleware('auth:guru'); // Contoh guard: guru
-
-// Route untuk halaman Kelola Laporan Guru
-Route::get('/guru/kelola-laporan', function () {
-    return view('guru.kelola_laporan');
-})->name('guru.kelola')->middleware('auth:guru');
-
-// Route untuk halaman Cetak Laporan Guru
-Route::get('/guru/cetak-laporan', function () {
-    return view('guru.cetak_laporan');
-})->name('guru.cetak')->middleware('auth:guru');
-
-// Halaman detail cetak detail laporan Guru
-Route::get('/guru/detail-laporan', function () {
-    return view('guru.detail_laporan');
-})->name('guru.cetak.detail')->middleware('auth:guru');
-
-// halaman panduan guru
-Route::get('/guru/panduan', function () {
-    return view('guru.panduan-guru');
-})->name('guru.panduan')->middleware('auth:guru');
-
-// halaman profile guruBK
-Route::get('/guru/profile', function () {
-    return view('guru.profile_guru');
-})->name('guru.profile')->middleware('auth:guru');
-
-// Akhir Route Guru BK
-
-
-// Awal Route Admin
+// Rute Login Admin (Menggunakan logika manual, disarankan untuk direfactor menggunakan Auth Guards)
 Route::GET('/admin/login', function () {
     return view('admin.login_admin');
 })->name('admin.login');
@@ -161,40 +155,42 @@ Route::post('/admin/login', function (Request $request) {
     return redirect()->back()->with('error', 'Username atau password salah!');
 })->name('admin.login.store');
 
-// Halaman Dashboard admin
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard_admin');
-})->name('admin.dashboard')->middleware('admin'); // Contoh middleware khusus admin
+// Rute Admin yang Memerlukan Autentikasi (menggunakan middleware 'admin' - pastikan middleware ini ada dan terdaftar)
+Route::middleware(['admin'])->group(function () { // Contoh middleware khusus admin
+    // Halaman Dashboard Admin
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard_admin');
+    })->name('admin.dashboard');
 
-// halaman kelola laporan admin
-Route::get('/admin/kelola_laporan', function () {
-    return view('admin.kelola_laporan');
-})->name('admin.kelola.laporan')->middleware('admin');
+    // Halaman Kelola Laporan Admin
+    Route::get('/admin/kelola_laporan', function () {
+        return view('admin.kelola_laporan');
+    })->name('admin.kelola.laporan');
 
-// halaman cetak laporan admin
-Route::get('/admin/cetak_laporan', function () {
-    return view('admin.cetak_laporan');
-})->name('admin.cetak')->middleware('admin');
+    // Halaman Cetak Laporan Admin
+    Route::get('/admin/cetak_laporan', function () {
+        return view('admin.cetak_laporan');
+    })->name('admin.cetak');
 
-// halaman detail laporan admin
-Route::get('/admin/detail_laporan', function () {
-    return view('admin.detail_laporan');
-})->name('admin.detail')->middleware('admin');
+    // Halaman Detail Laporan Admin
+    Route::get('/admin/detail_laporan', function () {
+        return view('admin.detail_laporan');
+    })->name('admin.detail');
 
-// halaman kelola akun admin
-Route::get('/admin/kelola_akun', function () {
-    return view('admin.kelola_akun');
-})->name('admin.kelola.akun')->middleware('admin');
+    // Halaman Kelola Akun Admin
+    Route::get('/admin/kelola_akun', function () {
+        return view('admin.kelola_akun');
+    })->name('admin.kelola.akun');
 
-// halaman panduan admin
-Route::get('/admin/panduan_admin', function () {
-    return view('admin.panduan_admin');
-})->name('admin.panduan.admin')->middleware('admin');
+    // Halaman Panduan Admin
+    Route::get('/admin/panduan_admin', function () {
+        return view('admin.panduan_admin');
+    })->name('admin.panduan.admin');
 
-// halaman logout admin
-Route::post('/admin/logout', function () {
-    Auth::logout();
-    session()->forget('admin_logged_in'); // Hapus sesi admin
-    return redirect('/admin/login');
-})->name('admin.logout');
-// Akhir Route Admin
+    // Logout Admin
+    Route::post('/admin/logout', function () {
+        Auth::logout(); // Logout dari semua guard, termasuk default
+        session()->forget('admin_logged_in'); // Hapus sesi admin manual
+        return redirect('/admin/login');
+    })->name('admin.logout');
+});

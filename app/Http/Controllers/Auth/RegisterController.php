@@ -27,6 +27,6 @@ class RegisterController extends Controller
         event(new Registered($pelapor));
         Auth::login($pelapor);
 
-        return redirect()->route('/dashboard');
+        return redirect()->route('login');
     }
 }

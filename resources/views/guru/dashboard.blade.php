@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Dashboard Admin')
+@section('title', 'Dashboard GuruBK')
 
 @section('content')
 <div class="d-flex vh-100">
@@ -11,7 +11,7 @@
             <h5 class="fw-bold">DUCARE</h5>
         </div>
         <nav class="nav flex-column">
-            <a href="#" class="nav-link text-white">🏠 Dashboard</a>
+            <a href="{{ route('guru.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
             <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
             <a href="{{ route ('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
             <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
@@ -28,7 +28,7 @@
 
     <!-- Konten Utama -->
     <main class="flex-grow-1 px-4 pt-5 pb-4 bg-light">
-        <h3 class="mb-4">Selamat Datang, Admin</h3>
+        <h3 class="mb-4">Selamat Datang, GuruBK</h3>
 
         <div class="row g-4">
             <div class="col-md-3">

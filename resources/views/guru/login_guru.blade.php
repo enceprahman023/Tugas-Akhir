@@ -9,12 +9,25 @@
             <img src="{{ asset('images/logodu.png') }}" alt="Logo" class="animated-logo mb-2" style="width: 80px;">
             <h4 class="fw-bold">Login Guru BK</h4>
         </div>
-        <form action="{{ route('guru.dashboard') }}" method="GET">
+
+        {{-- Alert error --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="/login-guru" method="POST">
             @csrf
             <div class="mb-3">
-                <label for="nip" class="form-label">NIP</label>
-                <input type="text" class="form-control" id="nip" name="nip" required>
+                <label for="email" class="form-label">Email Aktif</label>
+                <input type="email" class="form-control" id="email" name="email" required>
             </div>
+
             <div class="mb-3 position-relative">
                 <label for="password" class="form-label">Kata Sandi</label>
                 <input type="password" class="form-control" id="password" name="password" required>
@@ -23,8 +36,10 @@
                     👁️
                 </span>
             </div>
+
             <button type="submit" class="btn btn-primary w-100 mt-2">Masuk</button>
         </form>
+
         <div class="text-center mt-3">
             <small>Belum punya akun? <a href="{{ route('guru.register') }}">Daftar di sini</a></small>
         </div>

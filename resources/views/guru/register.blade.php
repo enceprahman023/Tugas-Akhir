@@ -21,12 +21,14 @@
                 @csrf
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="nama" class="form-label">Nama Lengkap</label>
-                        <input type="text" class="form-control" id="nama" name="nama" required>
+                        <label for="name" class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                         @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6">
                         <label for="nip" class="form-label">NIP</label>
                         <input type="text" class="form-control" id="nip" name="nip" required>
+                        @error('nip')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
@@ -34,10 +36,12 @@
                     <div class="col-md-6">
                         <label for="email" class="form-label">Email Aktif</label>
                         <input type="email" class="form-control" id="email" name="email" required>
+                        @error('email')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6">
-                        <label for="kontak" class="form-label">Nomor Kontak</label>
-                        <input type="text" class="form-control" id="kontak" name="kontak">
+                        <label for="phone_number" class="form-label">Nomor Kontak</label>
+                        <input type="text" class="form-control" id="phone_number" name="phone_number">
+                        @error('phone_number')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                 </div>
 
@@ -93,4 +97,25 @@
         input.type = input.type === 'password' ? 'text' : 'password';
     }
 </script>
+
+{{--  Popup Data berhasil masuk ke DB  --}}
+@if (session('success'))
+    <script>
+        window.onload = function () {
+            setTimeout(function () {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('guru.login') }}";
+                    }
+                });
+            }, 100);
+        }
+    </script>
+@endif
+
 @endsection

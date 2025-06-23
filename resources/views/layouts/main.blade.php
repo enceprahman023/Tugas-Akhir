@@ -1,4 +1,3 @@
-<!-- resources/views/layouts/main.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Darul Ulum Care')</title>
 
-    {{-- Bootstrap & Icons --}}
+    {{-- Bootstrap & Icons CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
+    {{-- SweetAlert2 CSS - Ditempatkan di HEAD UTAMA --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.min.css">
 
     {{-- Custom CSS --}}
-    {{--  <link rel="stylesheet" href="{{ asset('css/style.css') }}">  --}}
     @if (Request::is('guru*'))
     <link rel="stylesheet" href="{{ asset('css/guru.css') }}">
     @elseif (Request::is('admin*'))
@@ -47,7 +46,7 @@
 
             {{-- Right Menu Buttons --}}
             <div class="nav-menu">
-                <a href="{{ route('register') }}" class="btn btn-outline-warning">Register</a>
+                <a href="{{ route('pelapor.register') }}" class="btn btn-outline-warning">Register</a>
                 <a href="{{ route('login') }}" class="btn btn-outline-light ms-3">Login</a>
             </div>
         </div>
@@ -55,7 +54,7 @@
     @endif
 
     {{-- Dynamic Content Section --}}
-    <main class:"container-fluid p-0 m-0">
+    <main class="container-fluid p-0 m-0">
         @yield('content')
     </main>
 
@@ -64,40 +63,50 @@
         @yield('footer')
     @endif
 
-     <!-- Script Logout Umum pelapor -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const logoutButton = document.getElementById('logout-button');
-    const logoutForm = document.getElementById('logout-form');
+    {{-- Bootstrap & SweetAlert2 JS - Ditempatkan di AKHIR BODY --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.0/dist/sweetalert2.all.min.js"></script>
 
-    if (logoutButton && logoutForm) {
-      logoutButton.addEventListener('click', function () {
-        if (confirm('Apakah kamu yakin ingin logout?')) {
-          logoutForm.submit();
-        }
-      });
-    }
-  });
-</script>
-<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-  @csrf
-</form>
-<!-- Script Logout guruBK -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const logoutButton = document.getElementById('logout-button');
-    const logoutForm = document.getElementById('logout-form');
+    {{-- Script Logout Umum pelapor --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutButton = document.getElementById('logout-button');
+            const logoutForm = document.getElementById('logout-form');
 
-    if (logoutButton && logoutForm) {
-      logoutButton.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (confirm('Apakah kamu yakin ingin logout?')) {
-          logoutForm.submit();
-        }
-      });
-    }
-  });
-</script>
+            if (logoutButton && logoutForm) {
+                logoutButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (confirm('Apakah kamu yakin ingin logout?')) {
+                        logoutForm.submit();
+                    }
+                });
+            }
+        });
+    </script>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
+
+    {{-- Script Logout guruBK (Perhatikan ID yang berbeda agar tidak bentrok) --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const guruLogoutButton = document.getElementById('guru-logout-button');
+            const guruLogoutForm = document.getElementById('guru-logout-form');
+
+            if (guruLogoutButton && guruLogoutForm) {
+                guruLogoutButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (confirm('Apakah kamu yakin ingin logout Guru BK?')) {
+                        guruLogoutForm.submit();
+                    }
+                });
+            }
+        });
+    </script>
+    {{-- Pastikan ID form logout Guru BK unik, contoh: guru-logout-form --}}
+    {{-- <form id="guru-logout-form" action="{{ route('guru.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form> --}}
 
 </body>
 </html>

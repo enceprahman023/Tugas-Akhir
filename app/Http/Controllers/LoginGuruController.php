@@ -3,51 +3,73 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Guru; // Pastikan model Guru ada dan benar
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth; // Impor facade Auth
+use Illuminate\Support\Facades\Log;  // Untuk logging
 
 class LoginGuruController extends Controller
 {
-    // Menampilkan halaman login
+    // Menampilkan halaman login Guru BK
     public function showLoginForm()
     {
         return view('guru.login_guru');
     }
 
-    // Menangani proses login
+    // Menangani proses login Guru BK
     public function login(Request $request)
     {
         // Validasi input
-        $validated = $request->validate([
-            'nip' => 'required',
+        $credentials = $request->validate([
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Cek apakah NIP dan password sesuai (data dummy)
-        $dummyNip = '12345678';
-        $dummyPassword = 'password123';
+        // Log input dari user
+        Log::info('Coba login dengan:', [
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
 
-        if ($request->nip === $dummyNip && $request->password === $dummyPassword) {
-            // Simpan status login guru ke session
-            session(['login_guru' => true]);
+        // Cek apakah email ditemukan di database
+        $guru = Guru::where('email', $request->email)->first();
 
-            // Redirect ke dashboard guru
-            return redirect('/guru/dashboard');
+        if (!$guru) {
+            Log::warning('Login gagal: email tidak ditemukan di tabel gurus.');
+        } else {
+            Log::info('Data Guru ditemukan:', [
+                'email' => $guru->email,
+                'password_hash' => $guru->password,
+            ]);
+
+            Log::info('Password cocok?', [
+                'result' => Hash::check($request->password, $guru->password)
+            ]);
         }
 
-        // Jika login gagal, kembali dengan pesan error
+        // Coba autentikasi menggunakan guard 'guru'
+        if (Auth::guard('guru')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            Log::info('Login BERHASIL untuk: ' . $request->email);
+            return redirect()->route('guru.dashboard');
+        }
+
+        // Login gagal
+        Log::error('Login GAGAL untuk: ' . $request->email);
+
         return back()->withErrors([
-            'nip' => 'NIP atau password salah.',
-        ]);
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 
-    // Menangani logout guru
+    // Logout Guru BK
     public function logout(Request $request)
     {
-        // Hapus session login guru
-        $request->session()->forget('login_guru');
+        Auth::guard('guru')->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Redirect ke halaman login guru BK
         return redirect('/login-guru');
     }
 }
