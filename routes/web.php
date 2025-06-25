@@ -99,6 +99,13 @@ Route::get('/login-guru', [LoginGuruController::class, 'showLoginForm'])->name('
 Route::post('/login-guru', [LoginGuruController::class, 'login'])->name('guru.login.submit');
 Route::post('/logout-guru', [LoginGuruController::class, 'logout'])->name('guru.logout');
 
+//Route Profile guruBK
+Route::get('/guru/profil', [GuruProfileController::class, 'show'])->name('guru.profil');
+Route::post('/guru/profil/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profil.update');
+Route::put('/guru/profil/update', [GuruProfileController::class, 'update'])->name('guru.profil.update');
+Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
+Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
+
 
 // Rute Guru BK yang Memerlukan Autentikasi (menggunakan middleware 'auth:guru' - khusus guard 'guru')
 Route::middleware(['auth'])->group(function () {

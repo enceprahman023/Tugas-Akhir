@@ -12,6 +12,7 @@ class LoginGuruController extends Controller
 {
     // Menampilkan halaman login Guru BK
     public function showLoginForm()
+
     {
         return view('guru.login_guru');
     }
@@ -26,18 +27,19 @@ class LoginGuruController extends Controller
         ]);
 
         // Log input dari user
+        
         Log::info('Coba login dengan:', [
             'email' => $request->email,
+            'password' => $request->password,
             // jangan log password asli di production
+            
         ]);
 
         // Cari user dengan role gurubk
         $user = User::where('email', $request->email)
                     ->where('role', 'gurubk')
                     ->first();
-
         if (!$user) {
-             dd('User tidak ditemukan');
             Log::warning('Login gagal: email tidak ditemukan di tabel users untuk role gurubk.');
             return back()->withErrors([
                 'email' => 'Akun Guru BK tidak ditemukan.',
@@ -46,7 +48,6 @@ class LoginGuruController extends Controller
 
         // Cek apakah password cocok
         if (!Hash::check($request->password, $user->password)) {
-             dd('User tidak ditemukan');
             Log::warning('Login gagal: password salah untuk email ' . $request->email);
             return back()->withErrors([
                 'password' => 'Password salah.',
@@ -55,6 +56,7 @@ class LoginGuruController extends Controller
 
         // Login berhasil
         Auth::login($user);
+        session(['login_guru' => $user->id]);
         $request->session()->regenerate();
 
         Log::info('Login BERHASIL untuk Guru BK: ' . $request->email);
@@ -65,6 +67,7 @@ class LoginGuruController extends Controller
     // Logout Guru BK
     public function logout(Request $request)
     {
+        session()->forget('login_guru');
         Auth::logout(); // tidak perlu pakai guard karena kita pakai default login
 
         $request->session()->invalidate();

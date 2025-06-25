@@ -20,11 +20,19 @@
             <h2 class="mb-4 text-center">Daftar Guru BK</h2>
             <form action="{{ route('guru.register.store') }}" method="POST">
                 @csrf
+
+                {{-- Tampilkan error jika transaksi gagal --}}
+                @if ($errors->has('db_error'))
+                    <div class="alert alert-danger">
+                        {{ $errors->first('db_error') }}
+                    </div>
+                @endif
+
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="name" class="form-label">Nama Lengkap</label>
                         <input type="text" class="form-control" id="name" name="name" required>
-                         @error('name')<div class="text-danger">{{ $message }}</div>@enderror
+                        @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                     <div class="col-md-6">
                         <label for="nip" class="form-label">NIP</label>
@@ -41,7 +49,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="phone_number" class="form-label">Nomor Kontak</label>
-                        <input type="text" class="form-control" id="phone_number" name="phone_number">
+                        <input type="text" class="form-control" id="phone_number" name="phone_number" required>
                         @error('phone_number')<div class="text-danger">{{ $message }}</div>@enderror
                     </div>
                 </div>
@@ -50,7 +58,7 @@
                     <div class="col-md-6">
                         <label for="password" class="form-label">Kata Sandi</label>
                         <div class="position-relative">
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password" required autocomplete="new-password">
                             <span onclick="togglePassword('password')" 
                                 style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; font-size: 16px;">
                                 👁️
@@ -60,7 +68,7 @@
                     <div class="col-md-6">
                         <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
                         <div class="position-relative">
-                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required autocomplete="new-password">
                             <span onclick="togglePassword('password_confirmation')" 
                                 style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; font-size: 16px;">
                                 👁️
@@ -68,6 +76,7 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Tombol Daftar -->
                 <div class="text-center mb-3">
                     <button type="submit" class="btn btn-primary w-50">Daftar</button>

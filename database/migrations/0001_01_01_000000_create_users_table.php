@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pelapor;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
         $table->string('name');
         $table->string('email')->unique();
         $table->string('phone_number')->nullable(); // Tambahan
-        $table->string('role'); // admin, gurubk, pelapor
+        $table->enum('role', ['pelapor','gurubk','admin'])->default('pelapor'); // admin, gurubk, pelapor
         $table->string('nip')->nullable(); // Khusus Guru BK
         $table->string('nis')->nullable(); // Khusus Pelapor
         $table->timestamp('email_verified_at')->nullable();

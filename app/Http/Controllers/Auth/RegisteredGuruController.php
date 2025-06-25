@@ -24,7 +24,9 @@ class RegisteredGuruController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'nip' => ['required', 'string', 'max:100', 'unique:users,nip'],
+            'phone_number' => ['required', 'string', 'max:20'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -33,6 +35,8 @@ class RegisteredGuruController extends Controller
         try {
             $user = User::create([
                 'name' => $request->name,
+                'nip' => $request->nip,
+                'phone_number' => $request->phone_number,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role' => 'gurubk',
@@ -43,7 +47,7 @@ class RegisteredGuruController extends Controller
 
             DB::commit();
 
-            return redirect()->route('guru.register')->with('success', 'Akun Guru BK berhasil dibuat!');
+            return redirect()->route('guru.dashboard')->with('success', 'Akun Guru BK berhasil dibuat!');
         } catch (\Exception $e) {
             DB::rollBack();
 
