@@ -100,17 +100,22 @@ Route::post('/login-guru', [LoginGuruController::class, 'login'])->name('guru.lo
 Route::post('/logout-guru', [LoginGuruController::class, 'logout'])->name('guru.logout');
 
 //Route Profile guruBK
-Route::get('/guru/profil', [GuruProfileController::class, 'show'])->name('guru.profil');
-Route::post('/guru/profil/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profil.update');
-Route::put('/guru/profil/update', [GuruProfileController::class, 'update'])->name('guru.profil.update');
+Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
+Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
+Route::put('/guru/profile/update', [GuruProfileController::class, 'update'])->name('guru.profile.update');
 Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
 Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
 
 
 // Rute Guru BK yang Memerlukan Autentikasi (menggunakan middleware 'auth:guru' - khusus guard 'guru')
 Route::middleware(['auth'])->group(function () {
+    Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard');
     // Halaman Dashboard Guru BK
-    Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard'); // Menggunakan Controller
+   Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
+    Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
+    Route::put('/guru/profile/update', [GuruProfileController::class, 'update'])->name('guru.profile.update');
+    Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
+    Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
     // Atau jika hanya menampilkan view langsung:
     // Route::get('/guru/dashboard', function () {
     //     return view('guru.dashboard');

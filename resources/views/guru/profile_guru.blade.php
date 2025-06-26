@@ -15,7 +15,7 @@
             <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📁 Kelola Laporan</a>
             <a href="{{ route('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
             <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
-            <a href="{{ route('guru.profil') }}" class="nav-link text-white bg-dark rounded">👤 Profil</a>
+            <a href="{{ route('guru.profile') }}" class="nav-link text-white bg-dark rounded">👤 Profil</a>
             <form action="{{ route('guru.logout') }}" method="POST" class="mt-2">
                 @csrf
                 <button type="submit" class="nav-link text-danger border-0 bg-transparent text-start">🚪 Logout</button>
@@ -73,7 +73,7 @@
 <!-- Modal Edit Profil -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="{{ route('guru.profil.update') }}" method="POST" enctype="multipart/form-data" class="modal-content">
+    <form action="{{ route('guru.profile.update') }}" method="POST" enctype="multipart/form-data" class="modal-content">
       @csrf
       <div class="modal-header">
         <h5 class="modal-title" id="editProfileModalLabel">Edit Profil</h5>
