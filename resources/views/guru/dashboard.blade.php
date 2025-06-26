@@ -13,16 +13,16 @@
         <nav class="nav flex-column">
             <a href="{{ route('guru.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
             <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
-            <a href="{{ route ('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
+            <a href="{{ route('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
             <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
-            <a href="{{ route ('guru.profile') }}" class="nav-link text-white">👤 Profile</a>
+            <a href="{{ route('guru.profile') }}" class="nav-link text-white">👤 Profile</a>
             <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
-    @csrf
-    <a href="#" class="nav-link text-white"
-       onclick="event.preventDefault(); if(confirm('Apakah kamu yakin ingin logout?')) document.getElementById('logout-form').submit();">
-        🚪 Keluar
-    </a>
-</form>
+                @csrf
+                <a href="#" class="nav-link text-white"
+                   onclick="event.preventDefault(); if(confirm('Apakah kamu yakin ingin logout?')) document.getElementById('logout-form').submit();">
+                    🚪 Keluar
+                </a>
+            </form>
         </nav>
     </aside>
 
@@ -34,26 +34,28 @@
             <div class="col-md-3">
                 <div class="card shadow-sm p-3 text-center">
                     <h6>Laporan Masuk</h6>
-                    <h4 class="text-primary">12</h4>
+                    <h4 class="text-primary">{{ $jumlahMasuk }}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card shadow-sm p-3 text-center">
                     <h6>Dalam Proses</h6>
-                    <h4 class="text-warning">5</h4>
+                    <h4 class="text-warning">{{ $jumlahProses }}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card shadow-sm p-3 text-center">
                     <h6>Selesai</h6>
-                    <h4 class="text-success">3</h4>
+                    <h4 class="text-success">{{ $jumlahSelesai }}</h4>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="card shadow-sm p-3 text-center">
                     <h6>Ditolak</h6>
-                    <h4 class="text-danger">2</h4>
+                    <h4 class="text-danger">{{ $jumlahTolak }}</h4>
                 </div>
             </div>
         </div>
-  @endsection
+    </main>
+</div>
+@endsection

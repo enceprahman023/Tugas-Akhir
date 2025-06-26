@@ -19,6 +19,9 @@ class Laporan extends Model
     'isi_laporan',
     'nama_saksi',
     'bukti_gambar',
+    'status',
+    'catatan_penanganan',
+    'tanggal_penanganan',
 ];
     /**
      * Definisikan relasi laporan ini dimiliki oleh satu pelapor.

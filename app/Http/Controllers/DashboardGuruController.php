@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Laporan;
 
 class DashboardGuruController extends Controller
 {
@@ -15,6 +16,17 @@ class DashboardGuruController extends Controller
             ]);
         }
 
-       return view('guru.dashboard');
+        // Ambil jumlah laporan berdasarkan status
+        $jumlahMasuk   = Laporan::where('status', 'masuk')->count();
+        $jumlahProses  = Laporan::where('status', 'diproses')->count();
+        $jumlahSelesai = Laporan::where('status', 'selesai')->count();
+        $jumlahTolak   = Laporan::where('status', 'ditolak')->count();
+
+        return view('guru.dashboard', compact(
+            'jumlahMasuk',
+            'jumlahProses',
+            'jumlahSelesai',
+            'jumlahTolak'
+        ));
     }
 }

@@ -23,7 +23,6 @@
     <main class="flex-grow-1 px-4 pt-5 pb-4 bg-light">
         <h3 class="mb-4">Kelola Laporan</h3>
 
-        <!-- Tabel Laporan -->
         <div class="table-responsive mt-4">
             <table class="table table-bordered">
                 <thead>
@@ -36,166 +35,94 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>LAP-001</td>
-                        <td>Laporan Bullying di Kelas 10</td>
-                        <td><span class="badge bg-warning">Dalam Proses</span></td>
-                        <td>2025-05-03</td>
-                        <td>
-                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-001">Lihat Detail</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>LAP-002</td>
-                        <td>Laporan Penganiayaan oleh Senior</td>
-                        <td><span class="badge bg-success">Selesai</span></td>
-                        <td>2025-05-02</td>
-                        <td>
-                            <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-002">Lihat Detail</button>
-                        </td>
-                    </tr>
+                    @foreach ($laporans as $laporan)
+                        <tr>
+                            <td>LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</td>
+                            <td>{{ $laporan->judul_laporan }}</td>
+                            <td>
+                                @php
+                                    $badge = 'secondary';
+                                    if ($laporan->status === 'Dalam Proses') $badge = 'warning';
+                                    elseif ($laporan->status === 'Selesai') $badge = 'success';
+                                    elseif ($laporan->status === 'Ditolak') $badge = 'danger';
+                                @endphp
+                                <span class="badge bg-{{ $badge }}">{{ $laporan->status ?? 'Belum Ada' }}</span>
+                            </td>
+                            <td>{{ $laporan->created_at->format('Y-m-d') }}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $laporan->id }}">Lihat Detail</button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
 
-      <!-- Modal Detail Laporan LAP-001 (Non-Anonim) -->
-<div class="modal fade" id="detailModal-001" tabindex="-1" aria-labelledby="detailModalLabel001" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailModalLabel001">Detail Laporan LAP-001</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-striped">
-                    <tbody>
-                        <tr>
-                            <th>Judul Laporan</th>
-                            <td>Laporan Bullying di Kelas 10</td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td><span class="badge bg-warning">Dalam Proses</span></td>
-                        </tr>
-                        <tr>
-                            <th>Tanggal Laporan</th>
-                            <td>2025-05-03</td>
-                        </tr>
-                        <tr>
-                            <th>Pelaku</th>
-                            <td>Siswa A</td>
-                        </tr>
-                        <tr>
-                            <th>Pelapor</th>
-                            <td>Rina Putri</td>
-                        </tr>
-                        <tr>
-                            <th>Saksi</th>
-                            <td>Siswa B, Siswa C</td>
-                        </tr>
-                        <tr>
-                            <th>Deskripsi</th>
-                            <td>Laporan mengenai bullying yang terjadi di kelas 10. Siswa yang terlibat sudah teridentifikasi dan tindakan telah diambil oleh pihak sekolah.</td>
-                        </tr>
-                        <tr>
-                            <th>Bukti Foto</th>
-                            <td><img src="{{ asset('images/bukti_dummy.jpg') }}" alt="Bukti Foto" class="img-fluid" style="max-height: 250px;"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Catatan Penanganan -->
-<div class="mt-4">
-    <h6>Catatan Penanganan</h6>
-    <form>
-        <div class="mb-3">
-            <textarea class="form-control" rows="3" placeholder="Tulis catatan penanganan..."></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Tanggal Penanganan</label>
-            <input type="date" class="form-control">
-        </div>
-        <button type="button" class="btn btn-primary">Simpan Catatan</button>
-    </form>
-</div>
+        @foreach ($laporans as $laporan)
+        <!-- Modal Detail -->
+        <div class="modal fade" id="detailModal-{{ $laporan->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $laporan->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Laporan LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <tr><th>Judul Laporan</th><td>{{ $laporan->judul_laporan }}</td></tr>
+                            <tr><th>Status</th><td><span class="badge bg-secondary">{{ $laporan->status ?? 'Belum Ada' }}</span></td></tr>
+                            <tr><th>Tanggal Laporan</th><td>{{ $laporan->created_at->format('Y-m-d') }}</td></tr>
+                            <tr><th>Pelaku</th><td>{{ $laporan->nama_pembully }}</td></tr>
+                            <tr><th>Pelapor</th><td>{{ $laporan->nama_pelapor === 'Anonim' ? 'Laporan ini dikirim secara anonim' : $laporan->nama_pelapor }}</td></tr>
+                            <tr><th>Saksi</th><td>{{ $laporan->nama_saksi ?? '-' }}</td></tr>
+                            <tr><th>Deskripsi</th><td>{{ $laporan->isi_laporan }}</td></tr>
+                            <tr>
+                                <th>Bukti Foto</th>
+                                <td>
+                                    @if ($laporan->bukti_gambar)
+                                        <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" class="img-fluid" style="max-height: 250px;">
+                                    @else
+                                        Tidak ada gambar
+                                    @endif
+                                </td>
+                            </tr>
+                        </table>
 
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger">Hapus</button>
-                <button class="btn btn-success">Selesaikan</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <!-- Catatan Penanganan -->
+                        <div class="mt-4">
+                            <h6>Catatan Penanganan</h6>
+                            <form action="{{ route('laporan.updatePenanganan', $laporan->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="mb-3">
+                                    <textarea name="catatan_penanganan" class="form-control" rows="3" placeholder="Tulis catatan penanganan...">{{ $laporan->catatan_penanganan }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tanggal Penanganan</label>
+                                    <input type="date" name="tanggal_penanganan" class="form-control" value="{{ $laporan->tanggal_penanganan }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Simpan Catatan</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{{ route('laporan.destroy', $laporan->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus laporan ini?')">Hapus</button>
+                        </form>
+                        <form action="{{ route('laporan.updateStatus', $laporan->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="Selesai">
+                            <button class="btn btn-success">Selesaikan</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Modal Detail Laporan LAP-002 (Anonim) -->
-<div class="modal fade" id="detailModal-002" tabindex="-1" aria-labelledby="detailModalLabel002" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailModalLabel002">Detail Laporan LAP-002</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-striped">
-                    <tbody>
-                        <tr>
-                            <th>Judul Laporan</th>
-                            <td>Laporan Penganiayaan oleh Senior</td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td><span class="badge bg-success">Selesai</span></td>
-                        </tr>
-                        <tr>
-                            <th>Tanggal Laporan</th>
-                            <td>2025-05-02</td>
-                        </tr>
-                        <tr>
-                            <th>Pelaku</th>
-                            <td>Siswa X</td>
-                        </tr>
-                        <tr>
-                            <th>Pelapor</th>
-                            <td><em>Laporan ini dikirim secara anonim</em></td>
-                        </tr>
-                        <tr>
-                            <th>Saksi</th>
-                            <td>Tidak disebutkan</td>
-                        </tr>
-                        <tr>
-                            <th>Deskripsi</th>
-                            <td>Laporan anonim mengenai tindakan penganiayaan oleh siswa senior kepada junior saat kegiatan ekstrakurikuler.</td>
-                        </tr>
-                        <tr>
-                            <th>Bukti Foto</th>
-                            <td><img src="{{ asset('images/bukti_dummy2.jpg') }}" alt="Bukti Foto" class="img-fluid" style="max-height: 250px;"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Catatan Penanganan -->
-<div class="mt-4">
-    <h6>Catatan Penanganan</h6>
-    <form>
-        <div class="mb-3">
-            <textarea class="form-control" rows="3" placeholder="Tulis catatan penanganan..."></textarea>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Tanggal Penanganan</label>
-            <input type="date" class="form-control">
-        </div>
-        <button type="button" class="btn btn-primary">Simpan Catatan</button>
-    </form>
-</div>
-            </div>
-           <div class="modal-footer">
-            <button class="btn btn-danger">Hapus</button>
-         <button class="btn btn-success">Selesaikan</button>
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-</div>
-        </div>
-    </div>
-</div>
-</main>
+        @endforeach
+    </main>
 </div>
 @endsection

@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\RegisteredController; // Jika dipakai untuk regist
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Auth\LoginPelaporController; // Controller untuk login Pelapor
 use App\Http\Controllers\GuruProfileController;
+use App\Http\Controllers\GuruController;
 use Illuminate\Http\Request;
 
 // =====================================================================================================================
@@ -121,14 +122,15 @@ Route::middleware(['auth'])->group(function () {
     //     return view('guru.dashboard');
     // })->name('guru.dashboard');
 
-    // Rute Kelola Laporan Guru
+    // Route Kelola Laporan Guru
     Route::get('/guru/kelola-laporan', [LaporanController::class, 'guruKelola'])->name('guru.kelola');
+    
+    // Route Cetak Laporan guru
+    Route::get('/guru/cetak-laporan', [GuruController::class, 'cetakLaporan'])->name('guru.cetak');
+    Route::get('/guru/cetak-laporan/{id}', [GuruController::class, 'cetakDetail'])->name('guru.cetak.detail');
 
-    // Rute Cetak Laporan Guru
-    Route::get('/guru/cetak-laporan', function () {
-        return view('guru.cetak_laporan');
-    })->name('guru.cetak');
 
+    
     // Halaman Detail Cetak Laporan Guru
     Route::get('/guru/detail-laporan', function () {
         return view('guru.detail_laporan');

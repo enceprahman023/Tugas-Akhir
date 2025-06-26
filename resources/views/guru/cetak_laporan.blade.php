@@ -37,29 +37,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>LAP-001</td>
-                            <td>Bullying Kelas 10</td>
-                            <td>2025-05-03</td>
-                            <td><span class="badge bg-success">Selesai</span></td>
-                            <td>Non-Anonim</td>
-                            <td>
-                                <a href="{{ route('guru.cetak.detail') }}" class="btn btn-sm btn-primary">🖨️ Detail</a>
-                                <button class="btn btn-danger btn-sm">Cetak</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>LAP-002</td>
-                            <td>Bullying di Kantin</td>
-                            <td>2025-05-07</td>
-                            <td><span class="badge bg-warning text-dark">Proses</span></td>
-                            <td>Anonim</td>
-                            <td>
-                                <a href="{{ route('guru.cetak.detail') }}" class="btn btn-sm btn-primary">🖨️ Detail</a>
-                                <button class="btn btn-danger btn-sm">Cetak</button>
-                            </td>
-                        </tr>
-                        <!-- Tambahkan baris dummy lainnya jika perlu -->
+                        @foreach ($laporans as $laporan)
+                            <tr>
+                                <td>LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</td>
+                                <td>{{ $laporan->judul_laporan }}</td>
+                                <td>{{ $laporan->created_at->format('Y-m-d') }}</td>
+                                <td>
+                                    @php
+                                        $badge = 'secondary';
+                                        if ($laporan->status === 'Dalam Proses') $badge = 'warning text-dark';
+                                        elseif ($laporan->status === 'Selesai') $badge = 'success';
+                                        elseif ($laporan->status === 'Ditolak') $badge = 'danger';
+                                    @endphp
+                                    <span class="badge bg-{{ $badge }}">{{ $laporan->status }}</span>
+                                </td>
+                                <td>{{ $laporan->nama_pelapor === 'Anonim' ? 'Anonim' : 'Non-Anonim' }}</td>
+                                <td>
+                                    <a href="{{ route('guru.cetak.detail', $laporan->id) }}" class="btn btn-sm btn-primary">🖨️ Detail</a>
+                                    <button class="btn btn-danger btn-sm" onclick="window.print()">Cetak</button>
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        @if ($laporans->isEmpty())
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Belum ada laporan yang diproses.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
