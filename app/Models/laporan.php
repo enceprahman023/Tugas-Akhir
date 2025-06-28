@@ -11,6 +11,7 @@ class Laporan extends Model
 
     // Tentukan kolom-kolom yang boleh diisi secara massal (mass assignable)
   protected $fillable = [
+    'user_id',
     'jenis_pelaporan',
     'nama_pelapor',
     'tanggal_kejadian',

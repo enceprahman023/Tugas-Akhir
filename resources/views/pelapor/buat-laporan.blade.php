@@ -9,7 +9,7 @@
           📝 Buat Laporan
         </div>
         <div class="card-body">
-          <form action="{{ route('buat.laporan') }}" method="POST" enctype="multipart/form-data">
+          <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <!-- Pilihan Anonim / Non-Anonim -->
             <div class="mb-3">

@@ -18,7 +18,7 @@ class LoginPelaporController extends Controller
     {
         // Validasi input
         $credentials = $request->validate([
-            'nis' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 

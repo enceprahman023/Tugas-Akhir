@@ -60,7 +60,7 @@ $namaPelapor = $request->jenis_pelaporan === 'anonim'
 
     // 4. Simpan data laporan ke database
     Laporan::create([
-        'pelapor_id' => Auth::id(),
+        'user_id' => Auth::id(),
         'jenis_pelaporan' => $validatedData['jenis_pelaporan'],
         'nama_pelapor' => $namaPelapor,
         'tanggal_kejadian' => $validatedData['tanggal_kejadian'],

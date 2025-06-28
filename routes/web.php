@@ -14,6 +14,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Auth\LoginPelaporController; // Controller untuk login Pelapor
 use App\Http\Controllers\GuruProfileController;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\PelaporController;
 use Illuminate\Http\Request;
 
 // =====================================================================================================================
@@ -25,9 +26,30 @@ Route::get('/register', [RegisteredPelaporController::class, 'create'])->name('r
 Route::get('/pelapor/register', [RegisteredPelaporController::class, 'create'])->name('pelapor.register'); // Duplikat? Coba gunakan satu saja.
 Route::post('/pelapor/register', [RegisteredPelaporController::class, 'store'])->name('pelapor.register.store');
 
-// Rute Login Pelapor (Menggunakan LoginPelaporController)
+// Route Login Pelapor (Menggunakan LoginPelaporController)
 Route::get('/login', [LoginPelaporController::class, 'create'])->name('login');
 Route::post('/login', [LoginPelaporController::class, 'store'])->name('login.store');
+
+// Route Register Dashboard pelapor depan 
+Route::get('/pelapor/dashboard', [PelaporController::class, 'dashboard'])->name('pelapor.dashboard');
+
+// route ganti  password pelapor 
+Route::get('/pelapor/ganti-password', [ProfileController::class, 'formGantiPassword'])->name('pelapor.password');
+Route::post('/pelapor/ganti-password', [ProfileController::class, 'updatePassword'])->name('pelapor.password.update');
+
+// route update profile 
+Route::post('/profil/update', [ProfileController::class, 'update'])->name('profile.update');
+
+// Form Buat Laporan (GET)
+Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
+
+//  Proses Simpan Laporan (POST)
+Route::post('/laporan/store', [LaporanController::class, 'store'])->name('laporan.store');
+
+// Route Login Pelapor
+Route::middleware(['auth'])->group(function () {
+    Route::get('/pelapor/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
+});
 
 // Halaman Home (Tidak memerlukan autentikasi)
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -55,8 +77,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
 
     // Rute Buat Laporan
-    Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
-    Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+
 
     // Status Laporan Pelapor
     Route::get('/status-laporan', function () {

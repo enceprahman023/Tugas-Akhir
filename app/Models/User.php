@@ -29,4 +29,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Relasi: satu user bisa punya banyak laporan
+     */
+    public function laporans()
+    {
+        return $this->hasMany(Laporan::class);
+    }
 }
