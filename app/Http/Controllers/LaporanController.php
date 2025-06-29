@@ -68,6 +68,7 @@ $namaPelapor = $request->jenis_pelaporan === 'anonim'
         'judul_laporan' => $validatedData['judul'],
         'isi_laporan' => $validatedData['isi'],
         'nama_saksi' => $validatedData['saksi'],
+         'status' => 'Dalam Proses',
         'bukti_gambar' => $imagePath,
     ]);
 
@@ -122,6 +123,16 @@ $namaPelapor = $request->jenis_pelaporan === 'anonim'
         }
     }
 
+    public function cetakLaporan()
+{
+    $laporans = Laporan::whereIn('status', ['Selesai', 'Ditolak'])
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+    return view('guru.cetak_laporan', compact('laporans'));
+}
+
+
     // --- Anda akan perlu menambahkan metode update(Request $request, $id) di sini nanti
     // public function update(Request $request, $id)
     // {
@@ -146,4 +157,67 @@ $namaPelapor = $request->jenis_pelaporan === 'anonim'
             return redirect()->route('status.laporan')->with('error', 'Laporan tidak ditemukan');
         }
     }
+    /**
+ * Memperbarui catatan penanganan dan status laporan oleh Guru BK.
+ */
+public function updatePenanganan(Request $request, $id)
+{
+    $request->validate([
+        'catatan_penanganan' => 'required|string|max:1000',
+        'tanggal_penanganan' => 'required|date',
+        'ttd' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $laporan = Laporan::findOrFail($id);
+
+    $laporan->catatan_penanganan = $request->catatan_penanganan;
+    $laporan->tanggal_penanganan = $request->tanggal_penanganan;
+
+    // simpan nama guru dari input form
+    $laporan->ditangani_oleh = $request->ditangani_oleh ?? (session('login_guru')['nama'] ?? 'Guru BK');
+
+    // cek jika ada file ttd diupload
+    if ($request->hasFile('ttd')) {
+        $path = $request->file('ttd')->store('ttd', 'public');
+        $laporan->ttd_penangan = $path;
+    }
+
+    $laporan->save();
+
+    return redirect()->back()->with('success', 'Catatan penanganan berhasil disimpan.');
+}
+
+
+    /**
+ * Memperbarui status laporan (Selesai atau Ditolak)
+ */
+public function updateStatus(Request $request, $id)
+{
+    $request->validate([
+        'status' => 'required|in:Selesai,Ditolak',
+    ]);
+
+    $laporan = Laporan::findOrFail($id);
+
+    // Validasi: pastikan catatan penanganan sudah ada sebelum update status
+    if (empty($laporan->catatan_penanganan)) {
+        return redirect()->back()->with('error', 'Isi catatan penanganan terlebih dahulu sebelum mengubah status.');
+    }
+
+    $laporan->status = $request->status;
+
+    // Isi nama guru BK yang sedang login (jika pakai Auth user biasa atau guard khusus guru)
+  $laporan->ditangani_oleh = session('login_guru')['nama'] ?? 'Guru BK';
+
+    $laporan->save();
+
+    return redirect()->back()->with('success', 'Status laporan berhasil diperbarui.');
+}
+
+public function cetakDetail($id)
+{
+    $laporan = Laporan::findOrFail($id);
+    return view('guru.detail_laporan', compact('laporan'));
+}
+
 }

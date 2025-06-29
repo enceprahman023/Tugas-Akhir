@@ -50,7 +50,13 @@
                             </td>
                             <td>{{ $laporan->created_at->format('Y-m-d') }}</td>
                             <td>
-                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $laporan->id }}">Lihat Detail</button>
+                                <button class="btn btn-info btn-sm me-1" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $laporan->id }}">Lihat Detail</button>
+
+                                <form action="{{ route('laporan.destroy', $laporan->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -77,47 +83,73 @@
                             <tr><th>Saksi</th><td>{{ $laporan->nama_saksi ?? '-' }}</td></tr>
                             <tr><th>Deskripsi</th><td>{{ $laporan->isi_laporan }}</td></tr>
                             <tr>
-                                <th>Bukti Foto</th>
-                                <td>
-                                    @if ($laporan->bukti_gambar)
-                                        <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" class="img-fluid" style="max-height: 250px;">
-                                    @else
-                                        Tidak ada gambar
-                                    @endif
-                                </td>
-                            </tr>
+    <th>Bukti Foto</th>
+    <td>
+        @if ($laporan->bukti_gambar)
+            <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}"
+                 class="img-fluid zoomable-image"
+                 style="max-height: 200px; cursor: zoom-in;">
+        @else
+            Tidak ada gambar
+        @endif
+    </td>
+</tr>
                         </table>
 
-                        <!-- Catatan Penanganan -->
+                        <!-- Form Penanganan -->
                         <div class="mt-4">
                             <h6>Catatan Penanganan</h6>
-                            <form action="{{ route('laporan.updatePenanganan', $laporan->id) }}" method="POST">
+                            <form action="{{ route('laporan.updatePenanganan', $laporan->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
+
                                 <div class="mb-3">
                                     <textarea name="catatan_penanganan" class="form-control" rows="3" placeholder="Tulis catatan penanganan...">{{ $laporan->catatan_penanganan }}</textarea>
                                 </div>
+
                                 <div class="mb-3">
                                     <label class="form-label">Tanggal Penanganan</label>
                                     <input type="date" name="tanggal_penanganan" class="form-control" value="{{ $laporan->tanggal_penanganan }}">
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Ditangani Oleh</label>
+                                    <input type="text" name="ditangani_oleh" class="form-control" value="{{ $laporan->ditangani_oleh ?? auth()->user()->nama }}">
+                                </div>
+
+                                <div class="mb-3">
+    <label class="form-label">Tanda Tangan (opsional)</label>
+    <input type="file" name="ttd" class="form-control" accept="image/*">
+    @if ($laporan->ttd_penangan)
+        <div class="mt-2">
+            <p class="mb-1">Tanda tangan yang sudah diunggah:</p>
+            <img src="{{ asset('storage/' . $laporan->ttd_penangan) }}" alt="TTD" style="max-height: 100px;">
+        </div>
+    @endif
+</div>
                                 <button type="submit" class="btn btn-primary">Simpan Catatan</button>
                             </form>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <form action="{{ route('laporan.destroy', $laporan->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus laporan ini?')">Hapus</button>
-                        </form>
-                        <form action="{{ route('laporan.updateStatus', $laporan->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="status" value="Selesai">
-                            <button class="btn btn-success">Selesaikan</button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <div class="modal-footer d-flex justify-content-between align-items-center">
+                        <div>
+                            <form action="{{ route('laporan.updateStatus', $laporan->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="status" value="Ditolak">
+                                <button class="btn btn-warning me-2">Tolak</button>
+                            </form>
+
+                            <form action="{{ route('laporan.updateStatus', $laporan->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="status" value="Selesai">
+                                <button class="btn btn-success">Selesaikan</button>
+                            </form>
+                        </div>
+
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,3 +158,21 @@
     </main>
 </div>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('shown.bs.modal', function () {
+                const zoomableImages = modal.querySelectorAll('.zoomable-image');
+                zoomableImages.forEach(img => {
+                    img.addEventListener('click', function () {
+                        img.classList.toggle('zoomed');
+                    });
+                });
+            });
+        });
+    });
+</script>
+@endpush
+

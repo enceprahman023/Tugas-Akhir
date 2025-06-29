@@ -109,6 +109,7 @@
     {{-- <form id="guru-logout-form" action="{{ route('guru.logout') }}" method="POST" style="display: none;">
         @csrf
     </form> --}}
+    @stack('scripts')
 
 </body>
 </html>

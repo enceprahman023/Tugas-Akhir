@@ -3,6 +3,8 @@
 @section('title', 'Detail Cetak Laporan')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/Guru.css') }}">
+
 <div class="d-flex" style="min-height: 100vh;">
     <!-- Sidebar -->
     <aside class="sidebar bg-primary text-white p-3 pt-5" style="width: 250px;">
@@ -25,59 +27,86 @@
             <h3 class="mb-4 fw-bold">Detail Laporan</h3>
 
             <div class="card shadow-sm p-4">
-                <h5 class="fw-bold mb-3">Laporan: Kasus Bullying di Kelas 10</h5>
+                <h5 class="fw-bold mb-3">Laporan: {{ $laporan->judul_laporan }}</h5>
 
                 <table class="table table-borderless">
-                    <tr>
-                        <th style="width: 200px;">No. Laporan</th>
-                        <td>: LAP-001</td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>: <span class="badge bg-success">Selesai</span></td>
-                    </tr>
-                    <tr>
-                        <th>Tanggal Laporan</th>
-                        <td>: 2025-05-03</td>
-                    </tr>
-                    <tr>
-                        <th>Pelapor</th>
-                        <td>: Rina Putri</td>
-                    </tr>
-                    <tr>
-                        <th>Pelaku</th>
-                        <td>: Siswa A</td>
-                    </tr>
-                    <tr>
-                        <th>Saksi</th>
-                        <td>: Siswa B, Siswa C</td>
-                    </tr>
-                    <tr>
-                        <th>Deskripsi</th>
-                        <td>: Siswa mengalami tindakan bullying verbal dan fisik selama kegiatan belajar di kelas. Sudah ditindaklanjuti pihak sekolah.</td>
-                    </tr>
+                    <tr><th style="width: 200px;">No. Laporan</th><td>: LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</td></tr>
+                    <tr><th>Status</th><td>: <span class="badge bg-success">{{ $laporan->status }}</span></td></tr>
+                    <tr><th>Tanggal Laporan</th><td>: {{ $laporan->created_at->format('Y-m-d') }}</td></tr>
+                    <tr><th>Pelapor</th><td>: {{ $laporan->nama_pelapor === 'Anonim' ? 'Anonim' : $laporan->nama_pelapor }}</td></tr>
+                    <tr><th>Pelaku</th><td>: {{ $laporan->nama_pembully }}</td></tr>
+                    <tr><th>Saksi</th><td>: {{ $laporan->nama_saksi ?? '-' }}</td></tr>
+                    <tr><th>Deskripsi</th><td>: {{ $laporan->isi_laporan }}</td></tr>
                     <tr>
                         <th>Bukti Foto</th>
                         <td>
-                            <img src="{{ asset('images/bukti_dummy.jpg') }}" alt="Bukti Foto" class="img-thumbnail" style="max-height: 200px;">
+                            @if ($laporan->bukti_gambar)
+                                <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" 
+                                     alt="Bukti Foto" 
+                                     class="img-thumbnail zoomable-image" 
+                                     style="max-height: 200px; cursor: zoom-in;">
+                            @else
+                                Tidak ada gambar
+                            @endif
                         </td>
                     </tr>
+                    <tr><th>Catatan Penanganan</th><td>: {{ $laporan->catatan_penanganan ?? '-' }}</td></tr>
+                    <tr><th>Tanggal Penanganan</th><td>: {{ $laporan->tanggal_penanganan ? \Carbon\Carbon::parse($laporan->tanggal_penanganan)->format('d-m-Y') : '-' }}</td></tr>
+                    <tr><th>Ditangani Oleh</th><td>: {{ $laporan->ditangani_oleh ?? '-' }}</td></tr>
                 </table>
 
-                <!-- Tanda Tangan -->
+                <!-- Tanda Tangan Kanan Bawah -->
                 <div class="ttd mt-5 text-end">
-                    <p class="mb-1">Bandung, 14 Mei 2025</p>
-                    <p class="mb-5">Guru BK</p>
-                    <img src="{{ asset('images/ttd_dummy.png') }}" alt="Tanda Tangan" style="height: 80px;"><br>
-                    <strong>Ibu Siti Rahma, S.Psi</strong>
+                    <p class="mb-1">Bandung, {{ $laporan->tanggal_penanganan ? \Carbon\Carbon::parse($laporan->tanggal_penanganan)->format('d F Y') : now()->format('d F Y') }}</p>
+                    <p class="mb-1">Guru BK</p>
+                    @if ($laporan->ttd_penangan)
+                        <img src="{{ asset('storage/' . $laporan->ttd_penangan) }}"
+                             alt="Tanda Tangan"
+                             class="zoomable-image mb-1"
+                             style="height: 80px; cursor: zoom-in;">
+                    @else
+                        <p class="mb-1">[Tanda Tangan Tidak Tersedia]</p>
+                    @endif
+                    <strong>{{ $laporan->ditangani_oleh ?? 'Guru BK' }}</strong>
                 </div>
 
                 <div class="mt-4 d-flex gap-3">
                     <a href="{{ route('guru.cetak') }}" class="btn btn-secondary">← Kembali</a>
-                    <button class="btn btn-danger">🖨️ Cetak PDF</button>
+                    <button class="btn btn-danger" onclick="window.print()">🖨️ Cetak PDF</button>
                 </div>
             </div>
         </div>
     </main>
 </div>
+
+<!-- Zoom Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const images = document.querySelectorAll('.zoomable-image');
+    images.forEach(img => {
+        img.addEventListener('click', () => {
+            img.classList.toggle('zoomed');
+        });
+    });
+});
+</script>
 @endsection
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Saat modal dibuka, pasang ulang event listener zoom
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('shown.bs.modal', function () {
+                const zoomableImages = modal.querySelectorAll('.zoomable-image');
+                zoomableImages.forEach(img => {
+                    img.addEventListener('click', function () {
+                        img.classList.toggle('zoomed');
+                    });
+                });
+            });
+        });
+    });
+</script>
+@endpush
+

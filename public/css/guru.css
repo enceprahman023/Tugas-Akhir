@@ -210,3 +210,16 @@ x
 .ttd img {
     margin-bottom: 10px;
 }
+
+/* Css zoom img detail cetak laporan */
+.zoomable-image {
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+}
+
+.zoomed {
+  transform: scale(2.5);
+  cursor: zoom-out;
+  z-index: 9999;
+  position: relative;
+}

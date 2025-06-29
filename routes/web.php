@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\LoginPelaporController; // Controller untuk login 
 use App\Http\Controllers\GuruProfileController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PelaporController;
+use App\Models\Laporan;
 use Illuminate\Http\Request;
 
 // =====================================================================================================================
@@ -146,16 +147,17 @@ Route::middleware(['auth'])->group(function () {
     // Route Kelola Laporan Guru
     Route::get('/guru/kelola-laporan', [LaporanController::class, 'guruKelola'])->name('guru.kelola');
     
+    // Route update untuk kelola laporan guruBK
+    Route::post('/laporan/{id}/update-penanganan', [LaporanController::class, 'updatePenanganan'])->name('laporan.updatePenanganan');
+    Route::put('/laporan/{id}/update-status', [LaporanController::class, 'updateStatus'])->name('laporan.updateStatus');
+    Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
+
     // Route Cetak Laporan guru
-    Route::get('/guru/cetak-laporan', [GuruController::class, 'cetakLaporan'])->name('guru.cetak');
-    Route::get('/guru/cetak-laporan/{id}', [GuruController::class, 'cetakDetail'])->name('guru.cetak.detail');
+    Route::get('/guru/cetak-laporan', [LaporanController::class, 'cetakLaporan'])->name('guru.cetak');
+    Route::get('/guru/cetak-laporan/{id}', [LaporanController::class, 'cetakDetail'])->name('guru.cetak.detail');
 
 
     
-    // Halaman Detail Cetak Laporan Guru
-    Route::get('/guru/detail-laporan', function () {
-        return view('guru.detail_laporan');
-    })->name('guru.cetak.detail');
 
     // Halaman Panduan Guru
     Route::get('/guru/panduan', function () {

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('foto')->nullable()->after('email'); // untuk upload foto profil
-            $table->string('role')->default('pelapor')->after('foto'); // opsional, tentukan peran user
-        });
+        // Schema::table('users', function (Blueprint $table) {
+            // $table->string('foto')->nullable()->after('email'); // untuk upload foto profil
+            // $table->string('role')->default('pelapor')->after('foto'); // opsional, tentukan peran user
+        // });
     }
 
     /**
