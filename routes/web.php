@@ -214,13 +214,13 @@ Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('adm
 
 
 // 🔐 Route ADMIN - hanya bisa diakses kalau login & role admin
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', fn() => view('admin.dashboard_admin'))->name('admin.dashboard');
-    Route::get('/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('kelola.laporan');
-    Route::get('/cetak_laporan', fn() => view('admin.cetak_laporan'))->name('cetak');
-    Route::get('/detail_laporan', fn() => view('admin.detail_laporan'))->name('detail');
-    Route::get('/kelola_akun', fn() => view('admin.kelola_akun'))->name('kelola.akun');
-    Route::get('/panduan_admin', fn() => view('admin.panduan_admin'))->name('panduan.admin');
+    Route::get('/admin/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('admin.kelola.laporan');
+    Route::get('/admin/cetak_laporan', fn() => view('admin.cetak_laporan'))->name('admin.cetak');
+    Route::get('/admin/detail_laporan', fn() => view('admin.detail_laporan'))->name('admin.detail');
+    Route::get('/admin/kelola_akun', fn() => view('admin.kelola_akun'))->name('admin.kelola.akun');
+    Route::get('/admin/panduan_admin', fn() => view('admin.panduan_admin'))->name('admin.panduan.admin');
 });
 
 
