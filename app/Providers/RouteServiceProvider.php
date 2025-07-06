@@ -9,7 +9,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public const HOME = '/';
+    public const HOME = '/pelapor/dashboard';
 
     public function register(): void
     {

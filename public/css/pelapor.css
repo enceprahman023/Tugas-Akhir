@@ -1262,4 +1262,45 @@ h6 {
 .logout-btn:active {
   transform: scale(0.97); /* efek klik */
 }
+
+/* Zoom untuk detail cek statis pelapor */
+/* Zoomable Image */
+/* Gambar default kecil */
+.zoomable-image {
+  cursor: zoom-in;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Efek zoom besar */
+.zoomable-image.zoomed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 90vh;
+  z-index: 1050;
+  object-fit: contain;
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 10px;
+  border-radius: 8px;
+  cursor: zoom-out;
+}
+
+/* Css icon mata untuk halaman ganti password pelapor*/
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  user-select: none;
+}
 /* Akhir Css Pelapor */

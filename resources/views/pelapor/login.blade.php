@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/pelapor.css') }}">
 
     <style>
- .alert-success {
+        .alert-success {
             background-color: #d4edda;
             color: #155724;
             padding: 10px;
@@ -36,14 +36,15 @@
 
     <div class="register-right">
         <h2>Login</h2>
-         @if (session('success'))
+
+        {{-- Notifikasi sukses --}}
+        @if (session('success'))
             <div class="alert-success">
                 {{ session('success') }}
             </div>
         @endif
-        {{-- END PERBAIKAN --}}
 
-        {{-- START PERBAIKAN: Tambahkan ini untuk menampilkan pesan error login --}}
+        {{-- Notifikasi error --}}
         @if ($errors->any())
             <div class="alert-danger">
                 <ul>
@@ -53,16 +54,15 @@
                 </ul>
             </div>
         @endif
-        {{-- END PERBAIKAN --}}
 
+        {{-- Form Login --}}
         <form action="{{ route('login.store') }}" method="POST">
             @csrf
-            {{-- START PERBAIKAN: Hapus value="{{ old('email') }}" dan tambahkan autocomplete="off" --}}
             <input type="text" name="email" placeholder="Email" required autocomplete="off">
-            {{-- END PERBAIKAN --}}
             <input type="password" name="password" placeholder="Kata Sandi" required>
             <button type="submit" class="btn-login">Login</button>
         </form>
+
         <p class="login-link">Belum punya akun? <a href="{{ route('pelapor.register') }}">Daftar di sini</a></p>
     </div>
 </div>

@@ -9,15 +9,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-
 class ProfileController extends Controller
 {
     /**
      * Tampilkan form edit profil user.
      */
     public function show(Request $request): View
+    
     {
+        
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -28,15 +30,31 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Simpan field umum yang divalidasi (name, email, nis)
+        $user->fill($request->validated());
+
+        // ✅ Jika ada foto diupload, simpan ke folder "aneh"
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // Simpan ke folder yang dibuat otomatis oleh Laravel
+            Storage::disk('public')->putFileAs('foto_profil', $file, $filename);
+
+    // Simpan ke database
+    $user->foto = $filename;
         }
 
-        $request->user()->save();
+        // Reset verifikasi jika email berubah
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $user->save();
+
+        return redirect()->route('profile.laporan')->with('success', 'Profil berhasil diperbarui.');
     }
 
     /**
@@ -70,33 +88,48 @@ class ProfileController extends Controller
         return view('pelapor.profile-laporan', compact('laporans', 'user'));
     }
 
+    // Tampilkan form edit
+    public function edit(): View
+    {
+        $user = Auth::user();
+        return view('profile.edit', compact('user'));
+    }
+
     /**
      * ✅ Tampilkan form ganti password.
      */
     public function formGantiPassword(): RedirectResponse
-{
-    return back(); 
-    
-}
+    {
+        return back();
+    }
 
     /**
      * ✅ Proses update password user.
      */
-    public function updatePassword(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed',
-        ]);
+    public function updatePassword(Request $request)
+    
+{
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:6|confirmed',
+    ]);
 
-        $user = Auth::user(); // ⛳ pastikan kamu menggunakan model User atau Pelapor sesuai config/auth.php
-
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Password lama tidak cocok.']);
-        }
-
-        $user->password = Hash::make($request->new_password);
-
-        return redirect()->route('pelapor.password')->with('success', 'Password berhasil diperbarui.');
+    // Ambil user dari session pelapor
+    $user = \App\Models\User::where('nis', session('login_pelapor'))->first();
+    
+    if (!$user) {
+        return back()->withErrors(['current_password' => 'Akun tidak ditemukan.']);
     }
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return back()->withErrors(['current_password' => 'Password lama tidak cocok.']);
+    }
+
+    $user->password = Hash::make($request->new_password);
+    $user->save();
+
+    return redirect()->route('profile.laporan')->with('success', 'Password berhasil diperbarui.');
+}
+
+
 }

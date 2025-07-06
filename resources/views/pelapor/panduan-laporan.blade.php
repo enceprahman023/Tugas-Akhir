@@ -11,7 +11,7 @@
       <h5 class="fw-bold">DUCARE</h5>
     </div>
     <ul class="nav flex-column mt-4">
-      <li class="nav-item mb-3"><a href="{{ route('dashboard') }}" class="nav-link text-white">🏠 Dashboard</a></li>
+      <li class="nav-item mb-3"><a href="{{ route('pelapor.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a></li>
       <li class="nav-item mb-3"><a href="{{ route('buat.laporan') }}" class="nav-link text-white">📝 Buat Laporan</a></li>
       <li class="nav-item mb-3"><a href="{{ route('status.laporan') }}" class="nav-link text-white">📋 Status Laporan</a></li>
       <li class="nav-item mb-3"><a href="{{ route('panduan.laporan') }}" class="nav-link text-white"><i class="bi bi-book me-2"></i> Panduan</a></li>

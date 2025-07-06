@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginGuruController; // Controller untuk login GuruBK
 use App\Http\Controllers\DashboardGuruController;
+use App\Http\Controllers\DashboardPelaporController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredPelaporController;
 use App\Http\Controllers\Auth\RegisteredGuruController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\GuruProfileController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PelaporController;
 use App\Models\Laporan;
+use App\Http\Middleware\AdminAuthMiddleware;
+use App\Http\Controllers\AdminLoginController;
 use Illuminate\Http\Request;
 
 // =====================================================================================================================
@@ -38,18 +41,24 @@ Route::get('/pelapor/dashboard', [PelaporController::class, 'dashboard'])->name(
 Route::get('/pelapor/ganti-password', [ProfileController::class, 'formGantiPassword'])->name('pelapor.password');
 Route::post('/pelapor/ganti-password', [ProfileController::class, 'updatePassword'])->name('pelapor.password.update');
 
-// route update profile 
-Route::post('/profil/update', [ProfileController::class, 'update'])->name('profile.update');
-
 // Form Buat Laporan (GET)
 Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
 
 //  Proses Simpan Laporan (POST)
 Route::post('/laporan/store', [LaporanController::class, 'store'])->name('laporan.store');
 
+// Route Dashboard Pelapor
+Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
+
+
 // Route Login Pelapor
 Route::middleware(['auth'])->group(function () {
     Route::get('/pelapor/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
+    Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/status-laporan', function () {
+        return view('pelapor.status-laporan');
+    })->name('status.laporan');
 });
 
 // Halaman Home (Tidak memerlukan autentikasi)
@@ -69,26 +78,40 @@ Route::get('/panduan-laporan', function () {
 // Rute Pelapor yang Memerlukan Autentikasi (menggunakan middleware 'auth' - default 'web' guard)
 Route::middleware(['auth'])->group(function () {
     // Halaman Dashboard Pelapor
-    Route::get('/dashboard', function () {
-        return view('pelapor.dashboard'); // Pastikan ini mengarah ke view dashboard pelapor Anda
-    })->name('dashboard');
-
+    
+    
+    // route update profile 
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    
     // Rute Profil Pelapor
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Rute Buat Laporan
+    // foto supaya tersimpan di Profile
+    Route::get('/foto-profil/{filename}', function ($filename) {
+    $path = storage_path('app/public/foto_profil/' . $filename);
+
+    if (!file_exists($path)) {
+        abort(404);
+    }
+
+    return response()->file($path);
+})->name('foto.profil');
 
 
-    // Status Laporan Pelapor
-    Route::get('/status-laporan', function () {
-        return view('pelapor.status-laporan');
-    })->name('status.laporan');
+    //Route halaman pelapor cek status
+     Route::get('/status-laporan', [LaporanController::class, 'status'])
+    ->middleware('auth')
+    ->name('status.laporan');
 
-    // Detail Laporan Pelapor
-    Route::get('/detail-laporan', function () {
-        return view('pelapor.detail-laporan');
-    })->name('detail.laporan');
+    // route parameter detail laporan dan ubah laporan
+    Route::get('/status-laporan', [LaporanController::class, 'status'])->name('status.laporan');
+    Route::get('/detail-laporan/{id}', [LaporanController::class, 'show'])->name('detail.laporan');
+    Route::get('/ubah-laporan/{id}', [LaporanController::class, 'edit'])->name('ubah.laporan');
+    Route::delete('/hapus-laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
     // Ubah Laporan Pelapor
     Route::get('/ubah-laporan', function () {
@@ -99,6 +122,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile-laporan', function () {
         return view('pelapor.profile-laporan');
     })->name('profile.laporan.view');
+
+    Route::get('/dashboard', function () {
+    return redirect()->route('pelapor.dashboard');
+    })->name('dashboard');
+
 
     // Logout Pelapor
     Route::post('/logout', function (Request $request) {
@@ -175,59 +203,67 @@ Route::middleware(['auth'])->group(function () {
 // =====================================================================================================================
 // Rute untuk Admin
 // =====================================================================================================================
+// Halaman login admin
+Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
 
-// Rute Login Admin (Menggunakan logika manual, disarankan untuk direfactor menggunakan Auth Guards)
-Route::GET('/admin/login', function () {
+// Proses login admin
+Route::post('/admin/login', [AdminLoginController::class, 'login'])->name('admin.login.store');
+
+// Logout admin
+Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+
+// 🔐 Route ADMIN - hanya bisa diakses kalau login & role admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', fn() => view('admin.dashboard_admin'))->name('admin.dashboard');
+    Route::get('/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('kelola.laporan');
+    Route::get('/cetak_laporan', fn() => view('admin.cetak_laporan'))->name('cetak');
+    Route::get('/detail_laporan', fn() => view('admin.detail_laporan'))->name('detail');
+    Route::get('/kelola_akun', fn() => view('admin.kelola_akun'))->name('kelola.akun');
+    Route::get('/panduan_admin', fn() => view('admin.panduan_admin'))->name('panduan.admin');
+});
+
+Route::get('/admin/login', function () {
     return view('admin.login_admin');
 })->name('admin.login');
 
-Route::post('/admin/login', function (Request $request) {
-    $username = $request->input('username');
-    $password = $request->input('password');
+/*
+|--------------------------------------------------------------------------
+| Middleware untuk admin
+|--------------------------------------------------------------------------
+*/
 
-    if ($username === 'admin' && $password === 'admin123') {
-        session(['admin_logged_in' => true]);
-        return redirect('/admin/dashboard');
-    }
-    return redirect()->back()->with('error', 'Username atau password salah!');
-})->name('admin.login.store');
 
-// Rute Admin yang Memerlukan Autentikasi (menggunakan middleware 'admin' - pastikan middleware ini ada dan terdaftar)
-Route::middleware(['admin'])->group(function () { // Contoh middleware khusus admin
-    // Halaman Dashboard Admin
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard_admin');
-    })->name('admin.dashboard');
 
-    // Halaman Kelola Laporan Admin
-    Route::get('/admin/kelola_laporan', function () {
+    // Kelola Laporan
+    Route::get('/kelola_laporan', function () {
         return view('admin.kelola_laporan');
-    })->name('admin.kelola.laporan');
+    })->name('kelola.laporan');
 
-    // Halaman Cetak Laporan Admin
-    Route::get('/admin/cetak_laporan', function () {
+    // Cetak Laporan
+    Route::get('/cetak_laporan', function () {
         return view('admin.cetak_laporan');
-    })->name('admin.cetak');
+    })->name('cetak');
 
-    // Halaman Detail Laporan Admin
-    Route::get('/admin/detail_laporan', function () {
+    // Detail Laporan
+    Route::get('/detail_laporan', function () {
         return view('admin.detail_laporan');
-    })->name('admin.detail');
+    })->name('detail');
 
-    // Halaman Kelola Akun Admin
-    Route::get('/admin/kelola_akun', function () {
+    // Kelola Akun
+    Route::get('/kelola_akun', function () {
         return view('admin.kelola_akun');
-    })->name('admin.kelola.akun');
+    })->name('kelola.akun');
 
-    // Halaman Panduan Admin
-    Route::get('/admin/panduan_admin', function () {
+    // Panduan Admin
+    Route::get('/panduan_admin', function () {
         return view('admin.panduan_admin');
-    })->name('admin.panduan.admin');
+    })->name('panduan.admin');
+
 
     // Logout Admin
-    Route::post('/admin/logout', function () {
-        Auth::logout(); // Logout dari semua guard, termasuk default
-        session()->forget('admin_logged_in'); // Hapus sesi admin manual
-        return redirect('/admin/login');
-    })->name('admin.logout');
-});
+    Route::post('/logout', function () {
+        session()->forget('admin_logged_in');
+        session()->forget('admin_nama');
+        return redirect()->route('admin.login')->with('error', 'Anda telah logout.');
+    })->name('logout');

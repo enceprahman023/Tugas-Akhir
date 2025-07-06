@@ -21,8 +21,8 @@
             <form action="{{ route('admin.login.store') }}" method="POST">
                 @csrf
                 <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <label for="email">Email</label>
+                    <input type="text" id="username" name="email" required>
                 </div>
 
                 <div class="input-group">

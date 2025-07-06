@@ -103,7 +103,7 @@ $namaPelapor = $request->jenis_pelaporan === 'anonim'
         $laporan = Laporan::find($id);
 
         if ($laporan) {
-            return view('detail-laporan', compact('laporan'));
+           return view('pelapor.detail-laporan', compact('laporan'));
         } else {
             return redirect()->route('status.laporan')->with('error', 'Laporan tidak ditemukan');
         }
@@ -218,6 +218,17 @@ public function cetakDetail($id)
 {
     $laporan = Laporan::findOrFail($id);
     return view('guru.detail_laporan', compact('laporan'));
+}
+public function status()
+{
+    $user = Auth::user(); // Ambil user yang sedang login
+
+    // Ambil laporan berdasarkan user_id pelapor ini
+    $laporans = Laporan::where('user_id', $user->id)
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+    return view('pelapor.status-laporan', compact('laporans'));
 }
 
 }

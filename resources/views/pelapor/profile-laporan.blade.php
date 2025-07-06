@@ -14,7 +14,7 @@
 
         <ul class="nav flex-column mt-4">
             <li class="nav-item mb-3">
-                <a href="{{ route('dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
+                <a href="{{ route('pelapor.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
             </li>
             <li class="nav-item mb-3">
                 <a href="{{ route('buat.laporan') }}" class="nav-link text-white">📝 Buat Laporan</a>
@@ -38,16 +38,19 @@
             </li>
         </ul>
     </aside>
-
+    
     {{-- Main Content --}}
     <main class="flex-grow-1 p-4">
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         <div class="container bg-white p-5 rounded-4 shadow-sm">
             <h1 class="fw-bold mb-4 text-center" style="color: #1e2a38;">Profil Saya</h1>
 
             <!-- Card Profil Saya -->
             <div class="profile-card;">
                 <div class="card-body text-center">
-                    <img src="{{ asset('images/team 1.jpg') }}" alt="Foto Profil" class="rounded-circle mb-3" width="120" height="120">
+                   <img src="{{ route('foto.profil', $user->foto) }}" alt="Foto Profil" class="rounded-circle mb-3" width="120" height="120">
                     <h4 class="card-title mb-2">{{ $user->name }}</h4>
                     <p class="text-muted mb-1">NIS: {{ $user->nis }}</p>
                     <p class="text-muted mb-1">Nama: {{ $user->name }}</p>
@@ -60,8 +63,9 @@
 
                     <!-- Tombol Ganti Password -->
                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#gantiPasswordModal">
-    Ganti Password
+    Ubah Password
 </button>
+
                 </div>
             </div>
         </div>
@@ -125,35 +129,39 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
-                @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
 
-                <!-- Password Lama -->
-                <div class="mb-3">
-                    <label for="current_password" class="form-label">Password Lama</label>
-                    <input type="password" name="current_password" class="form-control" required>
-                    @error('current_password')
-                        <div class="text-danger small">{{ $message }}</div>
-                    @enderror
-                </div>
+               <!-- Password Lama -->
+<div class="mb-3">
+    <label for="current_password" class="form-label">Password Lama</label>
+    <div class="input-group">
+        <input type="password" id="current_password" name="current_password" class="form-control" required>
+        <span class="input-group-text" onclick="togglePassword('current_password')" style="cursor: pointer;">👁️</span>
+    </div>
+    @error('current_password')
+        <div class="text-danger small">{{ $message }}</div>
+    @enderror
+</div>
 
-                <!-- Password Baru -->
-                <div class="mb-3">
-                    <label for="new_password" class="form-label">Password Baru</label>
-                    <input type="password" name="new_password" class="form-control" required>
-                    @error('new_password')
-                        <div class="text-danger small">{{ $message }}</div>
-                    @enderror
-                </div>
+<!-- Password Baru -->
+<div class="mb-3">
+    <label for="new_password" class="form-label">Password Baru</label>
+    <div class="input-group">
+        <input type="password" id="new_password" name="new_password" class="form-control" required>
+        <span class="input-group-text" onclick="togglePassword('new_password')" style="cursor: pointer;">👁️</span>
+    </div>
+    @error('new_password')
+        <div class="text-danger small">{{ $message }}</div>
+    @enderror
+</div>
 
-                <!-- Konfirmasi Password -->
-                <div class="mb-3">
-                    <label for="new_password_confirmation" class="form-label">Konfirmasi Password Baru</label>
-                    <input type="password" name="new_password_confirmation" class="form-control" required>
-                </div>
-            </div>
-
+<!-- Konfirmasi Password -->
+<div class="mb-3">
+    <label for="new_password_confirmation" class="form-label">Konfirmasi Password Baru</label>
+    <div class="input-group">
+        <input type="password" id="new_password_confirmation" name="new_password_confirmation" class="form-control" required>
+        <span class="input-group-text" onclick="togglePassword('new_password_confirmation')" style="cursor: pointer;">👁️</span>
+    </div>
+</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan Password</button>
@@ -162,6 +170,7 @@
     </form>
   </div>
 </div>
+
 
 <!-- Script untuk Preview Gambar -->
 <script>
@@ -175,6 +184,11 @@ function previewFotoProfil(input) {
     }
 }
 </script>
-
 <!-- Script Bootstrap Modal (pastikan sudah include Bootstrap JS) -->
+<script>
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+</script>
 @endsection

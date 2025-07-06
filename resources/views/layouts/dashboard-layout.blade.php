@@ -36,7 +36,7 @@
 
       <ul class="nav flex-column mt-4">
         <li class="nav-item mb-3">
-          <a href="{{ route('dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
+          <a href="{{ route('pelapor.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
         </li>
         <li class="nav-item mb-3">
           <a href="{{ route('laporan.create') }}" class="nav-link text-white">📝 Buat Laporan</a>

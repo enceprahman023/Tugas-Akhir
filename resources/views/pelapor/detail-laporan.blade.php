@@ -2,24 +2,52 @@
 
 @section('content')
 <div class="container py-4">
-  <h2 class="fw-bold">Detail Laporan</h2>
+  <h2 class="fw-bold mb-4">Detail Laporan</h2>
 
-  <div class="card mt-4">
+  <div class="card shadow-sm">
     <div class="card-header bg-light">
-      <h5 class="card-title">Laporan #1: Bullying di kelas</h5>
+      <h5 class="mb-0">Laporan: {{ $laporan->judul_laporan }}</h5>
     </div>
-    <div class="card-body">
-      <p><strong>Pelapor:</strong> John Doe</p>
-      <p><strong>Tanggal Kejadian:</strong> 2025-04-20</p>
-      <p><strong>Nama Pelaku:</strong> Jane Smith</p>
-      <p><strong>Isi Laporan:</strong> Terdapat perundungan yang terjadi di kelas yang melibatkan siswa X dan Y. Saksi dari kejadian tersebut adalah Z.</p>
-      <p><strong>Status Laporan:</strong> <span class="badge bg-warning text-dark">Sedang Diproses</span></p>
-      <p><strong>Nama Saksi:</strong> Z</p>
-      <p><strong>Gambar Bukti:</strong></p>
-      <img src="{{ asset('images/bukti.jpg') }}" alt="Bukti" class="img-fluid" style="max-width: 500px;">
 
-      <a href="{{ route('ubah.laporan') }}" class="btn btn-primary mt-3">✏️ Ubah Laporan</a>
+    <div class="card-body">
+      <table class="table table-borderless">
+        <tr><th style="width: 200px;">No. Laporan</th><td>: LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</td></tr>
+        <tr><th>Status</th><td>: <span class="badge bg-success">{{ $laporan->status }}</span></td></tr>
+        <tr><th>Tanggal Kejadian</th><td>: {{ $laporan->tanggal_kejadian }}</td></tr>
+        <tr><th>Pelapor</th><td>: {{ $laporan->nama_pelapor === 'Anonim' ? 'Anonim' : $laporan->nama_pelapor }}</td></tr>
+        <tr><th>Pelaku</th><td>: {{ $laporan->nama_pembully }}</td></tr>
+        <tr><th>Nama Saksi</th><td>: {{ $laporan->nama_saksi ?? '-' }}</td></tr>
+        <tr><th>Isi Laporan</th><td>: {{ $laporan->isi_laporan }}</td></tr>
+        <tr>
+          <th>Bukti Foto</th>
+          <td>
+            @if ($laporan->bukti_gambar)
+              <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" 
+                   alt="Bukti Foto"
+                   class="img-thumbnail zoomable-image"
+                   style="max-height: 150px; cursor: zoom-in;">
+            @else
+              Tidak ada gambar
+            @endif
+          </td>
+        </tr>
+        <tr><th>Catatan Penanganan</th><td>: {{ $laporan->catatan_penanganan ?? '-' }}</td></tr>
+        <tr><th>Tanggal Penanganan</th><td>: {{ $laporan->tanggal_penanganan ?? '-' }}</td></tr>
+        <tr><th>Ditangani Oleh</th><td>: {{ $laporan->ditangani_oleh ?? '-' }}</td></tr>
+      </table>
     </div>
   </div>
 </div>
+
+<!-- Zoom Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const images = document.querySelectorAll('.zoomable-image');
+  images.forEach(img => {
+    img.addEventListener('click', () => {
+      img.classList.toggle('zoomed');
+    });
+  });
+});
+</script>
 @endsection

@@ -22,7 +22,8 @@ class RegisteredPelaporController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nis' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'nis' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

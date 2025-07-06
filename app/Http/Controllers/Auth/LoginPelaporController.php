@@ -10,27 +10,37 @@ class LoginPelaporController extends Controller
 {
     public function create()
     {
-        // Tampilkan halaman login pelapor
         return view('pelapor.login');
     }
 
     public function store(Request $request)
     {
-        // Validasi input
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        // Coba login
-        if (Auth::guard('web')->attempt($credentials)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard'); // Sesuaikan tujuan setelah login
+            $role = Auth::user()->role;
+
+            // Arahkan sesuai role
+            if ($role === 'pelapor') {
+                return redirect()->route('pelapor.dashboard');
+            } elseif ($role === 'guru') {
+                return redirect()->route('guru.dashboard');
+            } elseif ($role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            // Kalau role tidak dikenal, logout dan tolak
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['email' => 'Role tidak dikenali.']);
         }
 
         return back()->withErrors([
-            'nis' => 'NIS atau password salah.',
+            'email' => 'Email atau password salah.',
         ]);
     }
 }

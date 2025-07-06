@@ -10,54 +10,56 @@
     </a>
   </div>
 
-  @php
-      $laporans = [
-          (object)[ 'id' => 1, 'tentang' => 'Bullying di kelas', 'status' => 'Sedang Diproses' ],
-          (object)[ 'id' => 2, 'tentang' => 'Perundungan di kantin', 'status' => 'Selesai' ],
-          (object)[ 'id' => 3, 'tentang' => 'Ancaman lewat chat', 'status' => 'Ditolak' ],
-      ];
-  @endphp
-
   <div class="table-responsive">
     <table class="table table-bordered table-hover align-middle">
       <thead class="table-light">
         <tr class="text-center">
           <th style="width: 50px;">No</th>
-          <th>Tentang</th>
+          <th>Judul</th>
           <th>Status</th>
-          <th style="width: 100px;">Pilihan</th>
+          <th style="width: 100px;">Aksi</th>
         </tr>
       </thead>
       <tbody>
-        @foreach($laporans as $laporan)
+        @forelse($laporans as $laporan)
           <tr class="text-center">
             <td>{{ $loop->iteration }}</td>
-            <td class="text-start">{{ $laporan->tentang }}</td>
+            <td class="text-start">{{ $laporan->judul_laporan }}</td>
             <td>
-              @if ($laporan->status == 'Sedang Diproses')
-                  <span class="badge bg-warning text-dark">{{ $laporan->status }}</span>
-              @elseif ($laporan->status == 'Selesai')
-                  <span class="badge bg-success">{{ $laporan->status }}</span>
-              @elseif ($laporan->status == 'Ditolak')
-                  <span class="badge bg-danger">{{ $laporan->status }}</span>
+              @if ($laporan->status === 'Dalam Proses')
+                  <span class="badge bg-warning text-dark">Dalam Proses</span>
+              @elseif ($laporan->status === 'Selesai')
+                  <span class="badge bg-success">Selesai</span>
+              @elseif ($laporan->status === 'Ditolak')
+                  <span class="badge bg-danger">Ditolak</span>
               @else
                   <span class="badge bg-secondary">{{ $laporan->status }}</span>
               @endif
             </td>
             <td>
               <div class="dropdown">
-                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     ⚙️
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a href="{{ route('detail.laporan') }}" class="dropdown-item">📋 Detail Laporan</a></li>
-                  <li><a class="dropdown-item" href="#">✏️ Ubah Laporan</a></li>
-                  <li><a class="dropdown-item text-danger" href="#">🗑️ Hapus Laporan</a></li>
+                  <li>
+                    <a href="{{ route('detail.laporan', $laporan->id) }}" class="dropdown-item">📋 Detail Laporan</a>
+                  </li>
+                    <form action="{{ route('laporan.destroy', $laporan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                      @csrf
+                      @method('DELETE')
+                      <button class="dropdown-item text-danger" type="submit">🗑️ Hapus</button>
+                    </form>
+                  </li>
                 </ul>
               </div>
             </td>
           </tr>
-        @endforeach
+        @empty
+          <tr>
+            <td colspan="4" class="text-center">Belum ada laporan.</td>
+          </tr>
+        @endforelse
       </tbody>
     </table>
   </div>

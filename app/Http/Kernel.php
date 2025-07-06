@@ -17,6 +17,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        
     ];
 
     /**
@@ -48,9 +49,17 @@ class Kernel extends HttpKernel
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        // 'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         // ✅ Middleware custom kamu untuk Guru BK
         'cekLoginGuru' => \App\Http\Middleware\CekLoginGuru::class,
+
+        // Midwlera untuk pelapor
+        'pelapor' => \App\Http\Middleware\PelaporMiddleware::class,
+
+        // untuk admin
+        
+        'role' => \App\Http\Middleware\CheckRole::class,
+
     ];
 }
