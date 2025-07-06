@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
         User::create([
             'name' => 'Admin DUCARE',
             'email' => 'admin@ducare.com',
-            'password' => bcrypt('admin123'), // Ubah ini kalau mau ganti password
+            'password' => bcrypt('encep12345678'), // Ubah ini kalau mau ganti password
             'role' => 'admin',
         ]);
     }

@@ -13,25 +13,27 @@ class AdminLoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
+{
+    $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            if (Auth::user()->role === 'admin') {
-                return redirect()->route('admin.dashboard');
-            } else {
-                Auth::logout();
-                return back()->with('error', 'Anda bukan admin.');
-            }
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate(); // ✅ Tambahkan ini
+
+        $role = Auth::user()->role;
+
+        if ($role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        } elseif ($role === 'guru') {
+            return redirect()->route('guru.dashboard');
+        } elseif ($role === 'pelapor') {
+            return redirect()->route('pelapor.dashboard');
+        } else {
+            Auth::logout();
+            return back()->with('error', 'Role tidak dikenali.');
         }
-
-        return back()->with('error', 'Email atau password salah.');
     }
 
-    public function logout()
-    {
-        Auth::logout();
-        return redirect()->route('admin.login')->with('error', 'Anda telah logout.');
-    }
+    return back()->with('error', 'Email atau password salah.');
+}
 }
 

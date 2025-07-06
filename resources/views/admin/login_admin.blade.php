@@ -22,7 +22,7 @@
                 @csrf
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="text" id="username" name="email" required>
+                    <input type="text" id="email" name="email" required>
                 </div>
 
                 <div class="input-group">

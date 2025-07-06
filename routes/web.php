@@ -223,9 +223,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/panduan_admin', fn() => view('admin.panduan_admin'))->name('panduan.admin');
 });
 
-Route::get('/admin/login', function () {
-    return view('admin.login_admin');
-})->name('admin.login');
 
 /*
 |--------------------------------------------------------------------------
