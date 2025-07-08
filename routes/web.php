@@ -19,6 +19,7 @@ use App\Http\Controllers\PelaporController;
 use App\Models\Laporan;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
 
 // =====================================================================================================================
@@ -217,40 +218,21 @@ Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('adm
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', fn() => view('admin.dashboard_admin'))->name('admin.dashboard');
     Route::get('/admin/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('admin.kelola.laporan');
-    Route::get('/admin/cetak_laporan', fn() => view('admin.cetak_laporan'))->name('admin.cetak');
-    Route::get('/admin/detail_laporan', fn() => view('admin.detail_laporan'))->name('admin.detail');
-    Route::get('/admin/kelola_akun', fn() => view('admin.kelola_akun'))->name('admin.kelola.akun');
     Route::get('/admin/panduan_admin', fn() => view('admin.panduan_admin'))->name('admin.panduan.admin');
 });
 
+// Admin Dashboard Controller
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/kelola-laporan', [AdminController::class, 'kelolaLaporan'])->name('admin.kelola.laporan');
+// ✅ GUNAKAN YANG INI
+Route::get('/admin/cetak-laporan', [AdminController::class, 'cetakLaporan'])->name('admin.cetak');
+Route::get('/admin/cetak-laporan/{id}', [AdminController::class, 'cetakDetail'])->name('admin.cetak.detail');
+Route::get('/admin/detail_laporan/{id}', [AdminController::class, 'detailLaporan'])->name('admin.detail');
+Route::get('/admin/kelola_akun', [AdminController::class, 'kelolaAkun'])->name('admin.kelola.akun');
+Route::post('/admin/akun/update', [AdminController::class, 'updateAkun'])->name('admin.akun.update');
+Route::delete('/admin/akun/delete/{id}', [AdminController::class, 'hapusAkun'])->name('admin.akun.hapus');
+Route::post('/admin/akun/reset-password', [AdminController::class, 'resetPassword'])->name('admin.akun.resetpassword');
 
-/*
-|--------------------------------------------------------------------------
-| Middleware untuk admin
-|--------------------------------------------------------------------------
-*/
-
-
-
-    // Kelola Laporan
-    Route::get('/kelola_laporan', function () {
-        return view('admin.kelola_laporan');
-    })->name('kelola.laporan');
-
-    // Cetak Laporan
-    Route::get('/cetak_laporan', function () {
-        return view('admin.cetak_laporan');
-    })->name('cetak');
-
-    // Detail Laporan
-    Route::get('/detail_laporan', function () {
-        return view('admin.detail_laporan');
-    })->name('detail');
-
-    // Kelola Akun
-    Route::get('/kelola_akun', function () {
-        return view('admin.kelola_akun');
-    })->name('kelola.akun');
 
     // Panduan Admin
     Route::get('/panduan_admin', function () {

@@ -29,6 +29,6 @@ class Laporan extends Model
      */
     public function pelapor()
     {
-        return $this->belongsTo(Pelapor::class); // <-- Pastikan nama model Pelapor Anda benar (User.php atau Pelapor.php)
+        return $this->belongsTo(User::class); // <-- Pastikan nama model Pelapor Anda benar (User.php atau Pelapor.php)
     }
 }

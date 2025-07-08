@@ -22,10 +22,12 @@ class AdminLoginController extends Controller
         $role = Auth::user()->role;
 
         if ($role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            session(['login_admin' => Auth::id()]); 
+            return redirect()->route('admin.dashboard ');
         } elseif ($role === 'guru') {
             return redirect()->route('guru.dashboard');
         } elseif ($role === 'pelapor') {
+            session(['login_guru' => Auth::id()]);
             return redirect()->route('pelapor.dashboard');
         } else {
             Auth::logout();
