@@ -216,33 +216,23 @@ Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('adm
 
 // 🔐 Route ADMIN - hanya bisa diakses kalau login & role admin
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', fn() => view('admin.dashboard_admin'))->name('admin.dashboard');
-    Route::get('/admin/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('admin.kelola.laporan');
-    Route::get('/admin/panduan_admin', fn() => view('admin.panduan_admin'))->name('admin.panduan.admin');
+    // Route::get('/admin/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('admin.kelola.laporan');
+    // Route::get('/admin/panduan_admin', fn() => view('admin.panduan_admin'))->name('admin.panduan.admin');
+    // Admin Dashboard Controller
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/kelola-laporan', [AdminController::class, 'kelolaLaporan'])->name('admin.kelola.laporan');
+    // ✅ GUNAKAN YANG INI
+    Route::get('/admin/cetak-laporan', [AdminController::class, 'cetakLaporan'])->name('admin.cetak');
+    Route::get('/admin/cetak-laporan/{id}', [AdminController::class, 'cetakDetail'])->name('admin.cetak.detail');
+    Route::get('/admin/detail_laporan/{id}', [AdminController::class, 'detailLaporan'])->name('admin.detail');
+    Route::get('/admin/kelola_akun', [AdminController::class, 'kelolaAkun'])->name('admin.kelola.akun');
+    Route::post('/admin/akun/update', [AdminController::class, 'updateAkun'])->name('admin.akun.update');
+    Route::delete('/admin/akun/delete/{id}', [AdminController::class, 'hapusAkun'])->name('admin.akun.hapus');
+    Route::post('/admin/akun/reset-password', [AdminController::class, 'resetPassword'])->name('admin.akun.resetpassword');
+    Route::post('/logout-admin', [AdminController::class, 'logout'])->name('admin.logout');
+    
+        // Panduan Admin
+        Route::get('/admin/panduan', function () {
+            return view('admin.panduan_admin');
+        })->name('admin.panduan.admin');
 });
-
-// Admin Dashboard Controller
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-Route::get('/admin/kelola-laporan', [AdminController::class, 'kelolaLaporan'])->name('admin.kelola.laporan');
-// ✅ GUNAKAN YANG INI
-Route::get('/admin/cetak-laporan', [AdminController::class, 'cetakLaporan'])->name('admin.cetak');
-Route::get('/admin/cetak-laporan/{id}', [AdminController::class, 'cetakDetail'])->name('admin.cetak.detail');
-Route::get('/admin/detail_laporan/{id}', [AdminController::class, 'detailLaporan'])->name('admin.detail');
-Route::get('/admin/kelola_akun', [AdminController::class, 'kelolaAkun'])->name('admin.kelola.akun');
-Route::post('/admin/akun/update', [AdminController::class, 'updateAkun'])->name('admin.akun.update');
-Route::delete('/admin/akun/delete/{id}', [AdminController::class, 'hapusAkun'])->name('admin.akun.hapus');
-Route::post('/admin/akun/reset-password', [AdminController::class, 'resetPassword'])->name('admin.akun.resetpassword');
-
-
-    // Panduan Admin
-    Route::get('/panduan_admin', function () {
-        return view('admin.panduan_admin');
-    })->name('panduan.admin');
-
-
-    // Logout Admin
-    Route::post('/logout', function () {
-        session()->forget('admin_logged_in');
-        session()->forget('admin_nama');
-        return redirect()->route('admin.login')->with('error', 'Anda telah logout.');
-    })->name('logout');

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Laporan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+
 
 
 class AdminController extends Controller
@@ -110,6 +112,14 @@ public function resetPassword(Request $request)
     $user->save();
 
     return redirect()->back()->with('success', 'Password berhasil direset.');
+}
+public function logout(Request $request)
+{
+    Auth::logout();  // ganti guard jika kamu pakai default
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+   return redirect()->route('admin.login'); // arahkan ke halaman login admin
 }
 
 }

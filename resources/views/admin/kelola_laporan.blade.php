@@ -27,7 +27,8 @@
   <h3 class="mb-4">Kelola Laporan</h3>
 
   <div class="table-responsive">
-    <table class="table table-bordered align-middle">
+    <div style="max-height: 500px; overflow-y: auto;">
+    <table class="table table-bordered align-middle mb-0">
       <thead class="table-light">
         <tr>
           <th>No. Laporan</th>

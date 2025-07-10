@@ -15,7 +15,7 @@
     <a href="{{ route('admin.kelola.laporan') }}">Kelola Laporan</a>
     <a href="{{ route('admin.cetak') }}">Cetak Laporan</a>
     <a href="#">Kelola Akun</a>
-    <a href="#">Panduan</a>
+    <a href="{{ route('admin.panduan') }}">Panduan</a>
     <a href="#">Logout</a>
   </nav>
 

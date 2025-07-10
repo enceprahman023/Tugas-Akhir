@@ -12,7 +12,6 @@
   <div class="header-left">
     <img src="{{ asset('images/logodu.png') }}" alt="Logo Sekolah">
   </div>
-
   <nav class="menu">
     <a href="{{ route('admin.dashboard') }}">Dashboard</a>
     <a href="{{ route('admin.kelola.laporan') }}">Kelola Laporan 
@@ -23,7 +22,7 @@
     <a href="{{ route('admin.cetak') }}">Cetak Laporan</a>
     <a href="{{ route('admin.kelola.akun') }}">Kelola Akun</a>
     <a href="{{ route('admin.panduan.admin') }}">Panduan</a>
-    <a href="#" id="btn-logout-trigger">Logout</a>
+    <a href="{{ route('admin.logout') }}" id="btn-logout-trigger">Logout</a>
   </nav>
 
   <div class="header-right" title="Admin Profile">
@@ -66,43 +65,59 @@
     </div>
   </div>
 </main>
-
+<!-- Form logout tersembunyi -->
 <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
   @csrf
 </form>
 
-<div class="popup-overlay" id="popup-logout" role="dialog" aria-modal="true" aria-labelledby="logout-title">
+<!-- Popup konfirmasi logout -->
+<div class="popup-overlay" id="popup-logout" role="dialog" aria-modal="true" aria-labelledby="logout-title" style="display: none;">
   <div class="popup-box">
     <h2 id="logout-title">Konfirmasi Logout</h2>
     <p>Apakah Anda yakin ingin logout dari akun ini?</p>
     <div class="popup-buttons">
-      <button class="btn-cancel" id="btn-cancel">Batal</button>
-      <button class="btn-logout" id="btn-logout">Ya, Logout</button>
+      <button type="button" class="btn-cancel" id="btn-cancel">Batal</button>
+      <button type="button" class="btn-logout" id="btn-logout">Ya, Logout</button>
     </div>
   </div>
 </div>
 
+<!-- Script popup logout -->
 <script>
-const btnTrigger = document.getElementById('btn-logout-trigger');
-const popup = document.getElementById('popup-logout');
-const btnCancel = document.getElementById('btn-cancel');
-const btnLogout = document.getElementById('btn-logout');
-const logoutForm = document.getElementById('logout-form');
+  const btnTrigger = document.getElementById('btn-logout-trigger');
+  const popup = document.getElementById('popup-logout');
+  const btnCancel = document.getElementById('btn-cancel');
+  const btnLogout = document.getElementById('btn-logout');
+  const logoutForm = document.getElementById('logout-form');
 
-btnTrigger.addEventListener('click', e => {
-  e.preventDefault();
-  popup.style.display = 'flex';
-});
-btnCancel.addEventListener('click', () => popup.style.display = 'none');
-btnLogout.addEventListener('click', () => logoutForm.submit());
-popup.addEventListener('click', e => {
-  if (e.target === popup) popup.style.display = 'none';
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && popup.style.display === 'flex') {
-    popup.style.display = 'none';
+  if (btnTrigger) {
+    btnTrigger.addEventListener('click', e => {
+      e.preventDefault();
+      popup.style.display = 'flex';
+    });
   }
-});
+
+  if (btnCancel) {
+    btnCancel.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+  }
+
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      logoutForm.submit();
+    });
+  }
+
+  popup.addEventListener('click', e => {
+    if (e.target === popup) popup.style.display = 'none';
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && popup.style.display === 'flex') {
+      popup.style.display = 'none';
+    }
+  });
 </script>
 
 </body>

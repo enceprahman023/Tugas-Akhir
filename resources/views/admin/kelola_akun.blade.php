@@ -13,8 +13,8 @@
     <a href="{{ route('admin.kelola.laporan') }}">Kelola Laporan</a>
     <a href="{{ route('admin.cetak') }}">Cetak Laporan</a>
     <a href="{{ route('admin.kelola.akun') }}">Kelola Akun</a>
-    <a href="#">Panduan</a>
-    <a href="#">Logout</a>
+    <a href="{{ route('admin.panduan.admin') }}">Panduan</a>
+    <a href="{{ route('admin.logout.admin') }}">Logout</a>
   </nav>
 
   <div class="header-right" title="Admin Profile">
