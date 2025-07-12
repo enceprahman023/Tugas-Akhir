@@ -56,15 +56,21 @@
   background-size: cover;
   background-position: center;
   min-height: 100vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+   width: 100vw;
+    padding: 0;
+    margin: 0;
 }
+
 
 .login-card {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 30px;
-  width: 100%;
-  max-width: 420px;
+  width: 100% !important;
 }
 
 .animated-logo {
@@ -222,4 +228,14 @@ x
   cursor: zoom-out;
   z-index: 9999;
   position: relative;
+}
+body:has(.login-bg) main.container-fluid {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: none !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }

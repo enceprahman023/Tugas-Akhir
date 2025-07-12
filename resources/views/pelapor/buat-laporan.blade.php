@@ -4,13 +4,14 @@
 <div class="container py-0">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white fw-semibold">
+      <div class="card shadow-sm" style="border-radius: 16px; overflow: hidden;">
+        <div class="card-header bg-primary text-white fw-semibold" style="border-top-left-radius:16px; border-top-right-radius:16px; text-align:center;">
           📝 Buat Laporan
         </div>
         <div class="card-body">
           <form action="{{ route('laporan.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
             <!-- Pilihan Anonim / Non-Anonim -->
             <div class="mb-3">
               <label class="form-label fw-semibold">Jenis Pelaporan</label>
@@ -58,7 +59,7 @@
               <textarea class="form-control" id="isi" name="isi" rows="6" placeholder="Tulis laporanmu di sini..." required></textarea>
             </div>
 
-            <!-- Tombol Tambah Saksi di atas sebelah kiri -->
+            <!-- Tombol Tambah Saksi -->
             <div class="mb-3 d-inline-block">
               <button type="button" class="btn btn-outline-secondary" id="toggleSaksi">
                 <i class="bi bi-person-plus"></i> Tambah Saksi
@@ -72,19 +73,19 @@
               </button>
             </div>
 
-            <!-- Form Saksi (disembunyikan dulu) -->
+            <!-- Form Saksi -->
             <div class="mb-3 d-none" id="formSaksi">
               <label for="saksi" class="form-label fw-semibold">Nama Saksi (Opsional)</label>
               <input type="text" class="form-control" id="saksi" name="saksi" placeholder="Masukkan nama saksi jika ada">
             </div>
 
-            <!-- Input Bukti Gambar (disembunyikan dulu) -->
+            <!-- Input Bukti Gambar -->
             <div class="mb-3 d-none" id="formBukti">
               <label for="bukti" class="form-label fw-semibold">Unggah Bukti Foto (Opsional)</label>
               <input class="form-control" type="file" id="bukti" name="bukti" accept="image/*">
             </div>
 
-            <!-- Tombol Kirim Laporan (di bawah kanan) -->
+            <!-- Tombol Kirim -->
             <div class="text-end">
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-send"></i> Kirim Laporan
@@ -135,24 +136,22 @@
   });
 </script>
 
-{{--  popup untuk data laporan berhasil terkirim ke data base  --}}
 @if (session('success'))
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      Swal.fire({
-        icon: 'success',
-        title: 'Laporan Berhasil Dikirim!',
-        text: '{{ session('success') }}',
-        showCancelButton: true,
-        confirmButtonText: 'Lihat Status Laporan',
-        cancelButtonText: 'Tetap di Sini',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "{{ route('status.laporan') }}";
-        }
-        // Kalau klik "Tetap di Sini", tidak perlu redirect
-      });
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+      icon: 'success',
+      title: 'Laporan Berhasil Dikirim!',
+      text: '{{ session('success') }}',
+      showCancelButton: true,
+      confirmButtonText: 'Lihat Status Laporan',
+      cancelButtonText: 'Tetap di Sini',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "{{ route('status.laporan') }}";
+      }
     });
-  </script>
+  });
+</script>
 @endif

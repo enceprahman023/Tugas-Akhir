@@ -742,8 +742,19 @@ footer {
 
 /* Awal Halaman Dampak Bullying */
 .bullying-impact-section {
-  background-color: #f4f6f9;
-  margin-bottom: 0px;
+  background-color: #fff;
+  padding: 60px 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.bullying-impact-section > .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .bullying-impact-section h2 {
@@ -761,13 +772,14 @@ footer {
 .impact-card {
   background-color: #fff;
   border: 1px solid #ddd;
-  min-height: 340px;
+  min-height: unset;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: start;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 50%;
 }
 
 .impact-card:hover {
@@ -838,6 +850,38 @@ footer {
   font-size: 1rem;
   color: #555;
 }
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.scroll-container {
+  height: 100vh;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.screen-section {
+  height: 100vh;
+  width: 100vw;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+}
+
+.screen-section > .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.poster-image {
+  max-height: 50vh;
+  object-fit: contain;
+}
+
+
 /* Akhir Bahaya Bullying */
 
 /* ===== Dashboard Styles ===== */
@@ -927,6 +971,10 @@ footer {
 /* akhir dashboard pelapoe */
 
 /* Awal Halaman Buat Laporan */
+.card {
+  border-radius: 16px;
+  overflow: hidden; /* supaya header tidak ‘keluar’ */
+}
 .card-body{
   padding: 1.5rem; /* Memberi padding ekstra */
 }
@@ -934,6 +982,7 @@ footer {
   font-size: 1.2rem;
   text-align: center;
 }
+
 
 textarea::placeholder {
   color: #999;
@@ -1126,6 +1175,23 @@ h6 {
     height: auto;
     margin-top: 10px;
 }
+.dashboard-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 250px;
+}
+
+main.flex-grow-1 {
+  flex-grow: 1;
+  overflow-x: auto;
+}
+
+
 
 /* Styling untuk dashboard container */
 .dashboard-container {

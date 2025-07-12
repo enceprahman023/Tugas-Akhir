@@ -16,7 +16,7 @@
 
 
     {{-- Custom CSS --}}
-    @if (Request::is('guru*'))
+    @if (Request::is('guru*') || Request::is('login-guru') || Request::is('register-guru'))
     <link rel="stylesheet" href="{{ asset('css/guru.css') }}">
     @elseif (Request::is('admin*'))
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">

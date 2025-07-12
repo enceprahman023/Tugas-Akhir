@@ -34,7 +34,7 @@
 </style>
 
 <div class="login-bg d-flex justify-content-center align-items-center">
-    <div class="login-card">
+    <div class="login-card mx-auto">
         <div class="text-center mb-4">
             <img src="{{ asset('images/logodu.png') }}" alt="Logo" class="animated-logo mb-2" style="width: 80px;">
             <h4 class="fw-bold">Login Guru BK</h4>

@@ -229,7 +229,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/akun/update', [AdminController::class, 'updateAkun'])->name('admin.akun.update');
     Route::delete('/admin/akun/delete/{id}', [AdminController::class, 'hapusAkun'])->name('admin.akun.hapus');
     Route::post('/admin/akun/reset-password', [AdminController::class, 'resetPassword'])->name('admin.akun.resetpassword');
-    Route::post('/logout-admin', [AdminController::class, 'logout'])->name('admin.logout');
+    Route::post('/logout-admin', [AdminController::class, 'logout'])->name('admin.logout.admin');
     
         // Panduan Admin
         Route::get('/admin/panduan', function () {
