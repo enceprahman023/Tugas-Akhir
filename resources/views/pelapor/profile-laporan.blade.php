@@ -29,15 +29,13 @@
                 <a href="{{ route('profile.laporan') }}" class="nav-link text-white active bg-dark rounded"><i class="bi bi-person me-2"></i>Profile</a>
             </li>
             <li class="nav-item">
-                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
-                    <button type="button" id="logout-button" class="nav-link text-danger bg-transparent border-0 d-flex align-items-center p-0" style="width: 100%; text-align: left;">
-                        <i class="bi bi-box-arrow-right me-2"></i>Logout
-                    </button>
                 </form>
+            </aside>
             </li>
         </ul>
-    </aside>
     
     {{-- Main Content --}}
     <main class="flex-grow-1 p-4">
@@ -50,7 +48,11 @@
             <!-- Card Profil Saya -->
             <div class="profile-card;">
                 <div class="card-body text-center">
-                   <img src="{{ route('foto.profil', $user->foto) }}" alt="Foto Profil" class="rounded-circle mb-3" width="120" height="120">
+                   @if($user->foto)
+                    <img src="{{ route('foto.profil', $user->foto) }}" alt="Foto Profil" class="rounded-circle mb-3" width="120" height="120">
+                   @else
+                    <img src="{{ asset('images/default-profile.png') }}" alt="Foto Profil Default" class="rounded-circle mb-3" width="120" height="120">
+                   @endif
                     <h4 class="card-title mb-2">{{ $user->name }}</h4>
                     <p class="text-muted mb-1">NIS: {{ $user->nis }}</p>
                     <p class="text-muted mb-1">Nama: {{ $user->name }}</p>

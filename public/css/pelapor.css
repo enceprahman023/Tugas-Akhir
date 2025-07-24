@@ -899,6 +899,9 @@ html, body {
   width: 250px;
   border-right: 2px solid #ccc;
   padding: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
 }
 
 .sidebar .nav-link {
@@ -952,9 +955,12 @@ html, body {
   }
 
   .sidebar {
+    position: static;
     width: 100%;
     border-right: none;
     border-bottom: 2px solid #ccc;
+    min-height: unset;
+    padding: 20px;
   }
 }
 
@@ -1370,3 +1376,36 @@ main.flex-grow-1 {
   user-select: none;
 }
 /* Akhir Css Pelapor */
+
+@media (min-width: 992px) {
+  .dashboard-container {
+    min-height: 100vh;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    z-index: 1020;
+    overflow-y: auto;
+  }
+  .main-content, main.flex-grow-1 {
+    margin-left: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    padding-bottom: 40px;
+  }
+}
+@media (max-width: 991.98px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+  }
+  .main-content, main.flex-grow-1 {
+    margin-left: 0;
+    height: auto;
+    overflow-y: visible;
+  }
+}

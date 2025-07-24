@@ -50,13 +50,21 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
+    .logo-animated {
+      transition: transform 0.5s cubic-bezier(.4,2,.3,1), box-shadow 0.4s;
+      cursor: pointer;
+    }
+    .logo-animated:hover {
+      transform: scale(1.08) rotate(-5deg);
+      box-shadow: 0 8px 24px rgba(100,202,63,0.18);
+    }
   </style>
 </head>
 <body>
 
 <div class="register-wrapper">
   <div class="register-left">
-    <img src="{{ asset('images/logo register.png') }}" style="width:400px;" alt="DUCARE Logo">
+    <img src="{{ asset('images/logo register.png') }}" style="width:400px;" alt="DUCARE Logo" class="logo-animated">
     <h2>DUCARE</h2>
     <p>Lindungi diri, laporkan bullying!</p>
   </div>

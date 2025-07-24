@@ -28,31 +28,35 @@
 </head>
 <body>
     @if (in_array(Route::currentRouteName(), ['home', 'about.bullying']))
-    <nav class="navbar">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="{{ asset('images/logodu.png') }}" alt="Logo" width="40" height="40" class="me-5">
-                <div class="brand-text">
-                    <div class="brand-title">DUCARE</div>
-                    <div class="brand-subtitle">Darul Ulum Care</div>
-                </div>
-            </a>
-
-            {{-- Middle Menu Buttons --}}
-            <div class="d-flex justify-content-center gap-2 middle-menu">
-                <a class="btn btn-secondary" href="/">Home</a>
-                <a class="btn btn-secondary" href="/about-bullying">About Bullying</a>
-                <a class="btn btn-secondary" href="/#team">Team</a>
-                <a class="btn btn-secondary" href="/#kontak">Kontak</a>
-            </div>
-
-            {{-- Right Menu Buttons --}}
-            <div class="nav-menu">
-                <a href="{{ route('pelapor.register') }}" class="btn btn-outline-warning">Register</a>
-                <a href="{{ route('login') }}" class="btn btn-outline-light ms-3">Login</a>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-success py-3 fixed-top">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+          <img src="{{ asset('images/logodu.png') }}" alt="Logo" width="40" height="40">
+          <div>
+            <div class="brand-title">DUCARE</div>
+            <div class="brand-subtitle">Darul Ulum Care</div>
+          </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-2">
+            <li class="nav-item"><a class="nav-link text-white fw-semibold {{ Route::currentRouteName() == 'home' ? 'active' : '' }}" href="/">Home</a></li>
+            <li class="nav-item"><a class="nav-link text-white {{ Route::currentRouteName() == 'about.bullying' ? 'active' : '' }}" href="/about-bullying">About Bullying</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/#team">Team</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/#kontak">Kontak</a></li>
+          </ul>
+          <div class="d-flex gap-2">
+            <a href="{{ route('pelapor.register') }}" class="btn btn-outline-warning">Register</a>
+            <a href="{{ route('login') }}" class="btn btn-outline-light">Login</a>
+          </div>
         </div>
+      </div>
     </nav>
+    <style>
+    body { padding-top: 76px; }
+    </style>
     @endif
 
     {{-- Dynamic Content Section --}}

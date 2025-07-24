@@ -15,7 +15,11 @@
             <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
             <a href="{{ route('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
             <a href="{{ route('guru.panduan') }}" class="nav-link text-white active bg-dark rounded">📖 Panduan</a>
-            <a href="#" class="nav-link text-white">🚪 Logout</a>
+            <a href="{{ route('guru.profile') }}" class="nav-link text-white">👤 Profile</a>
+            <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
+                @csrf
+                <a href="#" class="nav-link text-white" onclick="event.preventDefault(); showLogoutPopup();">🚪 Keluar</a>
+            </form>
         </nav>
     </aside>
 
@@ -76,3 +80,26 @@
     </main>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function showLogoutPopup() {
+    Swal.fire({
+        title: 'Logout?',
+        text: 'Apakah kamu yakin ingin logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal',
+        backdrop: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
+    });
+}
+</script>
+@endpush

@@ -4,6 +4,30 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Guru.css') }}">
+<style>
+@media print {
+  aside.sidebar, .btn, .mt-4, .navbar, .footer-custom, .d-flex.gap-3, .mt-4.d-flex, .text-center.mt-3, .modal, .modal-backdrop, .zoomable-image.zoomed {
+    display: none !important;
+  }
+  body, html {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  main.flex-grow-1.bg-light.p-4, .container, .card.shadow-sm.p-4 {
+    background: #fff !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .card.shadow-sm.p-4 {
+    border: none !important;
+  }
+  .ttd {
+    page-break-inside: avoid;
+    display: block !important;
+  }
+}
+</style>
 
 <div class="d-flex" style="min-height: 100vh;">
     <!-- Sidebar -->
@@ -16,8 +40,12 @@
             <a href="{{ route('guru.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
             <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
             <a href="{{ route('guru.cetak') }}" class="nav-link text-white active bg-dark rounded">🖨️ Cetak Laporan</a>
-            <a href="#" class="nav-link text-white">📖 Panduan</a>
-            <a href="#" class="nav-link text-white">🚪 Logout</a>
+            <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
+            <a href="{{ route('guru.profile') }}" class="nav-link text-white">👤 Profile</a>
+            <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
+                @csrf
+                <a href="#" class="nav-link text-white" onclick="event.preventDefault(); showLogoutPopup();">🚪 Keluar</a>
+            </form>
         </nav>
     </aside>
 
@@ -57,22 +85,24 @@
 
                 <!-- Tanda Tangan Kanan Bawah -->
                 <div class="ttd mt-5 text-end">
-                    <p class="mb-1">Bandung, {{ $laporan->tanggal_penanganan ? \Carbon\Carbon::parse($laporan->tanggal_penanganan)->format('d F Y') : now()->format('d F Y') }}</p>
-                    <p class="mb-1">Guru BK</p>
-                    @if ($laporan->ttd_penangan)
-                        <img src="{{ asset('storage/' . $laporan->ttd_penangan) }}"
-                             alt="Tanda Tangan"
-                             class="zoomable-image mb-1"
-                             style="height: 80px; cursor: zoom-in;">
-                    @else
-                        <p class="mb-1">[Tanda Tangan Tidak Tersedia]</p>
-                    @endif
-                    <strong>{{ $laporan->ditangani_oleh ?? 'Guru BK' }}</strong>
+                    <div class="text-center" style="display: inline-block; min-width: 200px;">
+                        <p class="mb-1">Bandung, {{ $laporan->tanggal_penanganan ? \Carbon\Carbon::parse($laporan->tanggal_penanganan)->format('d F Y') : now()->format('d F Y') }}</p>
+                        <p class="mb-1">Guru BK</p>
+                        @if ($laporan->ttd_penangan)
+                            <img src="{{ asset('storage/' . $laporan->ttd_penangan) }}"
+                                 alt="Tanda Tangan"
+                                 class="zoomable-image mb-1"
+                                 style="height: 80px; cursor: zoom-in; display: block; margin: 0 auto 8px auto;">
+                        @else
+                            <p class="mb-1">[Tanda Tangan Tidak Tersedia]</p>
+                        @endif
+                        <strong class="d-block mt-2">{{ $laporan->ditangani_oleh ?? 'Guru BK' }}</strong>
+                    </div>
                 </div>
 
                 <div class="mt-4 d-flex gap-3">
                     <a href="{{ route('guru.cetak') }}" class="btn btn-secondary">← Kembali</a>
-                    <button class="btn btn-danger" onclick="window.print()">🖨️ Cetak PDF</button>
+                    <button class="btn btn-danger" onclick="window.print()">��️ Cetak PDF</button>
                 </div>
             </div>
         </div>
@@ -92,21 +122,25 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Saat modal dibuka, pasang ulang event listener zoom
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            modal.addEventListener('shown.bs.modal', function () {
-                const zoomableImages = modal.querySelectorAll('.zoomable-image');
-                zoomableImages.forEach(img => {
-                    img.addEventListener('click', function () {
-                        img.classList.toggle('zoomed');
-                    });
-                });
-            });
-        });
+function showLogoutPopup() {
+    Swal.fire({
+        title: 'Logout?',
+        text: 'Apakah kamu yakin ingin logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal',
+        backdrop: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
     });
+}
 </script>
 @endpush
 

@@ -16,8 +16,13 @@
       <li class="nav-item mb-3"><a href="{{ route('status.laporan') }}" class="nav-link text-white">📋 Status Laporan</a></li>
       <li class="nav-item mb-3"><a href="{{ route('panduan.laporan') }}" class="nav-link text-white"><i class="bi bi-book me-2"></i> Panduan</a></li>
       <li class="nav-item mb-3"><span class="nav-link text-white"><i class="bi bi-person me-2"></i>Profil</span></li>
-      <li class="nav-item"><span class="nav-link text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</span></li>
+      <li class="nav-item">
+        <a href="#" class="nav-link text-danger" onclick="event.preventDefault(); if(confirm('Apakah kamu yakin ingin logout?')){ document.getElementById('logout-form').submit(); }"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+      </li>
     </ul>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+      @csrf
+    </form>
   </aside>
 
   {{-- Main --}}

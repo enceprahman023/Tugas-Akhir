@@ -12,11 +12,11 @@
 
     .login-card {
         background: white;
-        padding: 50px;
-        border-radius: 20px;
+        padding: 32px;
+        border-radius: 14px;
         box-shadow: 0 12px 24px rgba(0,0,0,0.2);
         width: 100%;
-        max-width: 600px; /* Fokus tampilan web */
+        max-width: 400px;
     }
 
     .animated-logo {

@@ -12,13 +12,13 @@
         </div>
         <nav class="nav flex-column">
             <a href="{{ route('guru.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
-            <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📁 Kelola Laporan</a>
+            <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
             <a href="{{ route('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
             <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
             <a href="{{ route('guru.profile') }}" class="nav-link text-white bg-dark rounded">👤 Profil</a>
-            <form action="{{ route('guru.logout') }}" method="POST" class="mt-2">
+            <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="nav-link text-danger border-0 bg-transparent text-start">🚪 Logout</button>
+                <a href="#" class="nav-link text-white" onclick="event.preventDefault(); showLogoutPopup();">🚪 Keluar</a>
             </form>
         </nav>
     </aside>
@@ -163,4 +163,26 @@ document.getElementById('photoInput')?.addEventListener('change', function(event
     }
 });
 </script>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function showLogoutPopup() {
+    Swal.fire({
+        title: 'Logout?',
+        text: 'Apakah kamu yakin ingin logout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Logout',
+        cancelButtonText: 'Batal',
+        backdrop: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
+    });
+}
+</script>
+@endpush
 @endsection

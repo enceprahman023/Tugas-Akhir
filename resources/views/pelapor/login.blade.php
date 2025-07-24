@@ -57,13 +57,25 @@
       cursor: pointer;
       color: #888;
     }
+
+    @keyframes ancul {
+      0% { transform: rotate(0deg); }
+      20% { transform: rotate(-10deg); }
+      40% { transform: rotate(8deg); }
+      60% { transform: rotate(-6deg); }
+      80% { transform: rotate(4deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .logo-ancul:hover {
+      animation: ancul 0.7s cubic-bezier(.4,2,.3,1);
+    }
   </style>
 </head>
 <body>
 
 <div class="register-wrapper">
   <div class="register-left">
-    <img src="{{ asset('images/logo login.png') }}" alt="DUCARE Logo" class="logo-login">
+    <img src="{{ asset('images/logo login.png') }}" alt="DUCARE Logo" class="logo-login logo-ancul">
     <h2>DUCARE</h2>
     <p>Lindungi diri, laporkan bullying</p>
   </div>
