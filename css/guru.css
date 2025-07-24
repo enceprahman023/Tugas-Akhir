@@ -1,0 +1,241 @@
+/* Awal Css Guru_BK */
+/* Awal Halaman Register Guru BK*/
+.form-wrapper {
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Jarak antar field lebih padat */
+.form-wrapper .form-control {
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 10px;
+}
+
+/* Label lebih kecil dan rapi */
+.form-wrapper .form-label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Jarak antar group form dikecilkan */
+.form-wrapper .mb-3,
+.form-wrapper .mb-4 {
+  margin-bottom: 14px !important;
+}
+
+/* Button */
+.form-wrapper button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+.form-wrapper {
+  width: 100%;
+  max-width: 450px;
+}
+
+/* Animasi hover pada logo */
+.logo {
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.logo:hover {
+  transform: scale(1.1) rotate(-3deg);
+  filter: brightness(1.1);
+}
+
+
+/* Akhir halaman register Guru BK*/
+
+/* Awal Halaman Login Guru BK */
+.login-bg {
+  background: linear-gradient(to bottom right, #3fb714, #fef314);
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+   width: 100vw;
+    padding: 0;
+    margin: 0;
+}
+
+
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 30px;
+  width: 100% !important;
+}
+
+.animated-logo {
+  transition: transform 0.3s ease;
+}
+.animated-logo:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.login-card button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 12px;
+}
+
+/* Akhir halaman login */
+
+/* Awal halaman dashboard */
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.sidebar .nav-link {
+  margin: 8px 0;
+  font-size: 16px;
+  transition: background 0.2s;
+  border-radius: 8px;
+}
+
+.sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper-dashboard {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #0d6efd;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.sidebar .nav-link {
+  color: white;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #f8f9fa;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.card {
+  height: 0 px;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
+
+.activity-list {
+  max-height: 150px;
+  overflow-y: auto;
+}
+/* Akhir halaman dashboard guruBK */
+/* ===============================
+   SIDEBAR STYLING
+================================= */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  background-color: #0d6efd;
+  color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .nav-link {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: white;
+  transition: background 0.2s ease;
+}
+
+.sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+}
+
+/* ===============================
+ LOGO & HEADING DI SIDEBAR
+================================= */
+.sidebar .logo {
+  width: 60px;
+}
+
+/* ===============================
+ KONTEN UTAMA
+ (disesuaikan dengan lebar sidebar)
+================================= */
+main {
+  margin-left: 250px; /* supaya tidak tertutup sidebar */
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 40px;
+}
+
+/* ===============================
+x
+/* awal css cetak laporan GuruBK*/
+ /* Tambahan styling khusus cetak laporan */
+.ttd {
+    margin-top: 50px;
+    text-align: right;
+}
+
+.ttd img {
+    margin-bottom: 10px;
+}
+
+/* Css zoom img detail cetak laporan */
+.zoomable-image {
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+}
+
+.zoomed {
+  transform: scale(2.5);
+  cursor: zoom-out;
+  z-index: 9999;
+  position: relative;
+}
+body:has(.login-bg) main.container-fluid {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: none !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
