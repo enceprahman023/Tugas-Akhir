@@ -139,7 +139,7 @@ class LaporanController extends Controller
         $laporan = Laporan::find($id);
 
         if ($laporan) {
-            return view('ubah-laporan', compact('laporan'));
+            return view('pelapor.ubah-laporan', compact('laporan'));
         } else {
             return redirect()->route('status.laporan')->with('error', 'Laporan tidak ditemukan');
         }
@@ -169,16 +169,32 @@ class LaporanController extends Controller
     {
         $laporan = Laporan::find($id);
 
-        if ($laporan) {
-            // Opsional: Hapus juga file gambar jika ada
-            if ($laporan->bukti_gambar) {
-                Storage::disk('public')->delete($laporan->bukti_gambar);
-            }
-            $laporan->delete();
-            return redirect()->route('status.laporan')->with('success', 'Laporan berhasil dihapus');
-        } else {
-            return redirect()->route('status.laporan')->with('error', 'Laporan tidak ditemukan');
+        if (!$laporan) {
+            return redirect()->back()->with('error', 'Laporan tidak ditemukan');
         }
+
+        $user = Auth::user();
+
+        // Pelapor hanya boleh menghapus laporannya sendiri (Proteksi IDOR)
+        if ($user->role === 'pelapor' && $laporan->user_id !== $user->id) {
+            abort(403, 'Anda tidak memiliki hak untuk menghapus laporan ini.');
+        }
+
+        // Hapus file gambar bukti jika ada
+        if ($laporan->bukti_gambar) {
+            Storage::disk('public')->delete($laporan->bukti_gambar);
+        }
+
+        $laporan->delete();
+
+        // Redirect sesuai role untuk UX yang lebih baik
+        if ($user->role === 'gurubk') {
+            return redirect()->route('guru.kelola')->with('success', 'Laporan berhasil dihapus');
+        } elseif ($user->role === 'admin') {
+            return redirect()->route('admin.kelola.laporan')->with('success', 'Laporan berhasil dihapus');
+        }
+
+        return redirect()->route('status.laporan')->with('success', 'Laporan berhasil dihapus');
     }
     /**
      * Memperbarui catatan penanganan dan status laporan oleh Guru BK.

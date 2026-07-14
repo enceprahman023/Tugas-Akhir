@@ -37,113 +37,70 @@ Route::post('/login', [LoginPelaporController::class, 'store'])->name('login.sto
 
 
 
-// route ganti  password pelapor 
-Route::get('/pelapor/ganti-password', [ProfileController::class, 'formGantiPassword'])->name('pelapor.password');
-Route::post('/pelapor/ganti-password', [ProfileController::class, 'updatePassword'])->name('pelapor.password.update');
+// Halaman Utama & Informasi Umum (Tidak memerlukan autentikasi)
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about-bullying', fn () => view('pelapor.about-bullying'))->name('about.bullying');
+Route::get('/panduan-laporan', fn () => view('pelapor.panduan-laporan'))->name('panduan.laporan');
 
-// Form Buat Laporan (GET)
-Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
-
-//  Proses Simpan Laporan (POST)
-Route::post('/laporan/store', [LaporanController::class, 'store'])->name('laporan.store');
-
-// Route Dashboard Pelapor
-Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
+// Route sementara untuk test email (bisa dinonaktifkan atau dihapus)
 Route::get('/test-email', function () {
-
     Mail::raw('Test Email DUCARE', function ($message) {
-
         $message->to('enceprahman93@gmail.com')
             ->subject('Test Email');
     });
-
     return 'Email berhasil dikirim';
 });
 
-// Route Login Pelapor
-Route::middleware(['auth', 'role:pelapor'])->group(function () {
-    Route::get('/pelapor/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
-    Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/status-laporan', function () {
-        return view('pelapor.status-laporan');
-    })->name('status.laporan');
-});
-
-// Halaman Home (Tidak memerlukan autentikasi)
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// Halaman About (Tidak memerlukan autentikasi)
-Route::get('/about-bullying', function () {
-    return view('pelapor.about-bullying');
-})->name('about.bullying');
-
-// Halaman Panduan (Tidak memerlukan autentikasi)
-Route::get('/panduan-laporan', function () {
-    return view('pelapor.panduan-laporan');
-})->name('panduan.laporan');
-
-
-// Rute Pelapor yang Memerlukan Autentikasi (menggunakan middleware 'auth' - default 'web' guard)
+// Rute Pelapor yang Memerlukan Autentikasi (Wajib Login & Role Pelapor)
 Route::middleware(['auth', 'role:pelapor'])->group(function () {
     // Halaman Dashboard Pelapor
-
-
-    // route update profile 
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-
-    // Rute Profil Pelapor
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // foto supaya tersimpan di Profile
-    Route::get('/foto-profil/{filename}', function ($filename) {
-        $path = storage_path('app/public/foto_profil/' . $filename);
-
-        if (!file_exists($path)) {
-            abort(404);
-        }
-
-        return response()->file($path);
-    })->name('foto.profil');
-
-
-    //Route halaman pelapor cek status
-    Route::get('/status-laporan', [LaporanController::class, 'status'])
-        ->middleware('auth')
-        ->name('status.laporan');
-
-    // route parameter detail laporan dan ubah laporan
-    Route::get('/status-laporan', [LaporanController::class, 'status'])->name('status.laporan');
-    Route::get('/detail-laporan/{id}', [LaporanController::class, 'show'])->name('detail.laporan');
-    Route::get('/ubah-laporan/{id}', [LaporanController::class, 'edit'])->name('ubah.laporan');
-    Route::delete('/hapus-laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
-
-    // Ubah Laporan Pelapor
-    Route::get('/ubah-laporan', function () {
-        return view('pelapor.ubah-laporan');
-    })->name('ubah.laporan');
-
-    // Halaman Profile Laporan Pelapor
-    Route::get('/profile-laporan', function () {
-        return view('pelapor.profile-laporan');
-    })->name('profile.laporan.view');
-
+    Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
     Route::get('/dashboard', function () {
         return redirect()->route('pelapor.dashboard');
     })->name('dashboard');
 
+    // Buat Laporan
+    Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
+    Route::post('/laporan/store', [LaporanController::class, 'store'])->name('laporan.store');
+
+    // Status & Detail Laporan
+    Route::get('/status-laporan', [LaporanController::class, 'status'])->name('status.laporan');
+    Route::get('/detail-laporan/{id}', [LaporanController::class, 'show'])->name('detail.laporan');
+    Route::get('/ubah-laporan/{id}', [LaporanController::class, 'edit'])->name('ubah.laporan');
+
+    // Profil Pelapor
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile-laporan', fn () => view('pelapor.profile-laporan'))->name('profile.laporan.view');
+
+    // Rute Ganti Password Pelapor
+    Route::get('/pelapor/ganti-password', [ProfileController::class, 'formGantiPassword'])->name('pelapor.password');
+    Route::post('/pelapor/ganti-password', [ProfileController::class, 'updatePassword'])->name('pelapor.password.update');
+
+    // Serving Profile Photo
+    Route::get('/foto-profil/{filename}', function ($filename) {
+        $path = storage_path('app/public/foto_profil/' . $filename);
+        if (!file_exists($path)) {
+            abort(404);
+        }
+        return response()->file($path);
+    })->name('foto.profil');
 
     // Logout Pelapor
     Route::post('/logout', function (Request $request) {
-        Auth::logout(); // Logout dari guard default (web)
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
     })->name('logout');
+});
+
+// Rute Bersama untuk Semua Aktor Terautentikasi
+Route::middleware(['auth'])->group(function () {
+    Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 });
 
 // =====================================================================================================================
@@ -173,7 +130,6 @@ Route::middleware(['auth', 'role:gurubk'])->group(function () {
     // Halaman Dashboard Guru BK
     Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
     Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
-    Route::put('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
     Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
     Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
     // Atau jika hanya menampilkan view langsung:
@@ -187,7 +143,6 @@ Route::middleware(['auth', 'role:gurubk'])->group(function () {
     // Route update untuk kelola laporan guruBK
     Route::post('/laporan/{id}/update-penanganan', [LaporanController::class, 'updatePenanganan'])->name('laporan.updatePenanganan');
     Route::put('/laporan/{id}/update-status', [LaporanController::class, 'updateStatus'])->name('laporan.updateStatus');
-    Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
     // Route Cetak Laporan guru
     Route::get('/guru/cetak-laporan', [GuruController::class, 'cetakLaporan'])->name('guru.cetak');
