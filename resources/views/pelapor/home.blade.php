@@ -10,149 +10,241 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/pelapor.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: #334155;
+        padding-top: 76px;
+      }
+      
+      /* Navbar Tetap Hijau */
       .navbar {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        background-color: #15803d !important; /* Hijau yang solid dan profesional */
+        box-shadow: 0 4px 15px rgba(21, 128, 61, 0.2);
       }
-      .home-hero .overlay {
-        /* Overlay lebih tipis agar gambar sekolah tetap terlihat */
-        background: linear-gradient(120deg, rgba(100,202,63,0.35) 0%, rgba(2,79,112,0.25) 100%);
-        z-index: 1;
-      }
-      .home-hero .container {
+      .navbar-brand .brand-title { font-weight: 800; color: #ffffff; line-height: 1.2; }
+      .navbar-brand .brand-subtitle { font-size: 0.75rem; color: #dcfce7; font-weight: 600; letter-spacing: 1px; }
+      .nav-link { color: #f0fdf4 !important; font-weight: 500; transition: color 0.3s; }
+      .nav-link:hover, .nav-link.active { color: #fef08a !important; font-weight: 700; }
+      
+      .btn-outline-warning { border: 2px solid #fef08a; color: #fef08a; font-weight: 600; border-radius: 12px; }
+      .btn-outline-warning:hover { background: #fef08a; color: #15803d; border-color: #fef08a; }
+      .btn-outline-light { background: #ffffff; color: #15803d; border: none; font-weight: 600; border-radius: 12px; }
+      .btn-outline-light:hover { background: #f0fdf4; color: #166534; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+      /* Hero Section */
+      .home-hero {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        min-height: 550px;
         position: relative;
-        z-index: 2;
+        overflow: hidden;
+      }
+      .home-hero::before {
+        content: ''; position: absolute; width: 600px; height: 600px;
+        background: radial-gradient(circle, rgba(100,202,63,0.15) 0%, rgba(0,0,0,0) 70%);
+        top: -100px; right: -100px; border-radius: 50%;
       }
       .cta-btn {
-        background: #64CA3F;
+        background: linear-gradient(135deg, #64CA3F 0%, #4DA834 100%);
         color: #fff;
-        font-weight: 600;
-        border-radius: 30px;
-        padding: 12px 32px;
-        box-shadow: 0 2px 8px rgba(100,202,63,0.12);
-        transition: background 0.2s;
+        font-weight: 700;
+        font-size: 1.1rem;
+        border-radius: 14px;
+        padding: 14px 35px;
+        box-shadow: 0 10px 25px rgba(100,202,63,0.3);
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
       }
       .cta-btn:hover {
-        background: #4ea32e;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(100,202,63,0.4);
         color: #fff;
       }
-      .team-card {
-        min-height: 350px;
-      }
-      .footer-social a {
-        font-size: 22px;
-        margin: 0 8px;
-      }
-      .footer-menu {
-        margin-bottom: 0;
-      }
-      /* Section visi: gambar dan card lebih kecil, proporsional */
-      .home-vision .img-visi-custom {
-        max-width: 320px;
+      .hero-img {
+        animation: float 6s ease-in-out infinite;
+        max-width: 380px; /* Diperkecil sesuai request */
         width: 100%;
-        height: auto;
-        border-radius: 14px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      }
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-15px); }
+        100% { transform: translateY(0px); }
+      }
+
+      /* Unified Section Styling */
+      section { padding: 80px 0; }
+      .section-title {
+        font-weight: 800;
+        color: #1e293b;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+      }
+      .section-title::after {
+        content: ''; position: absolute; left: 0; bottom: -10px;
+        width: 50px; height: 4px; background: #64CA3F; border-radius: 2px;
+      }
+      .text-center .section-title::after { left: 50%; transform: translateX(-50%); }
+
+      /* Variasi Background per Section (Modern Pastels) */
+      .bg-section-visi { background-color: #f8fafc; } /* Slate sangat muda */
+      .bg-section-about { background-color: #f0fdf4; } /* Hijau sangat muda */
+      .bg-section-team { background-color: #ffffff; } /* Putih bersih */
+      .bg-section-contact { background-color: #f1f5f9; } /* Slate agak abu */
+
+      /* Cards & Images */
+      .feature-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        height: 100%;
+        border: 1px solid rgba(0,0,0,0.02);
+      }
+      .img-custom {
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+        max-width: 380px; /* Gambar tidak terlalu besar */
+        width: 100%;
         margin: 0 auto;
         display: block;
       }
-      .home-vision .text-box {
-        background-color: #ffffff;
-        padding: 24px 20px;
-        border-radius: 14px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.07);
-        max-width: 350px;
-        margin: 0 auto;
+      .img-custom:hover { transform: scale(1.02); }
+
+      /* Team Section */
+      .team-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.02);
       }
-      @media (min-width: 992px) {
-        .home-vision .row {
-          align-items: center;
-          justify-content: center;
-        }
-        .home-vision .col-md-6 {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 340px;
-        }
+      .team-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
       }
-      @media (max-width: 768px) {
-        .home-hero { height: auto; padding: 40px 0; }
-        .home-hero .row { flex-direction: column; }
-        .team-cards { flex-direction: column; gap: 20px; }
-        .footer-container { flex-direction: column; align-items: center; gap: 20px; }
-        .home-vision .text-box, .home-vision .img-visi-custom { max-width: 100%; }
+      .team-photo {
+        width: 110px; height: 110px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #f1f5f9;
+        margin-bottom: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
       }
+
+      /* Contact Section */
+      .contact-box {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        height: 100%;
+        transition: all 0.3s;
+        border: 1px solid #e2e8f0;
+      }
+      .contact-box:hover {
+        border-color: #64CA3F;
+        transform: translateY(-5px);
+      }
+      .contact-icon {
+        width: 60px; height: 60px;
+        background: #dcfce7;
+        color: #16a34a;
+        border-radius: 16px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 24px; margin: 0 auto 15px;
+      }
+
+      /* Footer */
+      .footer-custom {
+        background: #0f172a;
+        color: #94a3b8;
+        padding: 60px 0 20px;
+      }
+      .footer-menu { list-style: none; padding: 0; display: flex; gap: 20px; justify-content: center; }
+      .footer-menu a { color: #cbd5e1; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+      .footer-menu a:hover { color: #64CA3F; }
+      .social-icons a {
+        display: inline-flex; width: 40px; height: 40px;
+        background: rgba(255,255,255,0.05); color: #fff;
+        border-radius: 50%; align-items: center; justify-content: center;
+        transition: all 0.3s; margin: 0 5px;
+      }
+      .social-icons a:hover { background: #64CA3F; transform: translateY(-3px); }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-success py-3 fixed-top">
+
+<!-- Navbar (Hijau) -->
+<nav class="navbar navbar-expand-lg fixed-top py-3">
   <div class="container">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-      <img src="{{ asset('images/logodu.png') }}" alt="Logo" width="40" height="40">
+    <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+      <img src="{{ asset('images/logodu.png') }}" alt="Logo" width="45" height="45">
       <div>
         <div class="brand-title">DUCARE</div>
-        <div class="brand-subtitle">Darul Ulum Care</div>
+        <div class="brand-subtitle">DARUL ULUM CARE</div>
       </div>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" style="filter: invert(1);">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="mainNavbar">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-2">
-        <li class="nav-item"><a class="nav-link active text-white fw-semibold" href="#">Home</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="/about-bullying">About Bullying</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#team">Team</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#kontak">Kontak</a></li>
+      <ul class="navbar-nav mx-auto gap-3">
+        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about-bullying">About Bullying</a></li>
+        <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
+        <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
       </ul>
-      <div class="d-flex gap-2">
-        <a href="{{ route('register') }}" class="btn btn-outline-warning">Register</a>
-        <a href="{{ route('login') }}" class="btn btn-outline-light">Login</a>
+      <div class="d-flex gap-3 mt-3 mt-lg-0">
+        <a href="{{ route('register') }}" class="btn btn-outline-warning px-4">Register</a>
+        <a href="{{ route('login') }}" class="btn btn-outline-light px-4">Login</a>
       </div>
     </div>
   </div>
 </nav>
-<style>
-body { padding-top: 76px; }
-</style>
 
-<section class="home-hero text-white position-relative" style="min-height: 520px;">
-  <div class="overlay w-100 h-100 position-absolute top-0 start-0"></div>
-  <div class="container position-relative z-2 py-5">
+<!-- Hero Section -->
+<section class="home-hero d-flex align-items-center pt-5">
+  <div class="container position-relative z-2">
     <div class="row align-items-center">
-      <div class="col-md-6 mb-4 mb-md-0">
-        <h2 class="fw-bold display-5 mb-2">Together Against</h2>
-        <h2 class="fw-bold display-5 mb-4">Bullying, Act Now!</h2>
-        <p class="lead mb-4">
-          DUCARE adalah website pelaporan bullying untuk siswa Darul Ulum Nurdiniyyah Pasir Jambu. Bersama DUCARE, kita ciptakan sekolah yang aman dan bebas bullying.
+      <div class="col-lg-6 mb-5 mb-lg-0 text-center text-lg-start">
+        <h1 class="fw-bold text-white mb-3" style="font-size: 3.2rem; line-height: 1.15;">
+          Together Against <span style="color: #64CA3F;">Bullying</span>,<br>Act Now!
+        </h1>
+        <p class="lead text-white-50 mb-5" style="font-size: 1.1rem; max-width: 500px; line-height: 1.7; margin: 0 auto;">
+          DUCARE adalah platform pelaporan pintar untuk siswa Darul Ulum Nurdiniyyah Pasir Jambu. Mari ciptakan lingkungan sekolah yang aman, nyaman, dan bebas perundungan.
         </p>
-        <a href="/register" class="cta-btn">Mulai Lapor Sekarang</a>
-      </div>
-      <div class="col-md-6 text-center">
-        <img src="{{ asset('images/bullying home.png') }}" alt="logo-bullying" class="mb-3 logo-bullying img-fluid" style="max-width: 320px;">
-        <div class="mt-3 slogan-text">
-          <h3 class="fw-bold mb-1">KAMU TIDAK SENDIRI</h3>
-          <h3 class="fw-bold">KAMI PEDULI!</h3>
+        <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
+          <a href="{{ route('register') }}" class="cta-btn">Mulai Lapor Sekarang</a>
         </div>
+      </div>
+      <div class="col-lg-6 text-center">
+        <img src="{{ asset('images/bullying home.png') }}" alt="logo-bullying" class="img-fluid hero-img">
       </div>
     </div>
   </div>
 </section>
 
-<section class="home-vision py-5 bg-light">
+<!-- Vision Section -->
+<section class="bg-section-visi">
   <div class="container">
-    <div class="row align-items-center justify-content-center">
-      <div class="col-md-6 d-flex justify-content-center mb-4 mb-md-0">
-        <img src="{{ asset('images/gambar halaman visi.jpg') }}" alt="people-peace" class="img-visi-custom">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <img src="{{ asset('images/gambar halaman visi.jpg') }}" alt="Visi" class="img-fluid img-custom">
       </div>
-      <div class="col-md-6 d-flex justify-content-center">
-        <div class="text-box">
-          <h2 class="fw-bold mb-3">Visi Program Kami</h2>
-          <p class="mb-0">
-            Melalui program aplikasi DUCARE yang kami buat, kami ingin memberikan wadah yang aman dan mudah digunakan bagi siswa untuk melaporkan kasus bullying. Program ini dirancang untuk membantu sekolah merespon dengan cepat, serta menciptakan lingkungan yang lebih peduli dan bebas dari perundungan.
+      <div class="col-lg-6">
+        <div class="feature-card">
+          <h2 class="section-title">Visi Program Kami</h2>
+          <p class="fs-5 text-muted mb-4" style="line-height: 1.7;">
+            Melalui platform DUCARE, kami menghadirkan ruang aman bagi siswa untuk bersuara tanpa rasa takut. 
+          </p>
+          <p class="text-muted" style="line-height: 1.7; font-size: 1.05rem;">
+            Program ini dirancang tidak hanya untuk memudahkan pelaporan, tetapi juga mempercepat respon sekolah dalam menangani setiap indikasi perundungan. Bersama, kita wujudkan generasi peduli yang saling melindungi.
           </p>
         </div>
       </div>
@@ -160,178 +252,126 @@ body { padding-top: 76px; }
   </div>
 </section>
 
-<section class="about-section py-5" style="background: #e7eeff;">
+<!-- About Section -->
+<section class="bg-section-about">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-6 mb-4 mb-md-0">
-        <div class="about-text">
-          <h2 class="section-title mb-3">About Bullying</h2>
-          <p>
-            Bullying adalah tindakan menyakiti orang lain secara sengaja, baik secara fisik, verbal, maupun emosional. Biasanya dilakukan berulang-ulang dan membuat korban merasa takut, tertekan, atau tidak nyaman. Bullying bisa terjadi di mana saja, termasuk di sekolah, dan dapat berdampak serius pada mental maupun kehidupan sosial seseorang.
-          </p>
-          <a href="/detail-bullying" class="btn btn-outline-success mt-3">Pelajari Lebih Lanjut</a>
-        </div>
+    <div class="row align-items-center g-5 flex-lg-row-reverse">
+      <div class="col-lg-6">
+        <img src="{{ asset('images/about bullying.jpg') }}" alt="About Bullying" class="img-fluid img-custom">
       </div>
-      <div class="col-md-6 text-center">
-        <img src="{{ asset('images/about bullying.jpg') }}" alt="Poster Bullying" class="img-fluid poster-img rounded-4 shadow" style="max-width: 350px;">
+      <div class="col-lg-6">
+        <div class="feature-card">
+          <h2 class="section-title">Kenali Bullying</h2>
+          <p class="text-muted mb-4" style="line-height: 1.7; font-size: 1.05rem;">
+            Bullying bukan sekadar candaan. Ini adalah tindakan menyakiti orang lain secara sengaja dan berulang, baik secara fisik, verbal, maupun emosional.
+          </p>
+          <p class="text-muted mb-4" style="line-height: 1.7; font-size: 1.05rem;">
+            Dampaknya sangat serius terhadap mental dan kehidupan sosial korban. Memahami bentuk-bentuk bullying adalah langkah pertama untuk menghentikannya. Jangan biarkan terjadi di sekitarmu!
+          </p>
+          <a href="/detail-bullying" class="btn btn-outline-light text-dark bg-white border mt-2 px-4 py-2 rounded-pill fw-bold shadow-sm" style="border-color: #cbd5e1 !important;">Pelajari Lebih Lanjut <i class="bi bi-arrow-right ms-2"></i></a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="team" class="team-section py-5 bg-white">
+<!-- Team Section -->
+<section id="team" class="bg-section-team">
   <div class="container text-center">
-    <div class="team-title-wrapper mb-2 mx-auto">
-      <h4 class="team-title mb-0">TEAM</h4>
-    </div>
-    <h3 class="team-subtitle mt-3 mb-5">Team Developer Kami</h3>
-    <div class="team-cards d-flex justify-content-center gap-4 flex-wrap">
-      <div class="team-card p-4">
-        <img src="{{ asset('images/team 1.jpg') }}" alt="Team 1" class="team-photo mb-3 rounded-3 shadow">
-        <h5 class="fw-bold mt-2">Sholihin Mahmud</h5>
-        <p class="mb-0">Frontend Developer</p>
-      </div>
-      <div class="team-card p-4">
-        <img src="{{ asset('images/team 2.jpg') }}" alt="Team 2" class="team-photo mb-3 rounded-3 shadow">
-        <h5 class="fw-bold mt-2">Mansyur Sudhama</h5>
-        <p class="mb-0">Backend Developer</p>
-      </div>
-      <div class="team-card p-4">
-        <img src="{{ asset('images/team 3.jpg') }}" alt="Team 3" class="team-photo mb-3 rounded-3 shadow">
-        <h5 class="fw-bold mt-2">Nuril Sanusi</h5>
-        <p class="mb-0">UI/UX Designer</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="kontak" class="contact-section py-5" style="background: #e3f0ff;">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-11">
-        <div class="card border-0 shadow-lg rounded-4 p-4 mb-4" style="background: #f0faff;">
-          <div class="row justify-content-center mb-4">
-            <div class="col-lg-8 text-center">
-              <div class="bg-success text-white py-2 px-4 d-inline-block rounded-3 mb-2">
-                <h2 class="mb-0">KONTAK</h2>
-              </div>
-              <h4 class="mt-3 mb-2">Hubungi Kami</h4>
-              <p class="text-muted mb-0">Jika ada pertanyaan, saran, atau ingin melaporkan sesuatu, silakan hubungi kami melalui kontak berikut:</p>
-            </div>
-          </div>
-          <div class="row row-cols-1 row-cols-md-3 g-4 align-items-stretch justify-content-center">
-            <div class="col d-flex">
-              <div class="card flex-fill shadow-sm border-0 text-center py-4 h-100" style="background: #f0fff0;">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                  <i class="bi bi-geo-alt-fill fs-1 text-success mb-3"></i>
-                  <h5 class="card-title fw-bold mb-2">Alamat</h5>
-                  <p class="card-text mb-0">Jl. Raya Ciwidey KM.25, Pasirjambu, Bandung</p>
-                </div>
-              </div>
-            </div>
-            <div class="col d-flex">
-              <div class="card flex-fill shadow-sm border-0 text-center py-4 h-100" style="background: #f0fff0;">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                  <i class="bi bi-envelope-fill fs-1 text-success mb-3"></i>
-                  <h5 class="card-title fw-bold mb-2">Email</h5>
-                  <p class="card-text mb-0">dukungan@ducare.sch.id</p>
-                </div>
-              </div>
-            </div>
-            <div class="col d-flex">
-              <div class="card flex-fill shadow-sm border-0 text-center py-4 h-100" style="background: #f0fff0;">
-                <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                  <i class="bi bi-telephone-fill fs-1 text-success mb-3"></i>
-                  <h5 class="card-title fw-bold mb-2">Telepon</h5>
-                  <p class="card-text mb-0">(+62) 812-3456-7890</p>
-                </div>
-              </div>
-            </div>
-          </div>
+    <h2 class="section-title mb-5">Tim Pengembang</h2>
+    <div class="row justify-content-center g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="team-card">
+          <img src="{{ asset('images/team 1.jpg') }}" alt="Sholihin Mahmud" class="team-photo">
+          <h5 class="fw-bold text-dark mb-1">Sholihin Mahmud</h5>
+          <p class="text-success fw-semibold mb-0" style="color:#16a34a !important;">Frontend Developer</p>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-<section class="py-5" style="background: #e6ffe6;">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-11">
-        <div class="card shadow border-0 rounded-4 overflow-hidden" style="background: #e6ffe6;">
-          <div class="card-body p-0">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31674.340284952763!2d107.4369843492558!3d-7.0920497585975575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68ed56408530c9%3A0x5e331a2a59a3b3db!2sPondok%20Pesantren%20Darul%20Ulum%20Cikabuyutan!5e0!3m2!1sid!2sid!4v1748661714025!5m2!1sid!2sid" width="100%" height="350" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-          </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="team-card">
+          <img src="{{ asset('images/team 2.jpg') }}" alt="Mansyur Sudhama" class="team-photo">
+          <h5 class="fw-bold text-dark mb-1">Mansyur Sudhama</h5>
+          <p class="text-success fw-semibold mb-0" style="color:#16a34a !important;">Backend Developer</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="team-card">
+          <img src="{{ asset('images/team 3.jpg') }}" alt="Nuril Sanusi" class="team-photo">
+          <h5 class="fw-bold text-dark mb-1">Nuril Sanusi</h5>
+          <p class="text-success fw-semibold mb-0" style="color:#16a34a !important;">UI/UX Designer</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="footer-custom mt-5">
-  <div class="container py-4">
-    <div class="row align-items-center">
-      <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
-        <img src="{{ asset('images/logo Du2.png') }}" alt="Logo DUCARE" style="max-width: 90px;">
+<!-- Contact & Map Section -->
+<section id="kontak" class="bg-section-contact">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Hubungi Kami</h2>
+      <p class="text-muted" style="font-size: 1.05rem;">Punya pertanyaan atau butuh bantuan darurat? Kami siap mendengarkan.</p>
+    </div>
+    
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="contact-box text-center">
+          <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+          <h5 class="fw-bold mb-2">Lokasi Sekolah</h5>
+          <p class="text-muted mb-0">Jl. Raya Ciwidey KM.25,<br>Pasirjambu, Bandung</p>
+        </div>
       </div>
-      <div class="col-md-4 d-flex justify-content-center mb-3 mb-md-0">
-        <ul class="footer-menu d-flex flex-row flex-nowrap align-items-center justify-content-center mb-0 p-0" style="gap: 16px; font-size: 1rem;">
-          <li><a href="#" class="text-white">Menu</a></li>
-          <li><a href="/about-bullying" class="text-white">About Bullying</a></li>
-          <li><a href="/buat-laporan" class="text-white">Lapor</a></li>
-          <li><a href="#team" class="text-white">Team</a></li>
-          <li><a href="#kontak" class="text-white">Kontak</a></li>
+      <div class="col-md-4">
+        <div class="contact-box text-center">
+          <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
+          <h5 class="fw-bold mb-2">Email Layanan</h5>
+          <p class="text-muted mb-0">dukungan@ducare.sch.id<br>info@ducare.sch.id</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="contact-box text-center">
+          <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+          <h5 class="fw-bold mb-2">Telepon Darurat</h5>
+          <p class="text-muted mb-0">(+62) 812-3456-7890<br>Senin - Jumat, 07:00 - 15:00</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31674.340284952763!2d107.4369843492558!3d-7.0920497585975575!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68ed56408530c9%3A0x5e331a2a59a3b3db!2sPondok%20Pesantren%20Darul%20Ulum%20Cikabuyutan!5e0!3m2!1sid!2sid!4v1748661714025!5m2!1sid!2sid" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-custom">
+  <div class="container">
+    <div class="row align-items-center mb-4">
+      <div class="col-md-4 text-center text-md-start mb-4 mb-md-0">
+        <img src="{{ asset('images/logo Du2.png') }}" alt="DUCARE" style="max-width: 110px;">
+        <p class="mt-3 text-white-50 small">Platform Pelaporan Bullying Cerdas & Aman untuk Sekolah.</p>
+      </div>
+      <div class="col-md-4 mb-4 mb-md-0">
+        <ul class="footer-menu">
+          <li><a href="#">Home</a></li>
+          <li><a href="/about-bullying">Tentang</a></li>
+          <li><a href="{{ route('login') }}">Lapor</a></li>
+          <li><a href="#kontak">Kontak</a></li>
         </ul>
       </div>
-      <div class="col-md-4 text-center text-md-end">
-        <a href="#" class="me-2 text-white"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="me-2 text-white"><i class="fab fa-tiktok"></i></a>
-        <a href="#" class="text-white"><i class="fab fa-instagram"></i></a>
+      <div class="col-md-4 text-center text-md-end social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
       </div>
     </div>
-    <hr class="my-3" style="border-color: #fff; opacity: 0.2;">
-    <div class="text-center text-white-50 small">
-      © 2025 DUCARE. All rights reserved.
+    <div class="border-top border-secondary pt-4 text-center text-white-50 small">
+      &copy; 2025 DUCARE. Darul Ulum Nurdiniyyah Pasir Jambu. All rights reserved.
     </div>
   </div>
 </footer>
-<style>
-.footer-custom {
-  background: #024f70;
-  color: #fff;
-}
-.footer-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.footer-menu a {
-  color: #fff;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.2s;
-  white-space: nowrap;
-}
-.footer-menu a:hover, .footer-custom a:hover {
-  color: #64CA3F;
-}
-.footer-custom .fab {
-  font-size: 22px;
-  transition: color 0.2s;
-}
-.footer-custom .fab:hover {
-  color: #64CA3F;
-}
-@media (max-width: 768px) {
-  .footer-custom .row > div {
-    margin-bottom: 16px;
-  }
-  .footer-menu {
-    flex-direction: column !important;
-    gap: 8px !important;
-    align-items: center !important;
-  }
-}
-</style>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>

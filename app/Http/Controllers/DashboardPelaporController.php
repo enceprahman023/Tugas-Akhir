@@ -10,7 +10,7 @@ class DashboardPelaporController extends Controller
 {
     public function index(Request $request)
     {
-        $user = Auth::user(); // Ambil user yang login sekarang
+        $user = Auth::guard('web')->user(); // Ambil user yang login sekarang
 
         // Cek apakah sudah login dan role-nya pelapor
         if (!$user || $user->role !== 'pelapor') {

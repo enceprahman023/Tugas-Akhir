@@ -57,7 +57,10 @@
           </tr>
         @empty
           <tr>
-            <td colspan="4" class="text-center">Belum ada laporan.</td>
+            <td colspan="4" class="text-center py-5">
+              <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+              <p class="mt-2 text-muted">Belum ada laporan.</p>
+            </td>
           </tr>
         @endforelse
       </tbody>

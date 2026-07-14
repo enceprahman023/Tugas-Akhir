@@ -15,12 +15,12 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\Auth\LoginPelaporController; // Controller untuk login Pelapor
 use App\Http\Controllers\GuruProfileController;
 use App\Http\Controllers\GuruController;
-use App\Http\Controllers\PelaporController;
 use App\Models\Laporan;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 // =====================================================================================================================
 // Rute untuk Pelapor
@@ -28,15 +28,14 @@ use Illuminate\Http\Request;
 
 // Rute Registrasi Pelapor
 Route::get('/register', [RegisteredPelaporController::class, 'create'])->name('register');
-Route::get('/pelapor/register', [RegisteredPelaporController::class, 'create'])->name('pelapor.register'); // Duplikat? Coba gunakan satu saja.
+Route::get('/pelapor/register', [RegisteredPelaporController::class, 'create'])->name('pelapor.register');
 Route::post('/pelapor/register', [RegisteredPelaporController::class, 'store'])->name('pelapor.register.store');
 
 // Route Login Pelapor (Menggunakan LoginPelaporController)
 Route::get('/login', [LoginPelaporController::class, 'create'])->name('login');
 Route::post('/login', [LoginPelaporController::class, 'store'])->name('login.store');
 
-// Route Register Dashboard pelapor depan 
-Route::get('/pelapor/dashboard', [PelaporController::class, 'dashboard'])->name('pelapor.dashboard');
+
 
 // route ganti  password pelapor 
 Route::get('/pelapor/ganti-password', [ProfileController::class, 'formGantiPassword'])->name('pelapor.password');
@@ -50,10 +49,19 @@ Route::post('/laporan/store', [LaporanController::class, 'store'])->name('lapora
 
 // Route Dashboard Pelapor
 Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
+Route::get('/test-email', function () {
 
+    Mail::raw('Test Email DUCARE', function ($message) {
+
+        $message->to('enceprahman93@gmail.com')
+            ->subject('Test Email');
+    });
+
+    return 'Email berhasil dikirim';
+});
 
 // Route Login Pelapor
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:pelapor'])->group(function () {
     Route::get('/pelapor/buat-laporan', [LaporanController::class, 'create'])->name('laporan.create');
     Route::get('/pelapor/dashboard', [DashboardPelaporController::class, 'index'])->name('pelapor.dashboard');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -77,15 +85,15 @@ Route::get('/panduan-laporan', function () {
 
 
 // Rute Pelapor yang Memerlukan Autentikasi (menggunakan middleware 'auth' - default 'web' guard)
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:pelapor'])->group(function () {
     // Halaman Dashboard Pelapor
-    
-    
+
+
     // route update profile 
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-    
+
     // Rute Profil Pelapor
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
@@ -93,20 +101,20 @@ Route::middleware(['auth'])->group(function () {
 
     // foto supaya tersimpan di Profile
     Route::get('/foto-profil/{filename}', function ($filename) {
-    $path = storage_path('app/public/foto_profil/' . $filename);
+        $path = storage_path('app/public/foto_profil/' . $filename);
 
-    if (!file_exists($path)) {
-        abort(404);
-    }
+        if (!file_exists($path)) {
+            abort(404);
+        }
 
-    return response()->file($path);
-})->name('foto.profil');
+        return response()->file($path);
+    })->name('foto.profil');
 
 
     //Route halaman pelapor cek status
-     Route::get('/status-laporan', [LaporanController::class, 'status'])
-    ->middleware('auth')
-    ->name('status.laporan');
+    Route::get('/status-laporan', [LaporanController::class, 'status'])
+        ->middleware('auth')
+        ->name('status.laporan');
 
     // route parameter detail laporan dan ubah laporan
     Route::get('/status-laporan', [LaporanController::class, 'status'])->name('status.laporan');
@@ -125,7 +133,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile.laporan.view');
 
     Route::get('/dashboard', function () {
-    return redirect()->route('pelapor.dashboard');
+        return redirect()->route('pelapor.dashboard');
     })->name('dashboard');
 
 
@@ -152,20 +160,20 @@ Route::post('/login-guru', [LoginGuruController::class, 'login'])->name('guru.lo
 Route::post('/logout-guru', [LoginGuruController::class, 'logout'])->name('guru.logout');
 
 //Route Profile guruBK
-Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
-Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
-Route::put('/guru/profile/update', [GuruProfileController::class, 'update'])->name('guru.profile.update');
-Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
-Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
+// Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
+// Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
+// Route::put('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
+// Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
+// Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
 
 
 // Rute Guru BK yang Memerlukan Autentikasi (menggunakan middleware 'auth:guru' - khusus guard 'guru')
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:gurubk'])->group(function () {
     Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard');
     // Halaman Dashboard Guru BK
-   Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
+    Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
     Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
-    Route::put('/guru/profile/update', [GuruProfileController::class, 'update'])->name('guru.profile.update');
+    Route::put('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
     Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
     Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
     // Atau jika hanya menampilkan view langsung:
@@ -175,18 +183,18 @@ Route::middleware(['auth'])->group(function () {
 
     // Route Kelola Laporan Guru
     Route::get('/guru/kelola-laporan', [LaporanController::class, 'guruKelola'])->name('guru.kelola');
-    
+
     // Route update untuk kelola laporan guruBK
     Route::post('/laporan/{id}/update-penanganan', [LaporanController::class, 'updatePenanganan'])->name('laporan.updatePenanganan');
     Route::put('/laporan/{id}/update-status', [LaporanController::class, 'updateStatus'])->name('laporan.updateStatus');
     Route::delete('/laporan/{id}', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
     // Route Cetak Laporan guru
-    Route::get('/guru/cetak-laporan', [LaporanController::class, 'cetakLaporan'])->name('guru.cetak');
+    Route::get('/guru/cetak-laporan', [GuruController::class, 'cetakLaporan'])->name('guru.cetak');
     Route::get('/guru/cetak-laporan/{id}', [LaporanController::class, 'cetakDetail'])->name('guru.cetak.detail');
 
 
-    
+
 
     // Halaman Panduan Guru
     Route::get('/guru/panduan', function () {
@@ -215,7 +223,7 @@ Route::post('/admin/logout', [AdminLoginController::class, 'logout'])->name('adm
 
 
 // 🔐 Route ADMIN - hanya bisa diakses kalau login & role admin
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::get('/admin/kelola_laporan', fn() => view('admin.kelola_laporan'))->name('admin.kelola.laporan');
     // Route::get('/admin/panduan_admin', fn() => view('admin.panduan_admin'))->name('admin.panduan.admin');
     // Admin Dashboard Controller
@@ -230,9 +238,26 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/akun/delete/{id}', [AdminController::class, 'hapusAkun'])->name('admin.akun.hapus');
     Route::post('/admin/akun/reset-password', [AdminController::class, 'resetPassword'])->name('admin.akun.resetpassword');
     Route::post('/logout-admin', [AdminController::class, 'logout'])->name('admin.logout.admin');
-    
-        // Panduan Admin
-        Route::get('/admin/panduan', function () {
-            return view('admin.panduan_admin');
-        })->name('admin.panduan.admin');
+
+    // Panduan Admin
+    Route::get('/admin/panduan', function () {
+        return view('admin.panduan_admin');
+    })->name('admin.panduan.admin');
+});
+
+// Route sementara untuk membuat akun admin. Silakan buka /buat-admin-temp di browser.
+Route::get('/buat-admin-temp', function () {
+    try {
+        $user = \App\Models\User::updateOrCreate(
+            ['email' => 'admin_baru@ducare.com'],
+            [
+                'name' => 'Admin Baru DUCARE',
+                'password' => bcrypt('admin123'),
+                'role' => 'admin',
+            ]
+        );
+        return 'Akun Admin berhasil dibuat/diperbarui!<br>Email: <strong>admin_baru@ducare.com</strong><br>Password: <strong>admin123</strong>';
+    } catch (\Exception $e) {
+        return 'Gagal membuat akun: ' . $e->getMessage();
+    }
 });

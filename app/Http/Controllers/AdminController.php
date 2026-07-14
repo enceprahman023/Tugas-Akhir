@@ -7,6 +7,7 @@ use App\Models\Laporan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -17,33 +18,37 @@ class AdminController extends Controller
         $totalLaporan     = Laporan::count();
         $laporanSelesai   = Laporan::where('status', 'Selesai')->count();
         $laporanDitolak   = Laporan::where('status', 'Ditolak')->count();
-        $laporanBelum     = Laporan::where('status', 'Belum Ditangani')->count();
+        $laporanBelum     = Laporan::where('status', 'Dalam Proses')->count();
+        $totalUser        = User::where('role', 'pelapor')->count();
+        $totalGuru        = User::where('role', 'gurubk')->count();
 
     return view('admin.dashboard_admin', compact(
             'totalLaporan',
             'laporanSelesai',
             'laporanDitolak',
-            'laporanBelum'
+            'laporanBelum',
+            'totalUser',
+            'totalGuru'
         ));
     }
 
     public function kelolaLaporan()
     {
-        $laporans = \App\Models\Laporan::latest()->get();
-        $laporans = Laporan::latest()->get();
+        $laporans = Laporan::with('pelapor')->latest()->get();
         return view('admin.kelola_laporan', compact('laporans'));
     }
 
-        public function cetakLaporan()
+public function cetakLaporan()
 {
-    $laporans = Laporan::latest()->get();
+    $laporans = Laporan::with('pelapor')->latest()->get();
     return view('admin.cetak_laporan', compact('laporans'));
 }
 
 public function cetakDetail($id)
 {
-    $laporan = \App\Models\Laporan::findOrFail($id);
-    return view('admin.detail_laporan', compact('laporan'));
+    $laporan = Laporan::with('pelapor')->findOrFail($id);
+    $pdf = Pdf::loadView('pdf.detail-laporan', compact('laporan'));
+    return $pdf->download('Detail_Laporan_'.$laporan->id.'.pdf');
 }
 
 
@@ -78,12 +83,35 @@ public function updateAkun(Request $request)
         'role'  => 'required|in:Pelapor,Guru,Admin',
         'nis'   => 'nullable|string|max:20',
         'nip'   => 'nullable|string|max:20',
+        'foto'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
     $user = \App\Models\User::findOrFail($request->id);
     $user->name  = $request->name;
     $user->email = $request->email;
-    $user->role  = $request->role;
+    
+    // Map input role ke value enum database yang sesuai (lowercase / gurubk)
+    $roleMap = [
+        'Pelapor' => 'pelapor',
+        'Guru'    => 'gurubk',
+        'Admin'   => 'admin',
+    ];
+    $user->role  = $roleMap[$request->role] ?? 'pelapor';
+
+    // Unggah foto baru jika ada
+    if ($request->hasFile('foto')) {
+        $file = $request->file('foto');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        \Illuminate\Support\Facades\Storage::disk('public')->putFileAs('foto_profil', $file, $filename);
+
+        // Hapus foto lama jika ada
+        if ($user->foto && \Illuminate\Support\Facades\Storage::disk('public')->exists('foto_profil/' . $user->foto)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete('foto_profil/' . $user->foto);
+        }
+
+        $user->foto = $filename;
+    }
+
     $user->nis   = $request->nis;
     $user->nip   = $request->nip;
     $user->save();

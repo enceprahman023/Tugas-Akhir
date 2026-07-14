@@ -52,7 +52,10 @@ class LoginGuruController extends Controller
           Auth::login($user);
         // Login berhasil → Simpan session login khusus guru
         session([
-            'login_guru' => true,
+            'login_guru' => [
+                'status' => true,
+                'nama' => $user->name,
+            ],
             'guru_id' => $user->id,
         ]);
         $request->session()->regenerate();

@@ -20,23 +20,19 @@ class LoginPelaporController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        // 🔴 BAGIAN PENTING DI SINI
+        if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
 
-            $role = Auth::user()->role;
+            $user = Auth::guard('web')->user();
 
-            // Arahkan sesuai role
-            if ($role === 'pelapor') {
+            if ($user && $user->role === 'pelapor') {
                 return redirect()->route('pelapor.dashboard');
-            } elseif ($role === 'guru') {
-                return redirect()->route('guru.dashboard');
-            } elseif ($role === 'admin') {
-                return redirect()->route('admin.dashboard');
             }
 
-            // Kalau role tidak dikenal, logout dan tolak
-            Auth::logout();
-            return redirect()->route('login')->withErrors(['email' => 'Role tidak dikenali.']);
+            Auth::guard('web')->logout();
+            return redirect()->route('login')
+                ->withErrors(['email' => 'Akun ini bukan akun pelapor.']);
         }
 
         return back()->withErrors([

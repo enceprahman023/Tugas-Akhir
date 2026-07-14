@@ -17,13 +17,11 @@ class DashboardGuruController extends Controller
         }
 
         // Ambil jumlah laporan berdasarkan status
-        $jumlahMasuk   = Laporan::where('status', 'masuk')->count();
-        $jumlahProses  = Laporan::where('status', 'diproses')->count();
-        $jumlahSelesai = Laporan::where('status', 'selesai')->count();
-        $jumlahTolak   = Laporan::where('status', 'ditolak')->count();
+        $jumlahProses  = Laporan::where('status', 'Dalam Proses')->count();
+        $jumlahSelesai = Laporan::where('status', 'Selesai')->count();
+        $jumlahTolak   = Laporan::where('status', 'Ditolak')->count();
 
         return view('guru.dashboard', compact(
-            'jumlahMasuk',
             'jumlahProses',
             'jumlahSelesai',
             'jumlahTolak'

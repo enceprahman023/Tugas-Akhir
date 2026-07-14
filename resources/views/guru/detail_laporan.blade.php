@@ -1,12 +1,12 @@
-@extends('layouts.main')
+@extends('layouts.guru-layout')
 
 @section('title', 'Detail Cetak Laporan')
 
-@section('content')
+@section('guru-content')
 <link rel="stylesheet" href="{{ asset('css/Guru.css') }}">
 <style>
 @media print {
-  aside.sidebar, .btn, .mt-4, .navbar, .footer-custom, .d-flex.gap-3, .mt-4.d-flex, .text-center.mt-3, .modal, .modal-backdrop, .zoomable-image.zoomed {
+  aside.guru-sidebar, .btn, .mt-4, .navbar, .footer-custom, .d-flex.gap-3, .mt-4.d-flex, .text-center.mt-3, .modal, .modal-backdrop, .zoomable-image.zoomed {
     display: none !important;
   }
   body, html {
@@ -29,28 +29,7 @@
 }
 </style>
 
-<div class="d-flex" style="min-height: 100vh;">
-    <!-- Sidebar -->
-    <aside class="sidebar bg-primary text-white p-3 pt-5" style="width: 250px;">
-        <div class="text-center mb-4">
-            <img src="{{ asset('images/logodu.png') }}" alt="Logo" class="logo mb-2" style="width: 60px;">
-            <h5 class="fw-bold">DUCARE</h5>
-        </div>
-        <nav class="nav flex-column">
-            <a href="{{ route('guru.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
-            <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
-            <a href="{{ route('guru.cetak') }}" class="nav-link text-white active bg-dark rounded">🖨️ Cetak Laporan</a>
-            <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
-            <a href="{{ route('guru.profile') }}" class="nav-link text-white">👤 Profile</a>
-            <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
-                @csrf
-                <a href="#" class="nav-link text-white" onclick="event.preventDefault(); showLogoutPopup();">🚪 Keluar</a>
-            </form>
-        </nav>
-    </aside>
-
-    <!-- Konten -->
-    <main class="flex-grow-1 bg-light p-4">
+<div class="container-fluid p-0">
         <div class="container">
             <h3 class="mb-4 fw-bold">Detail Laporan</h3>
 
@@ -106,7 +85,6 @@
                 </div>
             </div>
         </div>
-    </main>
 </div>
 
 <!-- Zoom Script -->
@@ -121,26 +99,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endsection
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-function showLogoutPopup() {
-    Swal.fire({
-        title: 'Logout?',
-        text: 'Apakah kamu yakin ingin logout?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Logout',
-        cancelButtonText: 'Batal',
-        backdrop: false
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('logout-form').submit();
-        }
-    });
-}
-</script>
-@endpush
+
 

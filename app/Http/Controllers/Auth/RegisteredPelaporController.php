@@ -25,20 +25,21 @@ class RegisteredPelaporController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'nis' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+            'password' => ['required', 'confirmed', 'min:6'],
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'nis' => $request->nis,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'pelapor',
-        ]);
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'nis' => $request->nis,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'pelapor',
+            ]);
 
-        event(new Registered($user));
-        Auth::login($user);
-
-        return redirect()->route('pelapor.dashboard')->with('register_success', true);
+            return redirect()->route('pelapor.register')->with('register_success', true);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Gagal mendaftar: ' . $e->getMessage());
+        }
     }
 }

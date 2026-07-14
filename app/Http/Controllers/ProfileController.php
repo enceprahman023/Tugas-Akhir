@@ -83,7 +83,7 @@ class ProfileController extends Controller
     public function laporan(): View
     {
         $user = Auth::user();
-        $laporans = Laporan::where('user_id', $user->nis)->get();
+        $laporans = Laporan::where('user_id', $user->id)->get();
 
         return view('pelapor.profile-laporan', compact('laporans', 'user'));
     }
@@ -106,30 +106,26 @@ class ProfileController extends Controller
     /**
      * ✅ Proses update password user.
      */
-    public function updatePassword(Request $request)
-    
+   public function updatePassword(Request $request)
 {
     $request->validate([
         'current_password' => 'required',
         'new_password' => 'required|min:6|confirmed',
     ]);
 
-    // Ambil user dari session pelapor
-    $user = \App\Models\User::where('nis', session('login_pelapor'))->first();
-    
-    if (!$user) {
-        return back()->withErrors(['current_password' => 'Akun tidak ditemukan.']);
-    }
+    /** @var \App\Models\User $user */
+    $user = Auth::user(); // ✅ ambil user yang login sekarang
 
     if (!Hash::check($request->current_password, $user->password)) {
-        return back()->withErrors(['current_password' => 'Password lama tidak cocok.']);
+        return back()->withErrors([
+            'current_password' => 'Password lama tidak cocok.'
+        ]);
     }
 
     $user->password = Hash::make($request->new_password);
     $user->save();
 
-    return redirect()->route('profile.laporan')->with('success', 'Password berhasil diperbarui.');
+    return redirect()->route('profile.laporan')
+            ->with('success', 'Password berhasil diperbarui.');
 }
-
-
 }

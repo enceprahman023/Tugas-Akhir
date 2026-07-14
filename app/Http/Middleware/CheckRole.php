@@ -14,12 +14,23 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-   public function handle($request, \Closure $next, $role)
-{
-    if (Auth::check() && Auth::user()->role === $role) {
-        return $next($request);
-    }
+    public function handle($request, \Closure $next, $role)
+    {
+        if (Auth::check() && Auth::user()->role === $role) {
+            return $next($request);
+        }
 
-    return redirect('/admin/login')->with('error', 'Akses ditolak.');
-}
+        if (Auth::check()) {
+            $userRole = Auth::user()->role;
+            if ($userRole === 'admin') {
+                return redirect()->route('admin.dashboard')->with('error', 'Akses ditolak. Anda tidak memiliki izin ke halaman tersebut.');
+            } elseif ($userRole === 'gurubk') {
+                return redirect()->route('guru.dashboard')->with('error', 'Akses ditolak. Anda tidak memiliki izin ke halaman tersebut.');
+            } else {
+                return redirect()->route('pelapor.dashboard')->with('error', 'Akses ditolak. Anda tidak memiliki izin ke halaman tersebut.');
+            }
+        }
+
+        return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
+    }
 }

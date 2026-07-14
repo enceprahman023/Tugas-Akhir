@@ -1,73 +1,126 @@
-@extends('layouts.main')
+@extends('layouts.guru-layout')
 
 @section('title', 'Profil Guru BK')
 
-@section('content')
-<div class="d-flex" style="min-height: 100vh;">
-    <!-- Sidebar -->
-    <aside class="sidebar bg-primary text-white p-3 pt-5" style="width: 250px;">
-        <div class="text-center mb-4">
-            <img src="{{ asset('images/logodu.png') }}" alt="Logo DUCARE" class="logo mb-2" style="width: 60px;">
-            <h5 class="fw-bold">DUCARE</h5>
-        </div>
-        <nav class="nav flex-column">
-            <a href="{{ route('guru.dashboard') }}" class="nav-link text-white">🏠 Dashboard</a>
-            <a href="{{ route('guru.kelola') }}" class="nav-link text-white">📋 Kelola Laporan</a>
-            <a href="{{ route('guru.cetak') }}" class="nav-link text-white">🖨️ Cetak Laporan</a>
-            <a href="{{ route('guru.panduan') }}" class="nav-link text-white">📖 Panduan</a>
-            <a href="{{ route('guru.profile') }}" class="nav-link text-white bg-dark rounded">👤 Profil</a>
-            <form id="logout-form" action="{{ route('guru.logout') }}" method="POST">
-                @csrf
-                <a href="#" class="nav-link text-white" onclick="event.preventDefault(); showLogoutPopup();">🚪 Keluar</a>
-            </form>
-        </nav>
-    </aside>
+@section('guru-content')
+<div class="container-fluid p-0">
+    <style>
+        .profile-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid #f1f5f9;
+            overflow: hidden;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .profile-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            height: 120px;
+            position: relative;
+        }
+        .profile-avatar-container {
+            text-align: center;
+            margin-top: -60px;
+            position: relative;
+            z-index: 2;
+        }
+        .profile-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 5px solid #ffffff;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            object-fit: cover;
+            background: #f8fafc;
+        }
+        .profile-info {
+            padding: 30px 40px;
+        }
+        .profile-table th {
+            color: #64748b;
+            font-weight: 600;
+            padding: 12px 0;
+            width: 150px;
+        }
+        .profile-table td {
+            color: #1e293b;
+            font-weight: 700;
+            padding: 12px 0;
+        }
+        .btn-custom {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-bottom: 1px solid #e2e8f0;
+            border-radius: 20px 20px 0 0;
+            padding: 20px 25px;
+        }
+        .modal-title { font-weight: 800; color: #1e293b; }
+        .form-control {
+            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+        }
+        .form-control:focus {
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 0.25rem rgba(245, 158, 11, 0.25);
+            background-color: #ffffff;
+        }
+    </style>
 
-    <!-- Konten Profil -->
-    <main class="flex-grow-1 p-4 bg-light">
-        <div class="container">
-            <div class="card shadow-sm p-4">
-                <h3 class="fw-bold mb-4">Profil Guru BK</h3>
-                <div class="row">
-                    <div class="col-md-4 text-center">
-                        <img src="{{ asset('images/team 3.jpg') }}" alt="Foto Guru BK" class="img-thumbnail rounded-circle mb-3" style="max-width: 150px;">
-                        <h5 class="fw-semibold">{{ $guru->name }}</h5>
-                        <p class="text-muted">{{ $guru->email }}</p>
-                    </div>
-                    <div class="col-md-8">
-                        <table class="table table-borderless">
+        <div class="container py-4">
+            <div class="profile-card">
+                <div class="profile-header"></div>
+                
+                <div class="profile-avatar-container">
+                    <img src="{{ $guru->foto ? asset('storage/' . $guru->foto) : asset('images/team 3.jpg') }}" alt="Foto Guru BK" class="profile-avatar">
+                    <h4 class="fw-bold mt-3 mb-0" style="color: #1e293b;">{{ $guru->name }}</h4>
+                    <span class="badge bg-warning text-dark mt-2 rounded-pill px-3 py-2"><i class="fa-solid fa-shield-halved me-1"></i> Guru BK</span>
+                </div>
+
+                <div class="profile-info">
+                    <div class="row justify-content-center">
+                        <div class="col-md-9">
+                            <div class="bg-light rounded-4 p-4 mb-4 border border-light">
+                        <table class="table profile-table table-borderless mb-0">
                             <tr>
-                                <th style="width: 180px;">Nama</th>
-                                <td>: {{ $guru->name }}</td>
+                                <th><i class="fa-regular fa-envelope me-2 text-muted"></i> Email</th>
+                                <td>{{ $guru->email }}</td>
                             </tr>
                             <tr>
-                                <th>Email</th>
-                                <td>: {{ $guru->email }}</td>
+                                <th><i class="fa-regular fa-id-badge me-2 text-muted"></i> NIP</th>
+                                <td>{{ $guru->nip ?? '-' }}</td>
                             </tr>
                             <tr>
-                                <th>NIP</th>
-                                <td>: {{ $guru->nip ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Kontak</th>
-                                <td>: {{ $guru->phone_number ?? '-' }}</td>
-                            </tr>
-                            <tr>
-                                <th>Role</th>
-                                <td>: {{ ucfirst($guru->role) }}</td>
+                                <th><i class="fa-solid fa-phone me-2 text-muted"></i> Kontak</th>
+                                <td>{{ $guru->phone_number ?? '-' }}</td>
                             </tr>
                         </table>
+                            </div>
 
                         <!-- Tombol Edit & Ganti Password -->
-                        <div class="mt-4 d-flex gap-2">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">✏️ Edit Profil</button>
-                            <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changePasswordModal">🔑 Ganti Password</button>
+                        <div class="d-flex justify-content-center gap-3">
+                            <button class="btn btn-custom btn-primary px-4" data-bs-toggle="modal" data-bs-target="#editProfileModal"><i class="fa-solid fa-pen-to-square me-2"></i>Edit Profil</button>
+                            <button class="btn btn-custom btn-outline-dark px-4" data-bs-toggle="modal" data-bs-target="#changePasswordModal"><i class="fa-solid fa-key me-2"></i>Ganti Password</button>
+                        </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 </div>
 
 <!-- Modal Edit Profil -->
@@ -75,8 +128,9 @@
   <div class="modal-dialog">
     <form action="{{ route('guru.profile.update') }}" method="POST" enctype="multipart/form-data" class="modal-content">
       @csrf
+       @method('PUT')
       <div class="modal-header">
-        <h5 class="modal-title" id="editProfileModalLabel">Edit Profil</h5>
+        <h5 class="modal-title" id="editProfileModalLabel"><i class="fa-solid fa-user-pen text-warning me-2"></i>Edit Profil</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
       <div class="modal-body">
@@ -102,17 +156,17 @@
         </div>
 
         <div class="mb-3">
-          <label for="photo" class="form-label">Foto Profil</label>
-          <input type="file" name="photo" id="photoInput" class="form-control">
+          <label for="foto" class="form-label">Foto Profil</label>
+          <input type="file" name="foto" id="fotoInput" class="form-control">
           <div class="mt-2">
-            <img id="previewPhoto" src="{{ asset('images/team 3.jpg') }}" width="100" class="rounded">
+            <img id="previewfoto" src="{{ $guru->foto ? asset('storage/' . $guru->foto) : asset('images/team 3.jpg') }}"width="100" class="rounded">
           </div>
         </div>
 
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        <button type="submit" class="btn btn-success">💾 Simpan Perubahan</button>
+      <div class="modal-footer bg-light border-top-0 rounded-bottom-4">
+        <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Batal</button>
+        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold"><i class="fa-solid fa-floppy-disk me-2"></i>Simpan Perubahan</button>
       </div>
     </form>
   </div>
@@ -124,7 +178,7 @@
     <form action="{{ route('guru.password.update') }}" method="POST" class="modal-content">
       @csrf
       <div class="modal-header">
-        <h5 class="modal-title" id="changePasswordModalLabel">Ganti Password</h5>
+        <h5 class="modal-title" id="changePasswordModalLabel"><i class="fa-solid fa-shield-halved text-warning me-2"></i>Ganti Password</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
       <div class="modal-body">
@@ -145,9 +199,9 @@
         </div>
 
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        <button type="submit" class="btn btn-success">🔐 Simpan Password</button>
+      <div class="modal-footer bg-light border-top-0 rounded-bottom-4">
+        <button type="button" class="btn btn-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">Batal</button>
+        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold"><i class="fa-solid fa-lock me-2"></i>Simpan Password</button>
       </div>
     </form>
   </div>
@@ -155,34 +209,12 @@
 
 <!-- Preview Foto Script -->
 <script>
-document.getElementById('photoInput')?.addEventListener('change', function(event) {
-    const preview = document.getElementById('previewPhoto');
+document.getElementById('fotoInput')?.addEventListener('change', function(event) {
+    const preview = document.getElementById('previewfoto');
     const file = event.target.files[0];
     if (file) {
         preview.src = URL.createObjectURL(file);
     }
 });
 </script>
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-function showLogoutPopup() {
-    Swal.fire({
-        title: 'Logout?',
-        text: 'Apakah kamu yakin ingin logout?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, Logout',
-        cancelButtonText: 'Batal',
-        backdrop: false
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('logout-form').submit();
-        }
-    });
-}
-</script>
-@endpush
 @endsection

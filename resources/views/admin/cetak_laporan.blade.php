@@ -1,154 +1,158 @@
-@extends('layouts.main')
+@extends('layouts.admin-layout')
 
-@section('title', 'Kelola Laporan')
+@section('title', 'Cetak Laporan - Admin')
 
-@section('content')
+@section('admin-content')
+<style>
+    /* Print Media Queries */
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        .print-area, .print-area * {
+            visibility: visible;
+        }
+        .print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+        .no-print {
+            display: none !important;
+        }
+        .admin-navbar {
+            display: none !important;
+        }
+        body {
+            padding-top: 0 !important;
+            background-color: white !important;
+        }
+        .table-responsive {
+            overflow: visible !important;
+        }
+    }
+</style>
 
-<header>
-  <div class="header-left">
-    <img src="{{ asset('images/logodu.png') }}" alt="Logo Sekolah">
-  </div>
-
-  <nav class="menu">
-    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-    <a href="{{ route('admin.kelola.laporan') }}">Kelola Laporan</a>
-    <a href="{{ route('admin.cetak') }}">Cetak Laporan</a>
-    <a href="{{ route('admin.kelola.akun') }}">Kelola Akun</a>
-    <a href="{{ route('admin.panduan.admin') }}">Panduan</a>
-    <a href="#" id="btn-logout-trigger">Logout</a>
-  </nav>
-
-  <div class="header-right" title="Admin Profile">
-    <img src="{{ asset('images/admin-profile.jpg') }}" alt="Foto Admin" />
-    <span>Nama Admin</span>
-  </div>
-</header>
-
-<main class="flex-grow-1 bg-light p-4">
-    <div class="container">
-        <h3 class="mb-4 fw-bold">Daftar Laporan Masuk</h3>
-
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered shadow-sm bg-white">
-                <thead class="table-primary">
-                    <tr>
-                        <th>No. Laporan</th>
-                        <th>Judul</th>
-                        <th>Tanggal</th>
-                        <th>Status</th>
-                        <th>Jenis</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($laporans as $laporan)
-                    <tr>
-                        <td>LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</td>
-                        <td>{{ $laporan->judul_laporan }}</td>
-                        <td>{{ $laporan->created_at->format('Y-m-d') }}</td>
-                        <td>
-                            @php
-                                $badge = 'secondary';
-                                if ($laporan->status === 'Dalam Proses') $badge = 'warning';
-                                elseif ($laporan->status === 'Selesai') $badge = 'success';
-                                elseif ($laporan->status === 'Ditolak') $badge = 'danger';
-                            @endphp
-                            <span class="badge bg-{{ $badge }}">{{ $laporan->status ?? 'Belum Ada' }}</span>
-                        </td>
-                        <td>{{ $laporan->jenis_pelaporan }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $laporan->id }}">🖨️ Detail</button>
-                            <a href="{{ route('admin.cetak.detail', $laporan->id) }}" class="btn btn-sm btn-danger">🖨️ Cetak</a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+<div class="container-fluid py-2">
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <div>
+            <h3 class="fw-bold" style="color: #0f172a;"><i class="fa-solid fa-print text-primary me-2"></i> Cetak Laporan</h3>
+            <p class="text-muted mb-0">Kelola dan unduh dokumen laporan sistem DUCARE.</p>
+        </div>
+        <div>
+            <!-- Tombol Cetak Rekap Keseluruhan (Native Browser Print) -->
+            <button onclick="window.print()" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                <i class="fa-solid fa-print me-2"></i> Cetak Rekap Semua
+            </button>
         </div>
     </div>
 
-    @foreach($laporans as $laporan)
-    <!-- Modal Detail -->
-    <div class="modal fade" id="detailModal-{{ $laporan->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $laporan->id }}" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Laporan LAP-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <tr><th>Judul</th><td>{{ $laporan->judul_laporan }}</td></tr>
-                        <tr><th>Status</th><td><span class="badge bg-{{ $badge }}">{{ $laporan->status ?? 'Belum Ada' }}</span></td></tr>
-                        <tr><th>Pelapor</th><td>{{ $laporan->nama_pelapor === 'Anonim' ? 'Anonim' : $laporan->nama_pelapor }}</td></tr>
-                        <tr><th>Pelaku</th><td>{{ $laporan->nama_pembully }}</td></tr>
-                        <tr><th>Saksi</th><td>{{ $laporan->nama_saksi ?? '-' }}</td></tr>
-                        <tr><th>Isi Laporan</th><td>{{ $laporan->isi_laporan }}</td></tr>
-                        <tr>
-                            <th>Bukti Foto</th>
-                            <td>
-                                @if ($laporan->bukti_gambar)
-                                    <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" class="img-fluid" style="max-height: 200px;">
-                                @else
-                                    Tidak ada gambar
-                                @endif
-                            </td>
-                        </tr>
+    <!-- Search / Filter Box (No Print) -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 no-print bg-primary bg-opacity-10 border border-primary border-opacity-25">
+        <div class="card-body p-3 d-flex align-items-center gap-3">
+            <i class="fa-solid fa-magnifying-glass text-primary ms-2"></i>
+            <input type="text" id="searchInput" class="form-control border-0 bg-transparent shadow-none" placeholder="Cari laporan berdasarkan nama, NIS, NIP, atau judul laporan..." onkeyup="filterLaporan()">
+        </div>
+    </div>
+
+    <!-- Print Area -->
+    <div class="print-area">
+        <div class="d-none d-print-block text-center mb-4">
+            <img src="{{ asset('images/logodu.png') }}" alt="Logo" style="width: 80px; margin-bottom: 10px;">
+            <h3 class="fw-bold text-uppercase">Laporan Rekapitulasi Kasus Bullying</h3>
+            <p class="mb-0">Sistem Pengaduan DUCARE - Divisi Administrator</p>
+            <p class="small text-muted">Dicetak pada: {{ \Carbon\Carbon::now()->format('d M Y, H:i') }}</p>
+            <hr>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="tabelCetak">
+                        <thead style="background-color: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                            <tr>
+                                <th class="text-secondary fw-semibold py-3" width="15%">No. Registrasi</th>
+                                <th class="text-secondary fw-semibold py-3">Tanggal Laporan</th>
+                                <th class="text-secondary fw-semibold py-3">Subjek / Pelaku</th>
+                                <th class="text-secondary fw-semibold py-3">Status</th>
+                                <th class="text-secondary fw-semibold py-3 text-center no-print" width="20%">Aksi Dokumen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($laporans as $laporan)
+                            <tr class="laporan-row">
+                                <td>
+                                    <span class="badge bg-light text-dark border font-monospace">LAP-{{ str_pad($laporan->id, 4, '0', STR_PAD_LEFT) }}</span>
+                                </td>
+                                <td>
+                                    <span class="fw-medium text-dark">{{ $laporan->created_at->format('d M Y') }}</span>
+                                    <div class="small text-muted">{{ $laporan->created_at->format('H:i') }} WIB</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold text-dark laporan-searchable">{{ $laporan->nama_pembully }}</div>
+                                    <div class="small text-muted laporan-searchable">{{ $laporan->judul_laporan }}</div>
+                                </td>
+                                <td>
+                                    @php
+                                        $badge = 'secondary';
+                                        if ($laporan->status === 'Dalam Proses') $badge = 'warning';
+                                        elseif ($laporan->status === 'Selesai') $badge = 'success';
+                                        elseif ($laporan->status === 'Ditolak') $badge = 'danger';
+                                    @endphp
+                                    <span class="badge bg-{{ $badge }}-subtle text-{{ $badge }} px-3 py-1 rounded-pill border border-{{ $badge }}-subtle">
+                                        {{ $laporan->status ?? 'Belum Ada' }}
+                                    </span>
+                                </td>
+                                <td class="text-center no-print">
+                                    <a href="{{ route('admin.cetak.detail', $laporan->id) }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 shadow-sm" target="_blank">
+                                        <i class="fa-solid fa-file-pdf me-1"></i> Download PDF
+                                    </a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="d-flex flex-column align-items-center justify-content-center">
+                                        <i class="fa-solid fa-folder-open text-muted mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+                                        <h5 class="text-muted fw-medium">Belum ada laporan.</h5>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
                     </table>
-
-                    <h6 class="mt-4">Catatan Penanganan</h6>
-                    <form action="{{ route('laporan.updatePenanganan', $laporan->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-
-                        <div class="mb-3">
-                            <textarea name="catatan_penanganan" class="form-control" rows="3" placeholder="Tulis catatan...">{{ $laporan->catatan_penanganan }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label>Tanggal Penanganan</label>
-                            <input type="date" name="tanggal_penanganan" class="form-control" value="{{ $laporan->tanggal_penanganan }}">
-                        </div>
-                        <div class="mb-3">
-                            <label>Ditangani Oleh</label>
-                            <input type="text" name="ditangani_oleh" class="form-control" value="{{ $laporan->ditangani_oleh ?? 'Admin' }}">
-                        </div>
-                        <div class="mb-3">
-                            <label>Tanda Tangan (opsional)</label>
-                            <input type="file" name="ttd" class="form-control">
-                            @if ($laporan->ttd_penangan)
-                            <div class="mt-2">
-                                <img src="{{ asset('storage/' . $laporan->ttd_penangan) }}" style="max-height: 100px;">
-                            </div>
-                            @endif
-                        </div>
-                        <button class="btn btn-primary">Simpan</button>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ route('laporan.destroy', $laporan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus laporan ini?')" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger">Hapus</button>
-                    </form>
-
-                    <form action="{{ route('laporan.updateStatus', $laporan->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="Selesai">
-                        <button class="btn btn-success">Tandai Selesai</button>
-                    </form>
-
-                    <form action="{{ route('laporan.updateStatus', $laporan->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="Ditolak">
-                        <button class="btn btn-warning">Tolak</button>
-                    </form>
-
-                    <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
     </div>
-    @endforeach
-</main>
+</div>
+
+@push('scripts')
+<script>
+    // Fitur Live Search
+    function filterLaporan() {
+        let input = document.getElementById('searchInput');
+        let filter = input.value.toLowerCase();
+        let rows = document.querySelectorAll('.laporan-row');
+
+        rows.forEach(row => {
+            let searchableElements = row.querySelectorAll('.laporan-searchable, .font-monospace');
+            let textMatch = false;
+
+            searchableElements.forEach(el => {
+                if (el.textContent.toLowerCase().includes(filter)) {
+                    textMatch = true;
+                }
+            });
+
+            if (textMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
+@endpush
 @endsection
