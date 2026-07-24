@@ -188,7 +188,7 @@
           <a href="{{ route('pelapor.dashboard') }}" class="nav-link text-white {{ Route::currentRouteName() == 'pelapor.dashboard' ? 'active-menu' : '' }}">🏠 Dashboard</a>
         </li>
         <li class="nav-item mb-3">
-          <a href="{{ route('laporan.create') }}" class="nav-link text-white {{ Route::currentRouteName() == 'laporan.create' ? 'active-menu' : '' }}">📝 Buat Laporan</a>
+          <a href="{{ route('buat.laporan') }}" class="nav-link text-white {{ in_array(Route::currentRouteName(), ['buat.laporan', 'laporan.create']) ? 'active-menu' : '' }}">📝 Buat Laporan</a>
         </li>
         <li class="nav-item mb-3">
           <a href="{{ route('status.laporan') }}" class="nav-link text-white {{ in_array(Route::currentRouteName(), ['status.laporan', 'detail.laporan', 'ubah.laporan']) ? 'active-menu' : '' }}">

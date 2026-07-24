@@ -61,6 +61,7 @@ Route::middleware(['auth', 'role:pelapor'])->group(function () {
 
     // Buat Laporan
     Route::get('/buat-laporan', [LaporanController::class, 'create'])->name('buat.laporan');
+    Route::get('/laporan/create', [LaporanController::class, 'create'])->name('laporan.create');
     Route::post('/laporan/store', [LaporanController::class, 'store'])->name('laporan.store');
 
     // Status & Detail Laporan
