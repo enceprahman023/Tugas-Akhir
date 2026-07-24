@@ -664,8 +664,9 @@ footer {
   }
 
   .logo-login {
-    width: 600px; /* Ukuran gambar, ubah sesuai kebutuhan */
-    height: auto;  /* Menjaga proporsi gambar */
+    max-width: 140px;
+    width: 100%;
+    height: auto;
     display: block;
     margin: 0 auto;
   }
