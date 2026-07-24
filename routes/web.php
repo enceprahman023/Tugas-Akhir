@@ -72,7 +72,7 @@ Route::middleware(['auth', 'role:pelapor'])->group(function () {
     // Profil Pelapor
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::match(['post', 'put'], '/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/laporan', [ProfileController::class, 'laporan'])->name('profile.laporan');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/profile-laporan', fn () => view('pelapor.profile-laporan'))->name('profile.laporan.view');
@@ -130,7 +130,7 @@ Route::middleware(['auth', 'role:gurubk'])->group(function () {
     Route::get('/guru/dashboard', [DashboardGuruController::class, 'index'])->name('guru.dashboard');
     // Halaman Dashboard Guru BK
     Route::get('/guru/profile', [GuruProfileController::class, 'show'])->name('guru.profile');
-    Route::post('/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
+    Route::match(['post', 'put'], '/guru/profile/update', [GuruProfileController::class, 'updateProfile'])->name('guru.profile.update');
     Route::get('/guru/ganti-password', [GuruProfileController::class, 'showChangePasswordForm'])->name('guru.password');
     Route::post('/guru/password/update', [GuruProfileController::class, 'updatePassword'])->name('guru.password.update');
     // Atau jika hanya menampilkan view langsung:
