@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Darul Ulum Care')</title>
-    <link rel="icon" href="{{ asset('images/logodu.png') }}" type="image/png">
-    <link rel="shortcut icon" href="{{ asset('images/logodu.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('images/logodu.png') }}?v=3" type="image/png">
+    <link rel="icon" href="{{ asset('images/logodu.png') }}?v=3" type="image/png">
+    <link rel="icon" sizes="32x32" href="{{ asset('images/logodu.png') }}?v=3" type="image/png">
+    <link rel="apple-touch-icon" href="{{ asset('images/logodu.png') }}?v=3">
 
     {{-- Bootstrap & Icons CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">

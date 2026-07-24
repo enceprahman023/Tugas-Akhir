@@ -6,8 +6,10 @@
   <title>Register - DUCARE</title>
 
   {{-- Favicon Logo DUCARE --}}
-  <link rel="icon" href="{{ asset('images/logodu.png') }}" type="image/png">
-  <link rel="shortcut icon" href="{{ asset('images/logodu.png') }}" type="image/png">
+  <link rel="shortcut icon" href="{{ asset('images/logodu.png') }}?v=3" type="image/png">
+  <link rel="icon" href="{{ asset('images/logodu.png') }}?v=3" type="image/png">
+  <link rel="icon" sizes="32x32" href="{{ asset('images/logodu.png') }}?v=3" type="image/png">
+  <link rel="apple-touch-icon" href="{{ asset('images/logodu.png') }}?v=3">
 
   <link rel="stylesheet" href="{{ asset('css/pelapor.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
