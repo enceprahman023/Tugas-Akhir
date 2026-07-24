@@ -85,7 +85,7 @@
                 <div class="profile-header"></div>
                 
                 <div class="profile-avatar-container">
-                    <img src="{{ $guru->foto ? asset('storage/' . $guru->foto) : asset('images/team 3.jpg') }}" alt="Foto Guru BK" class="profile-avatar">
+                    <img src="{{ $guru->foto ? (str_contains($guru->foto, '/') ? asset('storage/' . $guru->foto) : asset('storage/foto_profil/' . $guru->foto)) : asset('images/team 3.jpg') }}" alt="Foto Guru BK" class="profile-avatar">
                     <h4 class="fw-bold mt-3 mb-0" style="color: #1e293b;">{{ $guru->name }}</h4>
                     <span class="badge bg-warning text-dark mt-2 rounded-pill px-3 py-2"><i class="fa-solid fa-shield-halved me-1"></i> Guru BK</span>
                 </div>
@@ -159,7 +159,7 @@
           <label for="foto" class="form-label">Foto Profil</label>
           <input type="file" name="foto" id="fotoInput" class="form-control">
           <div class="mt-2">
-            <img id="previewfoto" src="{{ $guru->foto ? asset('storage/' . $guru->foto) : asset('images/team 3.jpg') }}"width="100" class="rounded">
+            <img id="previewfoto" src="{{ $guru->foto ? (str_contains($guru->foto, '/') ? asset('storage/' . $guru->foto) : asset('storage/foto_profil/' . $guru->foto)) : asset('images/team 3.jpg') }}" width="100" class="rounded">
           </div>
         </div>
 
