@@ -42,17 +42,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-bullying', fn () => view('pelapor.about-bullying'))->name('about.bullying');
 Route::get('/panduan-laporan', fn () => view('pelapor.panduan-laporan'))->name('panduan.laporan');
 
-// Route sementara untuk test email langsung di browser
+// Route sementara untuk test email (bisa dinonaktifkan atau dihapus)
 Route::get('/test-email', function () {
-    try {
-        Mail::raw('Test Email DUCARE dari Server Hosting', function ($message) {
-            $message->to('enceprahman93@gmail.com')
-                ->subject('Test Email DUCARE Hosting');
-        });
-        return '<h2 style="color:green;">BERHASIL! Email notifikasi sukses dikirim ke enceprahman93@gmail.com</h2>';
-    } catch (\Exception $e) {
-        return '<h2 style="color:red;">GAGAL KIRIM EMAIL</h2><p><strong>Pesan Error Persis dari Server:</strong></p><pre>' . $e->getMessage() . '</pre>';
-    }
+    Mail::raw('Test Email DUCARE', function ($message) {
+        $message->to('enceprahman93@gmail.com')
+            ->subject('Test Email');
+    });
+    return 'Email berhasil dikirim';
 });
 
 // Rute Pelapor yang Memerlukan Autentikasi (Wajib Login & Role Pelapor)
