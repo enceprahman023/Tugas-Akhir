@@ -85,9 +85,13 @@ Route::middleware(['auth', 'role:pelapor'])->group(function () {
     Route::get('/foto-profil/{filename}', function ($filename) {
         $path = storage_path('app/public/foto_profil/' . $filename);
         if (!file_exists($path)) {
-            abort(404);
+            $path = storage_path('app/public/' . $filename);
+            if (!file_exists($path)) {
+                abort(404);
+            }
         }
-        return response()->file($path);
+        $mimeType = @mime_content_type($path) ?: 'image/jpeg';
+        return response()->file($path, ['Content-Type' => $mimeType]);
     })->name('foto.profil');
 
     // Logout Pelapor
@@ -217,3 +221,16 @@ Route::get('/buat-admin-temp', function () {
         return 'Gagal membuat akun: ' . $e->getMessage();
     }
 });
+
+// Rute publik untuk menampilkan file dari storage/app/public/ (Foto Profil, Bukti Foto, TTD) jika symlink tidak ada
+Route::get('/storage/{folder}/{filename}', function ($folder, $filename) {
+    $filePath = storage_path("app/public/{$folder}/{$filename}");
+    if (!file_exists($filePath)) {
+        $filePath = storage_path("app/public/{$folder}");
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
+    }
+    $mimeType = @mime_content_type($filePath) ?: 'image/jpeg';
+    return response()->file($filePath, ['Content-Type' => $mimeType]);
+})->where('folder', '.*')->name('storage.serve');
