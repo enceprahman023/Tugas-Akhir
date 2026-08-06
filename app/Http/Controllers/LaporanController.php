@@ -209,6 +209,7 @@ class LaporanController extends Controller
         $request->validate([
             'catatan_penanganan' => 'required|string|max:1000',
             'tanggal_penanganan' => 'required|date',
+            'ditangani_oleh' => 'nullable|string|max:255',
             'ttd' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -217,10 +218,14 @@ class LaporanController extends Controller
         $laporan->catatan_penanganan = $request->catatan_penanganan;
         $laporan->tanggal_penanganan = $request->tanggal_penanganan;
 
-        // simpan nama guru dari input form
-        $laporan->ditangani_oleh = $request->ditangani_oleh ?? (Auth::user()->name ?? 'Guru BK');
+        // Simpan nama penangan yang diinput oleh Guru BK / Admin (misal: Ari Pudin)
+        if ($request->filled('ditangani_oleh')) {
+            $laporan->ditangani_oleh = trim($request->ditangani_oleh);
+        } elseif (empty($laporan->ditangani_oleh)) {
+            $laporan->ditangani_oleh = Auth::user()->name ?? 'Guru BK';
+        }
 
-        // cek jika ada file ttd diupload
+        // Cek jika ada file ttd diupload
         if ($request->hasFile('ttd')) {
             $path = $request->file('ttd')->store('ttd', 'public');
             $laporan->ttd_penangan = $path;
@@ -250,7 +255,7 @@ class LaporanController extends Controller
 
         $laporan->status = $request->status;
 
-        // Isi nama guru BK yang sedang login jika belum diisi
+        // Pertahankan nama penangan yang sudah diisi sebelumnya, jangan ditimpa jika sudah ada
         if (empty($laporan->ditangani_oleh)) {
             $laporan->ditangani_oleh = Auth::user()->name ?? 'Guru BK';
         }

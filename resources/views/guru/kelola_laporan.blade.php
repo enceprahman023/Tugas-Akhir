@@ -180,6 +180,9 @@
                                     @endif
                                 </td>
                             </tr>
+                            <tr><th>Catatan Penanganan</th><td>: {{ $laporan->catatan_penanganan ?? '-' }}</td></tr>
+                            <tr><th>Ditangani Oleh</th><td>: {{ $laporan->ditangani_oleh ?? '-' }}</td></tr>
+                            <tr><th>Tanggal Penanganan</th><td>: {{ $laporan->tanggal_penanganan ? \Carbon\Carbon::parse($laporan->tanggal_penanganan)->translatedFormat('d F Y') : '-' }}</td></tr>
                         </table>
 
                         <!-- Form Penanganan -->
@@ -201,7 +204,7 @@
 
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-semibold text-secondary small">Ditangani Oleh</label>
-                                        <input type="text" name="ditangani_oleh" class="form-control border-0 shadow-sm" value="{{ $laporan->ditangani_oleh ?? auth()->user()->name }}">
+                                        <input type="text" name="ditangani_oleh" class="form-control border-0 shadow-sm" value="{{ $laporan->ditangani_oleh }}" placeholder="Ketik nama penangan (misal: Ari Pudin)...">
                                     </div>
                                 </div>
 

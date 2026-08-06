@@ -194,7 +194,7 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label text-primary fw-semibold small">Ditangani Oleh</label>
-                                        <input type="text" name="ditangani_oleh" class="form-control border-primary border-opacity-25" value="{{ $laporan->ditangani_oleh ?? 'Administrator DUCARE' }}">
+                                        <input type="text" name="ditangani_oleh" class="form-control border-primary border-opacity-25" value="{{ $laporan->ditangani_oleh }}" placeholder="Ketik nama penangan (misal: Ari Pudin)...">
                                     </div>
                                 </div>
                                 <div class="mb-3">
