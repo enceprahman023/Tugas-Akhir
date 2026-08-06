@@ -49,14 +49,19 @@ class LaporanController extends Controller
             'judul' => 'required|string|max:255',
             'isi' => 'required|string',
             'saksi' => 'nullable|string|max:255',
-            'bukti' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'bukti' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,mp4,mov,avi,webm,mkv|max:20480',
         ]);
 
         $namaPelapor = $request->jenis_pelaporan === 'anonim'
             ? 'Anonim'
             : $validatedData['nama_pelapor'];
 
-        // 3. Upload gambar (jika ada)
+        // Jika mode anonim, hilangkan data saksi
+        $namaSaksi = $request->jenis_pelaporan === 'anonim'
+            ? null
+            : ($validatedData['saksi'] ?? null);
+
+        // 3. Upload file bukti (foto / video) jika ada
         $imagePath = null;
         if ($request->hasFile('bukti')) {
             $imagePath = $request->file('bukti')->store('bukti_laporan', 'public');
@@ -72,7 +77,7 @@ class LaporanController extends Controller
                 'nama_pembully' => $validatedData['orang_membuli'],
                 'judul_laporan' => $validatedData['judul'],
                 'isi_laporan' => $validatedData['isi'],
-                'nama_saksi' => $validatedData['saksi'],
+                'nama_saksi' => $namaSaksi,
                 'status' => 'Dalam Proses',
                 'bukti_gambar' => $imagePath,
             ]);

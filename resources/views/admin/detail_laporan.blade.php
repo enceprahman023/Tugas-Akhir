@@ -42,12 +42,23 @@
                 <tr><th>Saksi</th><td>: {{ $laporan->nama_saksi ?? '-' }}</td></tr>
                 <tr><th>Deskripsi</th><td>: {{ $laporan->isi_laporan }}</td></tr>
                 <tr>
-                    <th>Bukti Foto</th>
+                    <th>Bukti Lampiran (Foto / Video)</th>
                     <td>
                         @if ($laporan->bukti_gambar)
-                            <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" alt="Bukti Foto" class="img-thumbnail" style="max-height: 200px;">
+                            @php
+                                $ext = strtolower(pathinfo($laporan->bukti_gambar, PATHINFO_EXTENSION));
+                                $isVideo = in_array($ext, ['mp4', 'mov', 'avi', 'webm', 'mkv']);
+                            @endphp
+                            @if ($isVideo)
+                                <video controls class="rounded shadow-sm" style="max-height: 250px; max-width: 100%;">
+                                    <source src="{{ asset('storage/' . $laporan->bukti_gambar) }}">
+                                    Browser Anda tidak mendukung pemutaran video.
+                                </video>
+                            @else
+                                <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" alt="Bukti Foto" class="img-thumbnail" style="max-height: 200px;">
+                            @endif
                         @else
-                            Tidak ada gambar
+                            Tidak ada bukti lampiran
                         @endif
                     </td>
                 </tr>

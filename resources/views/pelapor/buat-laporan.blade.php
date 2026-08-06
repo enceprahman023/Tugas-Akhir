@@ -188,11 +188,11 @@
 
           <!-- Opsional Buttons -->
           <div class="d-flex flex-column flex-sm-row gap-3 mb-4">
-            <button type="button" class="btn btn-outline-custom flex-fill text-center" id="toggleSaksi">
+            <button type="button" class="btn btn-outline-custom flex-fill text-center" id="toggleSaksi" style="display: none;">
               <i class="bi bi-person-plus-fill me-2"></i> Tambah Saksi <span class="fw-normal">(Opsional)</span>
             </button>
             <button type="button" class="btn btn-outline-custom flex-fill text-center" id="toggleBukti">
-              <i class="bi bi-image-fill me-2"></i> Unggah Bukti <span class="fw-normal">(Opsional)</span>
+              <i class="bi bi-file-earmark-play-fill me-2"></i> Unggah Bukti (Foto / Video) <span class="fw-normal">(Opsional)</span>
             </button>
           </div>
 
@@ -202,11 +202,11 @@
             <input type="text" class="form-control" id="saksi" name="saksi" placeholder="Contoh: Budi, Andi">
           </div>
 
-          <!-- Input Bukti Gambar -->
+          <!-- Input Bukti Gambar / Video -->
           <div class="mb-4" id="formBukti" style="display: none;">
-            <label for="bukti" class="form-label">Unggah Foto Bukti</label>
-            <input class="form-control p-3" type="file" id="bukti" name="bukti" accept="image/*">
-            <small class="text-muted mt-2 d-block"><i class="bi bi-info-circle text-primary"></i> Format yang didukung: JPG, PNG, JPEG. (Maks 2MB)</small>
+            <label for="bukti" class="form-label">Unggah Bukti Foto / Video</label>
+            <input class="form-control p-3" type="file" id="bukti" name="bukti" accept="image/*,video/*">
+            <small class="text-muted mt-2 d-block"><i class="bi bi-info-circle text-primary"></i> Format yang didukung: Foto (JPG, PNG, JPEG, GIF) & Video (MP4, MOV, AVI, WEBM, MKV). (Maks 20MB)</small>
           </div>
 
           <!-- Tombol Kirim -->
@@ -237,7 +237,6 @@
     function toggleDisplay(element, show) {
         if(show) {
             element.style.display = 'block';
-            // Smooth reveal animation
             element.animate([
                 { opacity: 0, transform: 'translateY(-10px)' },
                 { opacity: 1, transform: 'translateY(0)' }
@@ -251,15 +250,23 @@
         }
     }
 
-    // Identitas pelapor logic
+    // Identitas pelapor & Saksi logic (Anonim vs Non-Anonim)
     nonAnonimRadio.addEventListener('change', function () {
-      if (this.checked) toggleDisplay(identitasPelapor, true);
+      if (this.checked) {
+        toggleDisplay(identitasPelapor, true);
+        btnSaksi.style.display = 'inline-block';
+      }
     });
 
     anonimRadio.addEventListener('change', function () {
       if (this.checked) {
         toggleDisplay(identitasPelapor, false);
         document.getElementById('namaPelapor').value = '';
+        // Sembunyikan dan bersihkan saksi saat Mode Anonim
+        btnSaksi.style.display = 'none';
+        toggleDisplay(formSaksi, false);
+        btnSaksi.classList.remove('active-btn');
+        document.getElementById('saksi').value = '';
       }
     });
 

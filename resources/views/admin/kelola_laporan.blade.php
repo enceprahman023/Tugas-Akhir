@@ -133,15 +133,26 @@
                     </div>
 
                     <div class="mb-4">
-                        <span class="text-muted small fw-semibold text-uppercase d-block mb-2">Bukti Lampiran</span>
+                        <span class="text-muted small fw-semibold text-uppercase d-block mb-2">Bukti Lampiran (Foto / Video)</span>
                         @if ($laporan->bukti_gambar)
+                            @php
+                                $ext = strtolower(pathinfo($laporan->bukti_gambar, PATHINFO_EXTENSION));
+                                $isVideo = in_array($ext, ['mp4', 'mov', 'avi', 'webm', 'mkv']);
+                            @endphp
                             <div class="text-center bg-light p-2 rounded-3 border">
-                                <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" class="img-fluid rounded" style="max-height: 250px; object-fit: contain;">
+                                @if ($isVideo)
+                                    <video controls class="rounded" style="max-height: 250px; max-width: 100%;">
+                                        <source src="{{ asset('storage/' . $laporan->bukti_gambar) }}">
+                                        Browser Anda tidak mendukung pemutaran video.
+                                    </video>
+                                @else
+                                    <img src="{{ asset('storage/' . $laporan->bukti_gambar) }}" class="img-fluid rounded" style="max-height: 250px; object-fit: contain;">
+                                @endif
                             </div>
                         @else
                             <div class="alert alert-secondary border-0 mb-0 d-flex align-items-center">
-                                <i class="fa-solid fa-image-slash fs-4 me-3 text-muted"></i>
-                                <div>Tidak ada bukti gambar yang dilampirkan oleh pelapor.</div>
+                                <i class="fa-solid fa-file-video fs-4 me-3 text-muted"></i>
+                                <div>Tidak ada bukti foto/video yang dilampirkan oleh pelapor.</div>
                             </div>
                         @endif
                     </div>
